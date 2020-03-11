@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.9 Buildings | Green Economy Analysis: Opportunities for Stockton</title>
+  <meta name="description" content="2.9 Buildings | Green Economy Analysis: Opportunities for Stockton" />
+  <meta name="generator" content="bookdown 0.17.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.9 Buildings | Green Economy Analysis: Opportunities for Stockton" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.9 Buildings | Green Economy Analysis: Opportunities for Stockton" />
+  
+  
+  
+
+<meta name="author" content="City Systems" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="energy.html"/>
+<link rel="next" href="ghg-forecast.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.js');
+  rCodeBlocks.each(function() {
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="approach.html"><a href="approach.html"><i class="fa fa-check"></i><b>1.1</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="baseline-assessment.html"><a href="baseline-assessment.html"><i class="fa fa-check"></i><b>2</b> Baseline Assessment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html"><i class="fa fa-check"></i><b>2.1</b> Population and Jobs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html#county-level-analysis"><i class="fa fa-check"></i><b>2.1.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="population-and-jobs.html"><a href="population-and-jobs.html#city-level-analysis"><i class="fa fa-check"></i><b>2.1.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="green-jobs.html"><a href="green-jobs.html"><i class="fa fa-check"></i><b>2.2</b> Green Jobs</a></li>
+<li class="chapter" data-level="2.3" data-path="ghg-inventory.html"><a href="ghg-inventory.html"><i class="fa fa-check"></i><b>2.3</b> 2005-2016 GHG Inventory</a></li>
+<li class="chapter" data-level="2.4" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html"><i class="fa fa-check"></i><b>2.4</b> Origin-Destination Commute Analysis</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#county-level-analysis-1"><i class="fa fa-check"></i><b>2.4.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.4.2" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#city-level-analysis-1"><i class="fa fa-check"></i><b>2.4.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.5</b> Commute Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#county-level-analysis-2"><i class="fa fa-check"></i><b>2.5.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.5.2" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#city-level-analysis-2"><i class="fa fa-check"></i><b>2.5.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="non-commute-vehicle-miles-traveled.html"><a href="non-commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.6</b> Non-Commute Vehicle Miles Traveled</a></li>
+<li class="chapter" data-level="2.7" data-path="vehicle-emissions.html"><a href="vehicle-emissions.html"><i class="fa fa-check"></i><b>2.7</b> Vehicle Emissions</a></li>
+<li class="chapter" data-level="2.8" data-path="energy.html"><a href="energy.html"><i class="fa fa-check"></i><b>2.8</b> Energy</a></li>
+<li class="chapter" data-level="2.9" data-path="buildings.html"><a href="buildings.html"><i class="fa fa-check"></i><b>2.9</b> Buildings</a></li>
+<li class="chapter" data-level="2.10" data-path="ghg-forecast.html"><a href="ghg-forecast.html"><i class="fa fa-check"></i><b>2.10</b> GHG Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="overview-of-green-economy-strategies.html"><a href="overview-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>3</b> Overview of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="building-utilization.html"><a href="building-utilization.html"><i class="fa fa-check"></i><b>3.1</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="building-utilization.html"><a href="building-utilization.html#revise-zoning-codes-in-medium-to-large-cities-to-facilitate-upzoning"><i class="fa fa-check"></i><b>3.1.1</b> Revise zoning codes in medium to large cities to facilitate upzoning</a></li>
+<li class="chapter" data-level="3.1.2" data-path="building-utilization.html"><a href="building-utilization.html#eliminate-minimum-parking"><i class="fa fa-check"></i><b>3.1.2</b> Eliminate minimum parking</a></li>
+<li class="chapter" data-level="3.1.3" data-path="building-utilization.html"><a href="building-utilization.html#encourage-accessory-dwelling-units"><i class="fa fa-check"></i><b>3.1.3</b> Encourage accessory dwelling units</a></li>
+<li class="chapter" data-level="3.1.4" data-path="building-utilization.html"><a href="building-utilization.html#encourage-micro-units"><i class="fa fa-check"></i><b>3.1.4</b> Encourage micro-units</a></li>
+<li class="chapter" data-level="3.1.5" data-path="building-utilization.html"><a href="building-utilization.html#provide-a-density-bonus-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.5</b> Provide a density bonus for affordable housing</a></li>
+<li class="chapter" data-level="3.1.6" data-path="building-utilization.html"><a href="building-utilization.html#develop-a-shared-equity-program-for-high-density-housing"><i class="fa fa-check"></i><b>3.1.6</b> Develop a shared equity program for high-density housing</a></li>
+<li class="chapter" data-level="3.1.7" data-path="building-utilization.html"><a href="building-utilization.html#match-homeowners-with-vacant-spaces-with-individuals-looking-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.7</b> Match homeowners with vacant spaces with individuals looking for affordable housing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="building-energy.html"><a href="building-energy.html"><i class="fa fa-check"></i><b>3.2</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="building-energy.html"><a href="building-energy.html#promote-solar-development-in-opportunity-zones"><i class="fa fa-check"></i><b>3.2.1</b> Promote solar development in Opportunity Zones</a></li>
+<li class="chapter" data-level="3.2.2" data-path="building-energy.html"><a href="building-energy.html#promote-a-solar-renewable-energy-certificate-program"><i class="fa fa-check"></i><b>3.2.2</b> Promote a Solar Renewable Energy Certificate program</a></li>
+<li class="chapter" data-level="3.2.3" data-path="building-energy.html"><a href="building-energy.html#set-energy-savings-standards-on-all-public-buildings-and-provide-financial-and-technical-assistance-for-commercial-private-sector-energy-savings"><i class="fa fa-check"></i><b>3.2.3</b> Set energy savings standards on all public buildings and provide financial and technical assistance for commercial private sector energy savings</a></li>
+<li class="chapter" data-level="3.2.4" data-path="building-energy.html"><a href="building-energy.html#create-a-fund-to-implement-energy-savings-projects"><i class="fa fa-check"></i><b>3.2.4</b> Create a fund to implement energy savings projects</a></li>
+<li class="chapter" data-level="3.2.5" data-path="building-energy.html"><a href="building-energy.html#enable-property-assessed-clean-energy-pace-financing"><i class="fa fa-check"></i><b>3.2.5</b> Enable property-assessed clean energy (PACE) financing</a></li>
+<li class="chapter" data-level="3.2.6" data-path="building-energy.html"><a href="building-energy.html#provide-consumer-oriented-programs-to-incentivize-energy-efficiency-retrofits-and-appliance-improvements"><i class="fa fa-check"></i><b>3.2.6</b> Provide consumer-oriented programs to incentivize energy efficiency retrofits and appliance improvements</a></li>
+<li class="chapter" data-level="3.2.7" data-path="building-energy.html"><a href="building-energy.html#provide-incentives-for-households-to-install-on-site-batteries-particularly-for-vulnerable-customers"><i class="fa fa-check"></i><b>3.2.7</b> Provide incentives for households to install on-site batteries, particularly for vulnerable customers</a></li>
+<li class="chapter" data-level="3.2.8" data-path="building-energy.html"><a href="building-energy.html#implement-reach-codes-which-go-beyond-state-minimum-requirements-for-energy-use-in-building-design-and-construction"><i class="fa fa-check"></i><b>3.2.8</b> Implement “reach” codes which go beyond state minimum requirements for energy use in building design and construction</a></li>
+<li class="chapter" data-level="3.2.9" data-path="building-energy.html"><a href="building-energy.html#use-waste-to-produce-electricity"><i class="fa fa-check"></i><b>3.2.9</b> Use waste to produce electricity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="employment-growth.html"><a href="employment-growth.html"><i class="fa fa-check"></i><b>3.3</b> Employment Growth</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="employment-growth.html"><a href="employment-growth.html#provide-training-and-coaching-for-low-income-workers-rather-than-unemployed-workers"><i class="fa fa-check"></i><b>3.3.1</b> Provide training and coaching for low-income workers, rather than unemployed workers</a></li>
+<li class="chapter" data-level="3.3.2" data-path="employment-growth.html"><a href="employment-growth.html#provide-green-oriented-job-training-and-education-pathways"><i class="fa fa-check"></i><b>3.3.2</b> Provide green-oriented job training and education pathways</a></li>
+<li class="chapter" data-level="3.3.3" data-path="employment-growth.html"><a href="employment-growth.html#create-a-scholarship-fund-for-students-wishing-to-pursue-eco-conscious-careers"><i class="fa fa-check"></i><b>3.3.3</b> Create a scholarship fund for students wishing to pursue eco-conscious careers</a></li>
+<li class="chapter" data-level="3.3.4" data-path="employment-growth.html"><a href="employment-growth.html#offer-continued-training-and-support-post-employment"><i class="fa fa-check"></i><b>3.3.4</b> Offer continued training and support post-employment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="local-jobs.html"><a href="local-jobs.html#offer-job-creation-tax-credit"><i class="fa fa-check"></i><b>3.4.1</b> Offer job creation tax credit</a></li>
+<li class="chapter" data-level="3.4.2" data-path="local-jobs.html"><a href="local-jobs.html#encourage-mortgage-refinancing"><i class="fa fa-check"></i><b>3.4.2</b> Encourage mortgage refinancing</a></li>
+<li class="chapter" data-level="3.4.3" data-path="local-jobs.html"><a href="local-jobs.html#develop-public-employment-program"><i class="fa fa-check"></i><b>3.4.3</b> Develop public employment program</a></li>
+<li class="chapter" data-level="3.4.4" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-advanced-industries"><i class="fa fa-check"></i><b>3.4.4</b> Provide tax credits to investors in advanced industries</a></li>
+<li class="chapter" data-level="3.4.5" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-community-development-corporations"><i class="fa fa-check"></i><b>3.4.5</b> Provide tax credits to investors in community development corporations</a></li>
+<li class="chapter" data-level="3.4.6" data-path="local-jobs.html"><a href="local-jobs.html#pursue-public-private-partnerships-for-commercial-development"><i class="fa fa-check"></i><b>3.4.6</b> Pursue public-private partnerships for commercial development</a></li>
+<li class="chapter" data-level="3.4.7" data-path="local-jobs.html"><a href="local-jobs.html#fund-economic-development-using-tax-base-sharing"><i class="fa fa-check"></i><b>3.4.7</b> Fund economic development using tax-base sharing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="local-jobs.html"><a href="local-jobs.html#pay-remote-workers-to-move-to-new-location"><i class="fa fa-check"></i><b>3.4.8</b> Pay remote workers to move to new location</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>3.5</b> Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#create-local-transportation-demand-management-ordinances"><i class="fa fa-check"></i><b>3.5.1</b> Create local transportation demand management ordinances</a></li>
+<li class="chapter" data-level="3.5.2" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#redesign-bus-network-to-prioritize-ridership-over-coverage"><i class="fa fa-check"></i><b>3.5.2</b> Redesign bus network to prioritize ridership over coverage</a></li>
+<li class="chapter" data-level="3.5.3" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#use-brt-corridors-to-reduce-travel-times-on-public-transit"><i class="fa fa-check"></i><b>3.5.3</b> Use BRT corridors to reduce travel times on public transit</a></li>
+<li class="chapter" data-level="3.5.4" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#promote-the-use-of-e-scooters-and-dockless-bicycles-to-reduce-reliance-on-private-cars"><i class="fa fa-check"></i><b>3.5.4</b> Promote the use of e-scooters and dockless bicycles to reduce reliance on private cars</a></li>
+<li class="chapter" data-level="3.5.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#rezone-areas-around-transit-stations-and-commercial-corridors-to-allow-for-high-density-residential-development"><i class="fa fa-check"></i><b>3.5.5</b> Rezone areas around transit stations and commercial corridors to allow for high-density residential development</a></li>
+<li class="chapter" data-level="3.5.6" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#offset-negative-externalities-of-traffic-through-tolls"><i class="fa fa-check"></i><b>3.5.6</b> Offset negative externalities of traffic through tolls</a></li>
+<li class="chapter" data-level="3.5.7" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#charge-for-parking"><i class="fa fa-check"></i><b>3.5.7</b> Charge for parking</a></li>
+<li class="chapter" data-level="3.5.8" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#give-carpoolers-priority-parking-at-transit-stops"><i class="fa fa-check"></i><b>3.5.8</b> Give carpoolers priority parking at transit stops</a></li>
+<li class="chapter" data-level="3.5.9" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#ban-personal-vehicles-from-certain-areas"><i class="fa fa-check"></i><b>3.5.9</b> Ban personal vehicles from certain areas</a></li>
+<li class="chapter" data-level="3.5.10" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#encourage-carsharing-strategies"><i class="fa fa-check"></i><b>3.5.10</b> Encourage carsharing strategies</a></li>
+<li class="chapter" data-level="3.5.11" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#provide-free-public-transit"><i class="fa fa-check"></i><b>3.5.11</b> Provide free public transit</a></li>
+<li class="chapter" data-level="3.5.12" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#subsidize-first-milelast-mile-transportation-services"><i class="fa fa-check"></i><b>3.5.12</b> Subsidize first-mile/last-mile transportation services</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html"><i class="fa fa-check"></i><b>3.6</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-for-pollutant-remediation-and-reduction-initiatives"><i class="fa fa-check"></i><b>3.6.1</b> Provide grants for pollutant remediation and reduction initiatives</a></li>
+<li class="chapter" data-level="3.6.2" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations"><i class="fa fa-check"></i><b>3.6.2</b> Provide commercial rebates for commercial building owners to install EV charging stations</a></li>
+<li class="chapter" data-level="3.6.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.6.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
+<li class="chapter" data-level="3.6.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.6.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
+<li class="chapter" data-level="3.6.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.6.5</b> Reduce vehicle speed limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="resilience.html"><a href="resilience.html"><i class="fa fa-check"></i><b>3.7</b> Resilience</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="resilience.html"><a href="resilience.html#promote-cool-surfaces-to-reduce-heat-island-effect"><i class="fa fa-check"></i><b>3.7.1</b> Promote cool surfaces to reduce heat island effect</a></li>
+<li class="chapter" data-level="3.7.2" data-path="resilience.html"><a href="resilience.html#promote-permeable-pavement-to-increase-groundwater-absorption"><i class="fa fa-check"></i><b>3.7.2</b> Promote permeable pavement to increase groundwater absorption</a></li>
+<li class="chapter" data-level="3.7.3" data-path="resilience.html"><a href="resilience.html#reclaim-urban-streams-and-rivers-to-increase-groundwater-absorption-and-filtration"><i class="fa fa-check"></i><b>3.7.3</b> Reclaim urban streams and rivers to increase groundwater absorption and filtration</a></li>
+<li class="chapter" data-level="3.7.4" data-path="resilience.html"><a href="resilience.html#use-green-infrastructure-to-improve-stormwater-management"><i class="fa fa-check"></i><b>3.7.4</b> Use green infrastructure to improve stormwater management</a></li>
+<li class="chapter" data-level="3.7.5" data-path="resilience.html"><a href="resilience.html#promote-urban-gardens-as-a-substitute-for-displaced-ecosystem-services"><i class="fa fa-check"></i><b>3.7.5</b> Promote urban gardens as a substitute for displaced ecosystem services</a></li>
+<li class="chapter" data-level="3.7.6" data-path="resilience.html"><a href="resilience.html#offer-rebates-for-flood-mitigation-projects"><i class="fa fa-check"></i><b>3.7.6</b> Offer rebates for flood mitigation projects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="resource-management.html"><a href="resource-management.html"><i class="fa fa-check"></i><b>3.8</b> Resource Management</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="resource-management.html"><a href="resource-management.html#develop-carbon-capture-storage-facilities"><i class="fa fa-check"></i><b>3.8.1</b> Develop carbon capture &amp; storage facilities</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="analysis-of-green-economy-strategies.html"><a href="analysis-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>4</b> Analysis of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methodology.html"><a href="methodology.html"><i class="fa fa-check"></i><b>4.1</b> Methodology</a></li>
+<li class="chapter" data-level="4.2" data-path="building-utilization-1.html"><a href="building-utilization-1.html"><i class="fa fa-check"></i><b>4.2</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="building-utilization-1.html"><a href="building-utilization-1.html#strategy-accessory-dwelling-units"><i class="fa fa-check"></i><b>4.2.1</b> Strategy: Accessory Dwelling Units</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="building-energy-1.html"><a href="building-energy-1.html"><i class="fa fa-check"></i><b>4.3</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="building-energy-1.html"><a href="building-energy-1.html#strategy-electrification"><i class="fa fa-check"></i><b>4.3.1</b> Strategy: Electrification</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html"><i class="fa fa-check"></i><b>4.4</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html#strategy-electric-vehicle-program"><i class="fa fa-check"></i><b>4.4.1</b> Strategy: Electric Vehicle Program</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="appendix-a-index-of-case-studies-by-place.html"><a href="appendix-a-index-of-case-studies-by-place.html"><i class="fa fa-check"></i><b>6</b> Appendix A: Index of Case Studies by Place</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Green Economy Analysis: Opportunities for Stockton</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="buildings" class="section level2" number="2.9">
+<h2><span class="header-section-number">2.9</span> Buildings</h2>
+<p>2018 data from the local County Assessor’s Office includes property use type and total building square footage for every parcel in Stockton. Because the assessor’s record of total building square footage is of poor quality, we chose to instead use <a href="https://github.com/microsoft/USBuildingFootprints">Microsoft’s U.S. Building Footprint Data</a>, joined each building footprint to a parcel (thereby also assigning a residential or commercial type based on the zoning of the parcel), and multiplied this footprint area by number of stories, which came either from the assessor’s record or from the Microsoft data. This dataset may still contain significant errors (e.g. mixed use parcels are mis-identified, the stories record may be incorrect, Microsoft’s building footprints may be incorrect, etc.), but we decided it was the best representation of total building square footage in Stockton.</p>
+<p>The following maps show the density of residents per acre across Stockton, followed by the density of jobs per acre of commercials buildings, at the block group level. Residential population was obtained from ACS 2017 5-yr data, and job count was obtained from LODES 2017.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="buildings.html#cb58-1"></a>pge_stockton_filtered &lt;-<span class="st"> </span></span>
+<span id="cb58-2"><a href="buildings.html#cb58-2"></a><span class="st">  </span>pge_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-3"><a href="buildings.html#cb58-3"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>CUSTOMERCLASS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EI&quot;</span>,<span class="st">&quot;EA&quot;</span>) <span class="op">&amp;</span><span class="st"> </span>(YEAR <span class="op">==</span><span class="st"> </span><span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb58-4"><a href="buildings.html#cb58-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>YEAR,<span class="op">-</span>TOTALTCO2E,<span class="op">-</span>TCO2EPERCUST)</span>
+<span id="cb58-5"><a href="buildings.html#cb58-5"></a></span>
+<span id="cb58-6"><a href="buildings.html#cb58-6"></a>zips_spread &lt;-<span class="st"> </span></span>
+<span id="cb58-7"><a href="buildings.html#cb58-7"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-8"><a href="buildings.html#cb58-8"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-9"><a href="buildings.html#cb58-9"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb58-10"><a href="buildings.html#cb58-10"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb58-11"><a href="buildings.html#cb58-11"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb58-12"><a href="buildings.html#cb58-12"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-13"><a href="buildings.html#cb58-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-14"><a href="buildings.html#cb58-14"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-15"><a href="buildings.html#cb58-15"></a><span class="st">  </span><span class="kw">unite</span>(temp,CUSTOMERCLASS,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-16"><a href="buildings.html#cb58-16"></a><span class="st">  </span><span class="kw">spread</span>(temp,value) </span>
+<span id="cb58-17"><a href="buildings.html#cb58-17"></a></span>
+<span id="cb58-18"><a href="buildings.html#cb58-18"></a><span class="co">#next, since the previous line fully disaggregates by type AND class, but i also consider it valuable to disaggregate by type OR class individually on their own, i do a second and third spread. all of these &quot;spreads&quot; will be joined back to an original in the final step.</span></span>
+<span id="cb58-19"><a href="buildings.html#cb58-19"></a>zips_spread_<span class="dv">2</span> &lt;-<span class="st"> </span></span>
+<span id="cb58-20"><a href="buildings.html#cb58-20"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-21"><a href="buildings.html#cb58-21"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-22"><a href="buildings.html#cb58-22"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb58-23"><a href="buildings.html#cb58-23"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb58-24"><a href="buildings.html#cb58-24"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb58-25"><a href="buildings.html#cb58-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-26"><a href="buildings.html#cb58-26"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-27"><a href="buildings.html#cb58-27"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ENERGYTYPE =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-28"><a href="buildings.html#cb58-28"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-29"><a href="buildings.html#cb58-29"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ENERGYTYPE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-30"><a href="buildings.html#cb58-30"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb58-31"><a href="buildings.html#cb58-31"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb58-32"><a href="buildings.html#cb58-32"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">sum</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb58-33"><a href="buildings.html#cb58-33"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-34"><a href="buildings.html#cb58-34"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-35"><a href="buildings.html#cb58-35"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-36"><a href="buildings.html#cb58-36"></a><span class="st">  </span><span class="kw">unite</span>(temp,ENERGYTYPE,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-37"><a href="buildings.html#cb58-37"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
+<span id="cb58-38"><a href="buildings.html#cb58-38"></a></span>
+<span id="cb58-39"><a href="buildings.html#cb58-39"></a><span class="co">#note that when combining into SECTOR, say electricity and gas for commercial, the summary function for TOTALCUSTOMERS switches to max(), with the reasoning that many of these commercial customers have both electricity and gas, so we would assume that the correct total # of customers is closer to the max of either, than to add them together (which presumes that there are no overlapping electricity and gas customers).</span></span>
+<span id="cb58-40"><a href="buildings.html#cb58-40"></a>zips_spread_<span class="dv">3</span> &lt;-<span class="st"> </span></span>
+<span id="cb58-41"><a href="buildings.html#cb58-41"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span></span>
+<span id="cb58-42"><a href="buildings.html#cb58-42"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-43"><a href="buildings.html#cb58-43"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb58-44"><a href="buildings.html#cb58-44"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb58-45"><a href="buildings.html#cb58-45"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb58-46"><a href="buildings.html#cb58-46"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-47"><a href="buildings.html#cb58-47"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-48"><a href="buildings.html#cb58-48"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">SECTOR =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">2</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-49"><a href="buildings.html#cb58-49"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-50"><a href="buildings.html#cb58-50"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, SECTOR) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-51"><a href="buildings.html#cb58-51"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb58-52"><a href="buildings.html#cb58-52"></a>            <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">max</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-53"><a href="buildings.html#cb58-53"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-54"><a href="buildings.html#cb58-54"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-55"><a href="buildings.html#cb58-55"></a><span class="st">  </span><span class="kw">unite</span>(temp,SECTOR,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-56"><a href="buildings.html#cb58-56"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
+<span id="cb58-57"><a href="buildings.html#cb58-57"></a></span>
+<span id="cb58-58"><a href="buildings.html#cb58-58"></a><span class="co">#the final step here is to get the actual total totals for kbtu and TCO2E indicators, and then join all the &quot;subtotals&quot; from the previous 3 spreads.</span></span>
+<span id="cb58-59"><a href="buildings.html#cb58-59"></a>zips_total &lt;-<span class="st"> </span></span>
+<span id="cb58-60"><a href="buildings.html#cb58-60"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-61"><a href="buildings.html#cb58-61"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-62"><a href="buildings.html#cb58-62"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-63"><a href="buildings.html#cb58-63"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread_<span class="dv">3</span>, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-64"><a href="buildings.html#cb58-64"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">TOTALCUSTOMERS =</span> R_TOTALCUSTOMERS <span class="op">+</span><span class="st"> </span>C_TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-65"><a href="buildings.html#cb58-65"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread_<span class="dv">2</span>, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-66"><a href="buildings.html#cb58-66"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>)</span>
+<span id="cb58-67"><a href="buildings.html#cb58-67"></a></span>
+<span id="cb58-68"><a href="buildings.html#cb58-68"></a><span class="co">#join this massive summary back to the zcta geometries</span></span>
+<span id="cb58-69"><a href="buildings.html#cb58-69"></a>zcta_stockton_joined &lt;-<span class="st"> </span></span>
+<span id="cb58-70"><a href="buildings.html#cb58-70"></a><span class="st">  </span>zcta_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-71"><a href="buildings.html#cb58-71"></a><span class="st">  </span><span class="kw">left_join</span>(zips_total, <span class="dt">by=</span><span class="st">&quot;ZIPCODE&quot;</span>)</span>
+<span id="cb58-72"><a href="buildings.html#cb58-72"></a></span>
+<span id="cb58-73"><a href="buildings.html#cb58-73"></a><span class="co">#below I&#39;ve brought in all the code from stockton_bldg.R, but it can all be skipped by going to the load() of stockton_bldg.Rdata at the bottom. Kevin, whatever refinements you&#39;ve made, go ahead and make them here.</span></span>
+<span id="cb58-74"><a href="buildings.html#cb58-74"></a></span>
+<span id="cb58-75"><a href="buildings.html#cb58-75"></a><span class="co"># sjc_bldg &lt;- </span></span>
+<span id="cb58-76"><a href="buildings.html#cb58-76"></a><span class="co">#   read_csv(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/ca_06077_footprints.csv&quot;) %&gt;% </span></span>
+<span id="cb58-77"><a href="buildings.html#cb58-77"></a><span class="co">#   st_as_sf(wkt = &quot;WKT&quot;) %&gt;% </span></span>
+<span id="cb58-78"><a href="buildings.html#cb58-78"></a><span class="co">#   st_set_crs(4326) %&gt;% </span></span>
+<span id="cb58-79"><a href="buildings.html#cb58-79"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
+<span id="cb58-80"><a href="buildings.html#cb58-80"></a><span class="co">#   mutate(id = row_number())</span></span>
+<span id="cb58-81"><a href="buildings.html#cb58-81"></a><span class="co"># </span></span>
+<span id="cb58-82"><a href="buildings.html#cb58-82"></a><span class="co"># stockton_bldg &lt;- </span></span>
+<span id="cb58-83"><a href="buildings.html#cb58-83"></a><span class="co">#   sjc_bldg[which(sjc_bldg$id %in% st_centroid(sjc_bldg)[stockton_boundary_influence,]$id),]</span></span>
+<span id="cb58-84"><a href="buildings.html#cb58-84"></a><span class="co"># </span></span>
+<span id="cb58-85"><a href="buildings.html#cb58-85"></a><span class="co"># sjc_parcels &lt;- </span></span>
+<span id="cb58-86"><a href="buildings.html#cb58-86"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/Parcels.shp&quot;) %&gt;% </span></span>
+<span id="cb58-87"><a href="buildings.html#cb58-87"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
+<span id="cb58-88"><a href="buildings.html#cb58-88"></a><span class="co">#   st_make_valid()</span></span>
+<span id="cb58-89"><a href="buildings.html#cb58-89"></a><span class="co"># </span></span>
+<span id="cb58-90"><a href="buildings.html#cb58-90"></a><span class="co"># save(sjc_parcels, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/sjc_parcels.Rdata&quot;)</span></span>
+<span id="cb58-91"><a href="buildings.html#cb58-91"></a><span class="co"># </span></span>
+<span id="cb58-92"><a href="buildings.html#cb58-92"></a><span class="co"># stockton_parcels &lt;- </span></span>
+<span id="cb58-93"><a href="buildings.html#cb58-93"></a><span class="co">#   sjc_parcels[stockton_boundary_influence,]</span></span>
+<span id="cb58-94"><a href="buildings.html#cb58-94"></a><span class="co"># </span></span>
+<span id="cb58-95"><a href="buildings.html#cb58-95"></a><span class="co"># bldg_parcel_join &lt;- </span></span>
+<span id="cb58-96"><a href="buildings.html#cb58-96"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_parcels) %&gt;%</span></span>
+<span id="cb58-97"><a href="buildings.html#cb58-97"></a><span class="co">#   dplyr::select(APN, id, STAREA__) %&gt;% </span></span>
+<span id="cb58-98"><a href="buildings.html#cb58-98"></a><span class="co">#   rename(area = STAREA__) %&gt;% </span></span>
+<span id="cb58-99"><a href="buildings.html#cb58-99"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb58-100"><a href="buildings.html#cb58-100"></a><span class="co"># </span></span>
+<span id="cb58-101"><a href="buildings.html#cb58-101"></a><span class="co"># sjc_zoning &lt;- </span></span>
+<span id="cb58-102"><a href="buildings.html#cb58-102"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Zoning/Zoning.shp&quot;) %&gt;% </span></span>
+<span id="cb58-103"><a href="buildings.html#cb58-103"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
+<span id="cb58-104"><a href="buildings.html#cb58-104"></a><span class="co">#   filter(ZNLABEL != &quot;STOCKTON&quot;)</span></span>
+<span id="cb58-105"><a href="buildings.html#cb58-105"></a><span class="co"># </span></span>
+<span id="cb58-106"><a href="buildings.html#cb58-106"></a><span class="co"># stockton_zoning &lt;- </span></span>
+<span id="cb58-107"><a href="buildings.html#cb58-107"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Stockton_Zoning/Zoning.shp&quot;) %&gt;% </span></span>
+<span id="cb58-108"><a href="buildings.html#cb58-108"></a><span class="co">#   st_transform(st_crs(zcta_stockton))</span></span>
+<span id="cb58-109"><a href="buildings.html#cb58-109"></a><span class="co"># </span></span>
+<span id="cb58-110"><a href="buildings.html#cb58-110"></a><span class="co"># bldg_zoning_join &lt;- </span></span>
+<span id="cb58-111"><a href="buildings.html#cb58-111"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_zoning) %&gt;% </span></span>
+<span id="cb58-112"><a href="buildings.html#cb58-112"></a><span class="co">#   dplyr::select(ZONE, id) %&gt;% </span></span>
+<span id="cb58-113"><a href="buildings.html#cb58-113"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb58-114"><a href="buildings.html#cb58-114"></a><span class="co"># </span></span>
+<span id="cb58-115"><a href="buildings.html#cb58-115"></a><span class="co"># bldg_zoning_join_uninc &lt;- </span></span>
+<span id="cb58-116"><a href="buildings.html#cb58-116"></a><span class="co">#   st_join(st_centroid(stockton_bldg), sjc_zoning) %&gt;% </span></span>
+<span id="cb58-117"><a href="buildings.html#cb58-117"></a><span class="co">#   dplyr::select(ZNCODE, id) %&gt;% </span></span>
+<span id="cb58-118"><a href="buildings.html#cb58-118"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb58-119"><a href="buildings.html#cb58-119"></a><span class="co"># </span></span>
+<span id="cb58-120"><a href="buildings.html#cb58-120"></a><span class="co"># bldg_zoning_join %&lt;&gt;% </span></span>
+<span id="cb58-121"><a href="buildings.html#cb58-121"></a><span class="co">#   merge(bldg_zoning_join_uninc) %&gt;% </span></span>
+<span id="cb58-122"><a href="buildings.html#cb58-122"></a><span class="co">#   mutate(ZONE = ifelse(is.na(ZONE),as.character(ZNCODE),as.character(ZONE))) %&gt;% </span></span>
+<span id="cb58-123"><a href="buildings.html#cb58-123"></a><span class="co">#   dplyr::select(ZONE, id)</span></span>
+<span id="cb58-124"><a href="buildings.html#cb58-124"></a><span class="co"># </span></span>
+<span id="cb58-125"><a href="buildings.html#cb58-125"></a><span class="co"># sjc_bgs &lt;- </span></span>
+<span id="cb58-126"><a href="buildings.html#cb58-126"></a><span class="co">#   block_groups(&quot;California&quot;, &quot;San Joaquin County&quot;)</span></span>
+<span id="cb58-127"><a href="buildings.html#cb58-127"></a><span class="co"># </span></span>
+<span id="cb58-128"><a href="buildings.html#cb58-128"></a><span class="co"># stockton_bgs &lt;- </span></span>
+<span id="cb58-129"><a href="buildings.html#cb58-129"></a><span class="co">#   sjc_bgs[stockton_boundary_influence,]</span></span>
+<span id="cb58-130"><a href="buildings.html#cb58-130"></a><span class="co"># </span></span>
+<span id="cb58-131"><a href="buildings.html#cb58-131"></a><span class="co"># bldg_bg_join &lt;- </span></span>
+<span id="cb58-132"><a href="buildings.html#cb58-132"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_bgs) %&gt;% </span></span>
+<span id="cb58-133"><a href="buildings.html#cb58-133"></a><span class="co">#   dplyr::select(GEOID, id) %&gt;% </span></span>
+<span id="cb58-134"><a href="buildings.html#cb58-134"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb58-135"><a href="buildings.html#cb58-135"></a><span class="co"># </span></span>
+<span id="cb58-136"><a href="buildings.html#cb58-136"></a><span class="co"># bldg_zcta_join &lt;- </span></span>
+<span id="cb58-137"><a href="buildings.html#cb58-137"></a><span class="co">#   st_join(st_centroid(stockton_bldg), zcta_stockton) %&gt;% </span></span>
+<span id="cb58-138"><a href="buildings.html#cb58-138"></a><span class="co">#   dplyr::select(ZIPCODE, id) %&gt;% </span></span>
+<span id="cb58-139"><a href="buildings.html#cb58-139"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb58-140"><a href="buildings.html#cb58-140"></a><span class="co"># </span></span>
+<span id="cb58-141"><a href="buildings.html#cb58-141"></a><span class="co"># load(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/tax_sjc.Rdata&quot;)</span></span>
+<span id="cb58-142"><a href="buildings.html#cb58-142"></a><span class="co"># </span></span>
+<span id="cb58-143"><a href="buildings.html#cb58-143"></a><span class="co"># tax_sjc &lt;- </span></span>
+<span id="cb58-144"><a href="buildings.html#cb58-144"></a><span class="co">#   tax_sjc %&gt;% </span></span>
+<span id="cb58-145"><a href="buildings.html#cb58-145"></a><span class="co">#   mutate(APN = as.numeric(apn)) %&gt;% </span></span>
+<span id="cb58-146"><a href="buildings.html#cb58-146"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb58-147"><a href="buildings.html#cb58-147"></a><span class="co"># </span></span>
+<span id="cb58-148"><a href="buildings.html#cb58-148"></a><span class="co"># stockton_bldg_final &lt;-</span></span>
+<span id="cb58-149"><a href="buildings.html#cb58-149"></a><span class="co">#   stockton_bldg %&gt;%</span></span>
+<span id="cb58-150"><a href="buildings.html#cb58-150"></a><span class="co">#   left_join(bldg_parcel_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb58-151"><a href="buildings.html#cb58-151"></a><span class="co">#   left_join(bldg_zoning_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb58-152"><a href="buildings.html#cb58-152"></a><span class="co">#   left_join(bldg_bg_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb58-153"><a href="buildings.html#cb58-153"></a><span class="co">#   left_join(bldg_zcta_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb58-154"><a href="buildings.html#cb58-154"></a><span class="co">#   left_join(tax_sjc, by=&quot;APN&quot;) %&gt;%</span></span>
+<span id="cb58-155"><a href="buildings.html#cb58-155"></a><span class="co">#   mutate( # the following takes the bldg data, computes bldgground (ground footprint, where the factor conversion is sqm to sqft) and bldgtot (total sqft).</span></span>
+<span id="cb58-156"><a href="buildings.html#cb58-156"></a><span class="co">#     bldgground = as.numeric(st_area(WKT))*10.7639,</span></span>
+<span id="cb58-157"><a href="buildings.html#cb58-157"></a><span class="co">#     bldgtot =</span></span>
+<span id="cb58-158"><a href="buildings.html#cb58-158"></a><span class="co">#       ifelse(</span></span>
+<span id="cb58-159"><a href="buildings.html#cb58-159"></a><span class="co">#         is.na(stories),</span></span>
+<span id="cb58-160"><a href="buildings.html#cb58-160"></a><span class="co">#         bldgground,</span></span>
+<span id="cb58-161"><a href="buildings.html#cb58-161"></a><span class="co">#         bldgground*stories</span></span>
+<span id="cb58-162"><a href="buildings.html#cb58-162"></a><span class="co">#       ),</span></span>
+<span id="cb58-163"><a href="buildings.html#cb58-163"></a><span class="co">#     ZIPCODE = as.numeric(ZIPCODE),</span></span>
+<span id="cb58-164"><a href="buildings.html#cb58-164"></a><span class="co">#     ZONING = </span></span>
+<span id="cb58-165"><a href="buildings.html#cb58-165"></a><span class="co">#       case_when(</span></span>
+<span id="cb58-166"><a href="buildings.html#cb58-166"></a><span class="co">#         substr(ZONE,1,1) == &quot;R&quot; ~ &quot;R&quot;,</span></span>
+<span id="cb58-167"><a href="buildings.html#cb58-167"></a><span class="co">#         substr(ZONE,1,2) == &quot;(R&quot; ~ &quot;R&quot;,</span></span>
+<span id="cb58-168"><a href="buildings.html#cb58-168"></a><span class="co">#         substr(ZONE,1,1) %in% c(&quot;C&quot;,&quot;P&quot;,&quot;M&quot;,&quot;U&quot;) ~ &quot;C&quot;, </span></span>
+<span id="cb58-169"><a href="buildings.html#cb58-169"></a><span class="co">#         substr(ZONE,1,2) %in% c(&quot;(C&quot;,&quot;(P&quot;) ~ &quot;C&quot;,</span></span>
+<span id="cb58-170"><a href="buildings.html#cb58-170"></a><span class="co">#         TRUE ~ &quot;O&quot;</span></span>
+<span id="cb58-171"><a href="buildings.html#cb58-171"></a><span class="co">#       )</span></span>
+<span id="cb58-172"><a href="buildings.html#cb58-172"></a><span class="co">#   )</span></span>
+<span id="cb58-173"><a href="buildings.html#cb58-173"></a><span class="co"># </span></span>
+<span id="cb58-174"><a href="buildings.html#cb58-174"></a><span class="co"># save(stockton_bldg_final, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/stockton_bldg.Rdata&quot;)</span></span>
+<span id="cb58-175"><a href="buildings.html#cb58-175"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/stockton_bldg.Rdata&quot;</span>)</span>
+<span id="cb58-176"><a href="buildings.html#cb58-176"></a><span class="co"># </span></span>
+<span id="cb58-177"><a href="buildings.html#cb58-177"></a><span class="co"># stockton_bldg_17 &lt;- </span></span>
+<span id="cb58-178"><a href="buildings.html#cb58-178"></a><span class="co">#   readOGR(dsn = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/Stockton2017&quot;, layer = &quot;Stockton&quot;) %&gt;% </span></span>
+<span id="cb58-179"><a href="buildings.html#cb58-179"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb58-180"><a href="buildings.html#cb58-180"></a><span class="co">#   st_transform(st_crs(stockton_bldg_final))</span></span>
+<span id="cb58-181"><a href="buildings.html#cb58-181"></a><span class="co"># </span></span>
+<span id="cb58-182"><a href="buildings.html#cb58-182"></a><span class="co"># save(stockton_bldg_17, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/stockton_bldg_17.Rdata&quot;)</span></span>
+<span id="cb58-183"><a href="buildings.html#cb58-183"></a><span class="co"># load(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/stockton_bldg_17.Rdata&quot;)</span></span>
+<span id="cb58-184"><a href="buildings.html#cb58-184"></a></span>
+<span id="cb58-185"><a href="buildings.html#cb58-185"></a><span class="co"># # match height from 2017 data</span></span>
+<span id="cb58-186"><a href="buildings.html#cb58-186"></a><span class="co"># bldg_join &lt;-</span></span>
+<span id="cb58-187"><a href="buildings.html#cb58-187"></a><span class="co">#   stockton_bldg_final %&gt;%</span></span>
+<span id="cb58-188"><a href="buildings.html#cb58-188"></a><span class="co">#   st_join(</span></span>
+<span id="cb58-189"><a href="buildings.html#cb58-189"></a><span class="co">#     stockton_bldg_17 %&gt;%</span></span>
+<span id="cb58-190"><a href="buildings.html#cb58-190"></a><span class="co">#       st_transform(26910) %&gt;%</span></span>
+<span id="cb58-191"><a href="buildings.html#cb58-191"></a><span class="co">#       st_buffer(-1) %&gt;%</span></span>
+<span id="cb58-192"><a href="buildings.html#cb58-192"></a><span class="co">#       st_transform(st_crs(stockton_bldg_final))</span></span>
+<span id="cb58-193"><a href="buildings.html#cb58-193"></a><span class="co">#   ) %&gt;%</span></span>
+<span id="cb58-194"><a href="buildings.html#cb58-194"></a><span class="co">#   group_by(id) %&gt;%</span></span>
+<span id="cb58-195"><a href="buildings.html#cb58-195"></a><span class="co">#   summarize(</span></span>
+<span id="cb58-196"><a href="buildings.html#cb58-196"></a><span class="co">#     Height = mean(Height,na.rm=T)</span></span>
+<span id="cb58-197"><a href="buildings.html#cb58-197"></a><span class="co">#   ) %&gt;%</span></span>
+<span id="cb58-198"><a href="buildings.html#cb58-198"></a><span class="co">#   left_join(stockton_bldg_final %&gt;% st_set_geometry(NULL),by=&quot;id&quot;)</span></span>
+<span id="cb58-199"><a href="buildings.html#cb58-199"></a><span class="co"># </span></span>
+<span id="cb58-200"><a href="buildings.html#cb58-200"></a><span class="co"># bldg_join &lt;-</span></span>
+<span id="cb58-201"><a href="buildings.html#cb58-201"></a><span class="co">#   bldg_join %&gt;% </span></span>
+<span id="cb58-202"><a href="buildings.html#cb58-202"></a><span class="co">#   mutate(</span></span>
+<span id="cb58-203"><a href="buildings.html#cb58-203"></a><span class="co">#     stories_by_height =</span></span>
+<span id="cb58-204"><a href="buildings.html#cb58-204"></a><span class="co">#       case_when(</span></span>
+<span id="cb58-205"><a href="buildings.html#cb58-205"></a><span class="co">#         GEOID == &quot;060770039001&quot; ~ 1, #Naval base</span></span>
+<span id="cb58-206"><a href="buildings.html#cb58-206"></a><span class="co">#         is.na(Height) &amp; is.na(stories) ~ 1,</span></span>
+<span id="cb58-207"><a href="buildings.html#cb58-207"></a><span class="co">#         is.na(Height) ~ round(stories),</span></span>
+<span id="cb58-208"><a href="buildings.html#cb58-208"></a><span class="co">#         !is.na(stories) ~ round(stories),</span></span>
+<span id="cb58-209"><a href="buildings.html#cb58-209"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==1),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==1),]$Height) ~ 1,</span></span>
+<span id="cb58-210"><a href="buildings.html#cb58-210"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==2),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==2),]$Height) ~ 2,</span></span>
+<span id="cb58-211"><a href="buildings.html#cb58-211"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==3),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==3),]$Height) ~ 3,</span></span>
+<span id="cb58-212"><a href="buildings.html#cb58-212"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==4),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==4),]$Height) ~ 4,</span></span>
+<span id="cb58-213"><a href="buildings.html#cb58-213"></a><span class="co">#         TRUE ~ round(Height/5)</span></span>
+<span id="cb58-214"><a href="buildings.html#cb58-214"></a><span class="co">#       ),</span></span>
+<span id="cb58-215"><a href="buildings.html#cb58-215"></a><span class="co">#     bldg_tot =</span></span>
+<span id="cb58-216"><a href="buildings.html#cb58-216"></a><span class="co">#       bldgground*stories_by_height</span></span>
+<span id="cb58-217"><a href="buildings.html#cb58-217"></a><span class="co">#   )</span></span>
+<span id="cb58-218"><a href="buildings.html#cb58-218"></a><span class="co"># # 6033 unmatched when using -1m buffer. #2637 of those did not have assessor stories data, set to 1F. Of other 3396, 2090 1F, 1248 2F, 58 3F.</span></span>
+<span id="cb58-219"><a href="buildings.html#cb58-219"></a><span class="co"># # 70757 had both 2017 heights and assessor stories data, go with assessor stories data. 51676 had assessor stories = 1, kept at 1F. 18974 had assessor stories = 2, kept at 2F. 107 had assessor stories &gt; 2, set to 2.5F.</span></span>
+<span id="cb58-220"><a href="buildings.html#cb58-220"></a><span class="co"># # mean height for assessor 1F: 11.30, sd 1.63. mean height for assessor 2F: 13.98, sd 2.25. mean height for assessor 3F: 15.39, sd 2.99. mean height for assessor 4F: 14.42, sd 5.35.</span></span>
+<span id="cb58-221"><a href="buildings.html#cb58-221"></a><span class="co"># # 24660 had no assessor stories data but had 2017 heights, use mean + 1 sd from above as thresholds. 1F: 12.92. 2F: 16.23. 3F: 18.38. 4F: 19.77</span></span>
+<span id="cb58-222"><a href="buildings.html#cb58-222"></a><span class="co"># # 15991 1F, 5642 2F, 908 3F, 1512 4F, 541 5F, 29 6F, 12 7F, 15 8F, 4 9F, 5 10F, 1 12F.</span></span>
+<span id="cb58-223"><a href="buildings.html#cb58-223"></a><span class="co"># </span></span>
+<span id="cb58-224"><a href="buildings.html#cb58-224"></a><span class="co"># save(bldg_join, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;)</span></span>
+<span id="cb58-225"><a href="buildings.html#cb58-225"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;</span>)</span>
+<span id="cb58-226"><a href="buildings.html#cb58-226"></a></span>
+<span id="cb58-227"><a href="buildings.html#cb58-227"></a>bg_bldg &lt;-</span>
+<span id="cb58-228"><a href="buildings.html#cb58-228"></a><span class="st">  </span>bldg_join <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-229"><a href="buildings.html#cb58-229"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-230"><a href="buildings.html#cb58-230"></a><span class="st">  </span><span class="kw">group_by</span>(GEOID, ZONING) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-231"><a href="buildings.html#cb58-231"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
+<span id="cb58-232"><a href="buildings.html#cb58-232"></a>    <span class="dt">numbldg =</span> <span class="kw">n</span>(),</span>
+<span id="cb58-233"><a href="buildings.html#cb58-233"></a>    <span class="dt">bldgtot =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
+<span id="cb58-234"><a href="buildings.html#cb58-234"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-235"><a href="buildings.html#cb58-235"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-236"><a href="buildings.html#cb58-236"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_bgs_full, <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-237"><a href="buildings.html#cb58-237"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-238"><a href="buildings.html#cb58-238"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(<span class="kw">st_dimension</span>(.)))</span>
+<span id="cb58-239"><a href="buildings.html#cb58-239"></a></span>
+<span id="cb58-240"><a href="buildings.html#cb58-240"></a><span class="co">#res/sqft per block group</span></span>
+<span id="cb58-241"><a href="buildings.html#cb58-241"></a>bg_pop &lt;-</span>
+<span id="cb58-242"><a href="buildings.html#cb58-242"></a><span class="st">  </span><span class="kw">getCensus</span>(</span>
+<span id="cb58-243"><a href="buildings.html#cb58-243"></a>    <span class="dt">name =</span> <span class="st">&quot;acs/acs5&quot;</span>,</span>
+<span id="cb58-244"><a href="buildings.html#cb58-244"></a>    <span class="dt">vintage =</span> <span class="dv">2017</span>, <span class="co"># satellite imagery is from around 2014/2015</span></span>
+<span id="cb58-245"><a href="buildings.html#cb58-245"></a>    <span class="dt">vars =</span> <span class="kw">c</span>(<span class="st">&quot;B01003_001E&quot;</span>),</span>
+<span id="cb58-246"><a href="buildings.html#cb58-246"></a>    <span class="dt">region =</span> <span class="st">&quot;block group:*&quot;</span>,</span>
+<span id="cb58-247"><a href="buildings.html#cb58-247"></a>    <span class="dt">regionin =</span> <span class="st">&quot;state:06+county:077&quot;</span></span>
+<span id="cb58-248"><a href="buildings.html#cb58-248"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb58-249"><a href="buildings.html#cb58-249"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb58-250"><a href="buildings.html#cb58-250"></a>    <span class="dt">GEOID =</span> <span class="kw">paste0</span>(state,county,tract,block_group),</span>
+<span id="cb58-251"><a href="buildings.html#cb58-251"></a>    <span class="dt">pop =</span> B01003_001E</span>
+<span id="cb58-252"><a href="buildings.html#cb58-252"></a>  )</span>
+<span id="cb58-253"><a href="buildings.html#cb58-253"></a></span>
+<span id="cb58-254"><a href="buildings.html#cb58-254"></a>bg_bldg_norm_r &lt;-</span>
+<span id="cb58-255"><a href="buildings.html#cb58-255"></a><span class="st">  </span>bg_bldg <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-256"><a href="buildings.html#cb58-256"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;R&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-257"><a href="buildings.html#cb58-257"></a><span class="st">  </span><span class="kw">left_join</span>(bg_pop, <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-258"><a href="buildings.html#cb58-258"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb58-259"><a href="buildings.html#cb58-259"></a>    <span class="st">`</span><span class="dt">Residents per 1,000 sqft</span><span class="st">`</span> =<span class="st"> </span>pop<span class="op">/</span>bldgtot<span class="op">*</span><span class="dv">1000</span>,</span>
+<span id="cb58-260"><a href="buildings.html#cb58-260"></a>    <span class="dt">residential_density =</span> bldgtot<span class="op">/</span>(<span class="kw">as.numeric</span>(<span class="kw">st_area</span>(.))<span class="op">/</span><span class="fl">4046.86</span>)</span>
+<span id="cb58-261"><a href="buildings.html#cb58-261"></a>  )</span>
+<span id="cb58-262"><a href="buildings.html#cb58-262"></a></span>
+<span id="cb58-263"><a href="buildings.html#cb58-263"></a><span class="co"># map = mapview(bg_bldg_norm_r[,c(&quot;residential_density&quot;)],zcol=c(&quot;residential_density&quot;), legend = TRUE, layer.name = &quot;Residential&lt;/br&gt;density&lt;/br&gt;per acre&quot;)</span></span>
+<span id="cb58-264"><a href="buildings.html#cb58-264"></a><span class="co"># </span></span>
+<span id="cb58-265"><a href="buildings.html#cb58-265"></a><span class="co"># mapshot(map, url = &quot;map-residential-density.html&quot;)</span></span>
+<span id="cb58-266"><a href="buildings.html#cb58-266"></a></span>
+<span id="cb58-267"><a href="buildings.html#cb58-267"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-residential-density.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:residential-density"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-residential-density.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.36: Stockton residents per 1,000 sqft of residential building area, per block group.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="buildings.html#cb59-1"></a><span class="co"># bldg_norm_r &lt;-</span></span>
+<span id="cb59-2"><a href="buildings.html#cb59-2"></a><span class="co">#   bg_bldg %&gt;% </span></span>
+<span id="cb59-3"><a href="buildings.html#cb59-3"></a><span class="co">#   filter(ZONING == &quot;R&quot;) %&gt;% </span></span>
+<span id="cb59-4"><a href="buildings.html#cb59-4"></a><span class="co">#   left_join(bg_pop, by = &quot;GEOID&quot;) %&gt;% </span></span>
+<span id="cb59-5"><a href="buildings.html#cb59-5"></a><span class="co">#   summarize(</span></span>
+<span id="cb59-6"><a href="buildings.html#cb59-6"></a><span class="co">#     pop = sum(pop, na.rm=T),</span></span>
+<span id="cb59-7"><a href="buildings.html#cb59-7"></a><span class="co">#     bldgtot = sum(bldgtot, na.rm=T)</span></span>
+<span id="cb59-8"><a href="buildings.html#cb59-8"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb59-9"><a href="buildings.html#cb59-9"></a><span class="co">#   mutate(`Residents/1000sqft` = pop/bldgtot*1000)</span></span>
+<span id="cb59-10"><a href="buildings.html#cb59-10"></a><span class="co"># </span></span>
+<span id="cb59-11"><a href="buildings.html#cb59-11"></a><span class="co"># bldg_norm_c &lt;-</span></span>
+<span id="cb59-12"><a href="buildings.html#cb59-12"></a><span class="co">#   bg_bldg %&gt;% </span></span>
+<span id="cb59-13"><a href="buildings.html#cb59-13"></a><span class="co">#   filter(ZONING == &quot;C&quot;) %&gt;% </span></span>
+<span id="cb59-14"><a href="buildings.html#cb59-14"></a><span class="co">#   left_join(</span></span>
+<span id="cb59-15"><a href="buildings.html#cb59-15"></a><span class="co">#     stockton_wac %&gt;% </span></span>
+<span id="cb59-16"><a href="buildings.html#cb59-16"></a><span class="co">#       filter(year == 2017) %&gt;% </span></span>
+<span id="cb59-17"><a href="buildings.html#cb59-17"></a><span class="co">#       dplyr::select(jobs = C000, GEOID), </span></span>
+<span id="cb59-18"><a href="buildings.html#cb59-18"></a><span class="co">#     by = &quot;GEOID&quot;</span></span>
+<span id="cb59-19"><a href="buildings.html#cb59-19"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb59-20"><a href="buildings.html#cb59-20"></a><span class="co">#   summarize(</span></span>
+<span id="cb59-21"><a href="buildings.html#cb59-21"></a><span class="co">#     jobs = sum(jobs, na.rm=T),</span></span>
+<span id="cb59-22"><a href="buildings.html#cb59-22"></a><span class="co">#     bldgtot = sum(bldgtot, na.rm=T)</span></span>
+<span id="cb59-23"><a href="buildings.html#cb59-23"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb59-24"><a href="buildings.html#cb59-24"></a><span class="co">#   mutate(`Jobs/1000sqft` = jobs/bldgtot*1000)</span></span>
+<span id="cb59-25"><a href="buildings.html#cb59-25"></a></span>
+<span id="cb59-26"><a href="buildings.html#cb59-26"></a>bg_bldg_norm_c &lt;-</span>
+<span id="cb59-27"><a href="buildings.html#cb59-27"></a><span class="st">  </span>bg_bldg <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-28"><a href="buildings.html#cb59-28"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;C&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-29"><a href="buildings.html#cb59-29"></a><span class="st">  </span><span class="kw">left_join</span>(</span>
+<span id="cb59-30"><a href="buildings.html#cb59-30"></a>    stockton_wac <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-31"><a href="buildings.html#cb59-31"></a><span class="st">      </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-32"><a href="buildings.html#cb59-32"></a><span class="st">      </span><span class="kw">filter</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2015</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-33"><a href="buildings.html#cb59-33"></a><span class="st">      </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">jobs=</span>C000,GEOID), </span>
+<span id="cb59-34"><a href="buildings.html#cb59-34"></a>    <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span></span>
+<span id="cb59-35"><a href="buildings.html#cb59-35"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-36"><a href="buildings.html#cb59-36"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb59-37"><a href="buildings.html#cb59-37"></a>    <span class="st">`</span><span class="dt">Jobs per 1,000 sqft</span><span class="st">`</span> =<span class="st"> </span>jobs<span class="op">/</span>bldgtot<span class="op">*</span><span class="dv">1000</span>,</span>
+<span id="cb59-38"><a href="buildings.html#cb59-38"></a>    <span class="dt">commercial_density =</span> bldgtot<span class="op">/</span>(<span class="kw">as.numeric</span>(<span class="kw">st_area</span>(.))<span class="op">/</span><span class="fl">4046.86</span>)</span>
+<span id="cb59-39"><a href="buildings.html#cb59-39"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb59-40"><a href="buildings.html#cb59-40"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>GEOID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;060770039001&quot;</span>,<span class="st">&quot;060770039002&quot;</span>))</span>
+<span id="cb59-41"><a href="buildings.html#cb59-41"></a></span>
+<span id="cb59-42"><a href="buildings.html#cb59-42"></a><span class="co"># map = mapview(bg_bldg_norm_c[,c(&quot;commercial_density&quot;)],zcol=c(&quot;commercial_density&quot;), legend = TRUE, layer.name = &quot;Commercial&lt;/br&gt;density&lt;/br&gt;per acre&quot;)</span></span>
+<span id="cb59-43"><a href="buildings.html#cb59-43"></a><span class="co"># </span></span>
+<span id="cb59-44"><a href="buildings.html#cb59-44"></a><span class="co"># mapshot(map, url = &quot;map-commercial-density.html&quot;)</span></span>
+<span id="cb59-45"><a href="buildings.html#cb59-45"></a></span>
+<span id="cb59-46"><a href="buildings.html#cb59-46"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-commercial-density.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:commercial-density"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-commercial-density.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.37: Stockton jobs per 1,000 sqft of commercial building area, per block group.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Because we do not have robust historical building datasets, we cannot analyze the change in building square footages over time. For forecasting, we assumed an overall fixed building utilization estimate of 1.7 residents per 1000 sqft of residential buildings, and 1.3 jobs per 1000 sqft of commercial buildings. In the intervention stage, if we expect a strategy would change building utilization, we would make a reduction in energy consumption relative to these baseline utilization rates.</p>
+<p>As one last couple of building-specific analyses, we aggregated building square footage information up to the zipcode level and compared with energy usage data to see residential and commercial building energy efficiency at a recent snapshot of time, spatially distributed across Stockton.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="buildings.html#cb60-1"></a><span class="co">#disaggregating by zipcode and zoning type of the buildings to get summaries of # of buildings, total ground footprint, and total bldg sqft. the filter removes NAs in the data, which could be missing zones in specific zipcodes.</span></span>
+<span id="cb60-2"><a href="buildings.html#cb60-2"></a>zcta_bldg_spread &lt;-<span class="st"> </span></span>
+<span id="cb60-3"><a href="buildings.html#cb60-3"></a><span class="st">  </span>stockton_bldg_final <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-4"><a href="buildings.html#cb60-4"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-5"><a href="buildings.html#cb60-5"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ZONING) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-6"><a href="buildings.html#cb60-6"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb60-7"><a href="buildings.html#cb60-7"></a>    <span class="dt">NUMBLDG =</span> <span class="kw">n</span>(),</span>
+<span id="cb60-8"><a href="buildings.html#cb60-8"></a>    <span class="dt">TOTSQFTGROUND =</span> <span class="kw">sum</span>(bldgground, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-9"><a href="buildings.html#cb60-9"></a>    <span class="dt">TOTSQFT =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-10"><a href="buildings.html#cb60-10"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-11"><a href="buildings.html#cb60-11"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(ZIPCODE) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(ZONING)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-12"><a href="buildings.html#cb60-12"></a><span class="st">  </span><span class="kw">gather</span>(key, value, NUMBLDG<span class="op">:</span>TOTSQFT) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-13"><a href="buildings.html#cb60-13"></a><span class="st">  </span><span class="kw">unite</span>(temp,ZONING,key) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-14"><a href="buildings.html#cb60-14"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
+<span id="cb60-15"><a href="buildings.html#cb60-15"></a></span>
+<span id="cb60-16"><a href="buildings.html#cb60-16"></a><span class="co">#summarize totals by zipcode, then join the zoning-specific subtotals to it.</span></span>
+<span id="cb60-17"><a href="buildings.html#cb60-17"></a>zcta_bldg_summary &lt;-</span>
+<span id="cb60-18"><a href="buildings.html#cb60-18"></a><span class="st">  </span>stockton_bldg_final <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-19"><a href="buildings.html#cb60-19"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-20"><a href="buildings.html#cb60-20"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-21"><a href="buildings.html#cb60-21"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb60-22"><a href="buildings.html#cb60-22"></a>    <span class="dt">NUMBLDG =</span> <span class="kw">n</span>(),</span>
+<span id="cb60-23"><a href="buildings.html#cb60-23"></a>    <span class="dt">TOTSQFTGROUND =</span> <span class="kw">sum</span>(bldgground, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-24"><a href="buildings.html#cb60-24"></a>    <span class="dt">TOTSQFT =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-25"><a href="buildings.html#cb60-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-26"><a href="buildings.html#cb60-26"></a><span class="st">  </span><span class="kw">left_join</span>(zcta_bldg_spread, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>)</span>
+<span id="cb60-27"><a href="buildings.html#cb60-27"></a></span>
+<span id="cb60-28"><a href="buildings.html#cb60-28"></a>zcta_bldg_stockton_joined &lt;-<span class="st"> </span></span>
+<span id="cb60-29"><a href="buildings.html#cb60-29"></a><span class="st">  </span>zcta_stockton_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-30"><a href="buildings.html#cb60-30"></a><span class="st">  </span><span class="kw">filter</span>(ZIPCODE <span class="op">!=</span><span class="st"> </span><span class="dv">95211</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-31"><a href="buildings.html#cb60-31"></a><span class="st">  </span><span class="kw">left_join</span>(zcta_bldg_summary, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-32"><a href="buildings.html#cb60-32"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb60-33"><a href="buildings.html#cb60-33"></a>    <span class="dt">ER_KBTUperSQFT =</span> ER_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb60-34"><a href="buildings.html#cb60-34"></a>    <span class="dt">GR_KBTUperSQFT =</span> GR_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb60-35"><a href="buildings.html#cb60-35"></a>    <span class="dt">EC_KBTUperSQFT =</span> EC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb60-36"><a href="buildings.html#cb60-36"></a>    <span class="dt">GC_KBTUperSQFT =</span> GC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb60-37"><a href="buildings.html#cb60-37"></a>    <span class="dt">R_KBTUperSQFT =</span> R_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb60-38"><a href="buildings.html#cb60-38"></a>    <span class="dt">C_KBTUperSQFT =</span> C_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb60-39"><a href="buildings.html#cb60-39"></a>    <span class="dt">E_KBTUperSQFT =</span> E_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb60-40"><a href="buildings.html#cb60-40"></a>    <span class="dt">G_KBTUperSQFT =</span> G_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb60-41"><a href="buildings.html#cb60-41"></a>    <span class="dt">KBTUperSQFT =</span> TOTALKBTU<span class="op">/</span>TOTSQFT</span>
+<span id="cb60-42"><a href="buildings.html#cb60-42"></a>  )</span>
+<span id="cb60-43"><a href="buildings.html#cb60-43"></a></span>
+<span id="cb60-44"><a href="buildings.html#cb60-44"></a><span class="co"># map = mapview(zcta_bldg_stockton_joined[,c(&quot;R_KBTUPERCUST&quot;)], zcol=c(&quot;R_KBTUPERCUST&quot;), legend = TRUE, layer.name = &quot;kBTU per customer,&lt;/br&gt;Residential&quot;)</span></span>
+<span id="cb60-45"><a href="buildings.html#cb60-45"></a><span class="co"># </span></span>
+<span id="cb60-46"><a href="buildings.html#cb60-46"></a><span class="co"># mapshot(map, url = &quot;map-res-customer.html&quot;)</span></span>
+<span id="cb60-47"><a href="buildings.html#cb60-47"></a></span>
+<span id="cb60-48"><a href="buildings.html#cb60-48"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-res-customer.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:res-customer"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-res-customer.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.38: Stockton residential kBTU per sqft of residential building area, per zip code.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="buildings.html#cb61-1"></a><span class="co"># map = mapview(zcta_bldg_stockton_joined[,c(&quot;C_KBTUPERCUST&quot;)], zcol=c(&quot;C_KBTUPERCUST&quot;), legend = TRUE, layer.name = &quot;kBTU per customer,&lt;/br&gt;Commercial&quot;)</span></span>
+<span id="cb61-2"><a href="buildings.html#cb61-2"></a><span class="co"># </span></span>
+<span id="cb61-3"><a href="buildings.html#cb61-3"></a><span class="co"># mapshot(map, url = &quot;map-comm-customer.html&quot;)</span></span>
+<span id="cb61-4"><a href="buildings.html#cb61-4"></a></span>
+<span id="cb61-5"><a href="buildings.html#cb61-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-comm-customer.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:comm-customer"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-comm-customer.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.39: Stockton commercial kBTU per sqft of commercial building area, per zip code.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="buildings.html#cb62-1"></a>zcta_bldg_stockton_summary &lt;-<span class="st"> </span></span>
+<span id="cb62-2"><a href="buildings.html#cb62-2"></a><span class="st">  </span>zcta_bldg_stockton_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-3"><a href="buildings.html#cb62-3"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-4"><a href="buildings.html#cb62-4"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb62-5"><a href="buildings.html#cb62-5"></a>    <span class="kw">c</span>(</span>
+<span id="cb62-6"><a href="buildings.html#cb62-6"></a>      <span class="st">&quot;NUMBLDG&quot;</span>, </span>
+<span id="cb62-7"><a href="buildings.html#cb62-7"></a>      <span class="st">&quot;R_NUMBLDG&quot;</span>, </span>
+<span id="cb62-8"><a href="buildings.html#cb62-8"></a>      <span class="st">&quot;C_NUMBLDG&quot;</span>,</span>
+<span id="cb62-9"><a href="buildings.html#cb62-9"></a>      <span class="st">&quot;TOTSQFTGROUND&quot;</span>,</span>
+<span id="cb62-10"><a href="buildings.html#cb62-10"></a>      <span class="st">&quot;TOTSQFT&quot;</span>,</span>
+<span id="cb62-11"><a href="buildings.html#cb62-11"></a>      <span class="st">&quot;R_TOTSQFT&quot;</span>,</span>
+<span id="cb62-12"><a href="buildings.html#cb62-12"></a>      <span class="st">&quot;C_TOTSQFT&quot;</span>,</span>
+<span id="cb62-13"><a href="buildings.html#cb62-13"></a>      <span class="st">&quot;R_TOTSQFTGROUND&quot;</span>,</span>
+<span id="cb62-14"><a href="buildings.html#cb62-14"></a>      <span class="st">&quot;C_TOTSQFTGROUND&quot;</span>,</span>
+<span id="cb62-15"><a href="buildings.html#cb62-15"></a>      <span class="st">&quot;TOTALKBTU&quot;</span>,</span>
+<span id="cb62-16"><a href="buildings.html#cb62-16"></a>      <span class="st">&quot;E_TOTALKBTU&quot;</span>,</span>
+<span id="cb62-17"><a href="buildings.html#cb62-17"></a>      <span class="st">&quot;G_TOTALKBTU&quot;</span>,</span>
+<span id="cb62-18"><a href="buildings.html#cb62-18"></a>      <span class="st">&quot;R_TOTALKBTU&quot;</span>,</span>
+<span id="cb62-19"><a href="buildings.html#cb62-19"></a>      <span class="st">&quot;C_TOTALKBTU&quot;</span>, </span>
+<span id="cb62-20"><a href="buildings.html#cb62-20"></a>      <span class="st">&quot;ER_TOTALKBTU&quot;</span>, </span>
+<span id="cb62-21"><a href="buildings.html#cb62-21"></a>      <span class="st">&quot;GR_TOTALKBTU&quot;</span>, </span>
+<span id="cb62-22"><a href="buildings.html#cb62-22"></a>      <span class="st">&quot;EC_TOTALKBTU&quot;</span>, </span>
+<span id="cb62-23"><a href="buildings.html#cb62-23"></a>      <span class="st">&quot;GC_TOTALKBTU&quot;</span></span>
+<span id="cb62-24"><a href="buildings.html#cb62-24"></a>    ), sum, <span class="dt">na.rm=</span>T</span>
+<span id="cb62-25"><a href="buildings.html#cb62-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-26"><a href="buildings.html#cb62-26"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb62-27"><a href="buildings.html#cb62-27"></a>    <span class="dt">ER_KBTUperSQFT =</span> ER_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb62-28"><a href="buildings.html#cb62-28"></a>    <span class="dt">GR_KBTUperSQFT =</span> GR_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb62-29"><a href="buildings.html#cb62-29"></a>    <span class="dt">EC_KBTUperSQFT =</span> EC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb62-30"><a href="buildings.html#cb62-30"></a>    <span class="dt">GC_KBTUperSQFT =</span> GC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb62-31"><a href="buildings.html#cb62-31"></a>    <span class="dt">R_KBTUperSQFT =</span> R_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb62-32"><a href="buildings.html#cb62-32"></a>    <span class="dt">C_KBTUperSQFT =</span> C_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb62-33"><a href="buildings.html#cb62-33"></a>    <span class="dt">E_KBTUperSQFT =</span> E_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb62-34"><a href="buildings.html#cb62-34"></a>    <span class="dt">G_KBTUperSQFT =</span> G_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb62-35"><a href="buildings.html#cb62-35"></a>    <span class="dt">KBTUperSQFT =</span> TOTALKBTU<span class="op">/</span>TOTSQFT,</span>
+<span id="cb62-36"><a href="buildings.html#cb62-36"></a>  )</span>
+<span id="cb62-37"><a href="buildings.html#cb62-37"></a></span>
+<span id="cb62-38"><a href="buildings.html#cb62-38"></a>zcta_bldg_stockton_table &lt;-</span>
+<span id="cb62-39"><a href="buildings.html#cb62-39"></a><span class="st">  </span><span class="kw">data.frame</span>(</span>
+<span id="cb62-40"><a href="buildings.html#cb62-40"></a>    <span class="dt">Type =</span> <span class="kw">c</span>(</span>
+<span id="cb62-41"><a href="buildings.html#cb62-41"></a>      <span class="st">&quot;Residential Electricity&quot;</span>,</span>
+<span id="cb62-42"><a href="buildings.html#cb62-42"></a>      <span class="st">&quot;Residential Gas&quot;</span>,</span>
+<span id="cb62-43"><a href="buildings.html#cb62-43"></a>      <span class="st">&quot;Commercial Electricity&quot;</span>,</span>
+<span id="cb62-44"><a href="buildings.html#cb62-44"></a>      <span class="st">&quot;Commercial Gas&quot;</span>,</span>
+<span id="cb62-45"><a href="buildings.html#cb62-45"></a>      <span class="st">&quot;Residential Total&quot;</span>,</span>
+<span id="cb62-46"><a href="buildings.html#cb62-46"></a>      <span class="st">&quot;Commercial Total&quot;</span>,</span>
+<span id="cb62-47"><a href="buildings.html#cb62-47"></a>      <span class="st">&quot;Electricity Total&quot;</span>,</span>
+<span id="cb62-48"><a href="buildings.html#cb62-48"></a>      <span class="st">&quot;Gas Total&quot;</span>,</span>
+<span id="cb62-49"><a href="buildings.html#cb62-49"></a>      <span class="st">&quot;Total&quot;</span></span>
+<span id="cb62-50"><a href="buildings.html#cb62-50"></a>    ),</span>
+<span id="cb62-51"><a href="buildings.html#cb62-51"></a>    <span class="dt">Bldg =</span> <span class="kw">c</span>(</span>
+<span id="cb62-52"><a href="buildings.html#cb62-52"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-53"><a href="buildings.html#cb62-53"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-54"><a href="buildings.html#cb62-54"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-55"><a href="buildings.html#cb62-55"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-56"><a href="buildings.html#cb62-56"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_NUMBLDG,</span>
+<span id="cb62-57"><a href="buildings.html#cb62-57"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_NUMBLDG,</span>
+<span id="cb62-58"><a href="buildings.html#cb62-58"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-59"><a href="buildings.html#cb62-59"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-60"><a href="buildings.html#cb62-60"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_NUMBLDG<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_NUMBLDG</span>
+<span id="cb62-61"><a href="buildings.html#cb62-61"></a>    ),</span>
+<span id="cb62-62"><a href="buildings.html#cb62-62"></a>    <span class="dt">Footprint =</span> <span class="kw">c</span>(</span>
+<span id="cb62-63"><a href="buildings.html#cb62-63"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-64"><a href="buildings.html#cb62-64"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-65"><a href="buildings.html#cb62-65"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-66"><a href="buildings.html#cb62-66"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-67"><a href="buildings.html#cb62-67"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFTGROUND,</span>
+<span id="cb62-68"><a href="buildings.html#cb62-68"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFTGROUND,</span>
+<span id="cb62-69"><a href="buildings.html#cb62-69"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-70"><a href="buildings.html#cb62-70"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-71"><a href="buildings.html#cb62-71"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFTGROUND<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFTGROUND</span>
+<span id="cb62-72"><a href="buildings.html#cb62-72"></a>    ),</span>
+<span id="cb62-73"><a href="buildings.html#cb62-73"></a>    <span class="dt">sqft =</span> <span class="kw">c</span>(</span>
+<span id="cb62-74"><a href="buildings.html#cb62-74"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-75"><a href="buildings.html#cb62-75"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-76"><a href="buildings.html#cb62-76"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-77"><a href="buildings.html#cb62-77"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-78"><a href="buildings.html#cb62-78"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT,</span>
+<span id="cb62-79"><a href="buildings.html#cb62-79"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT,</span>
+<span id="cb62-80"><a href="buildings.html#cb62-80"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-81"><a href="buildings.html#cb62-81"></a>      <span class="ot">NA</span>,</span>
+<span id="cb62-82"><a href="buildings.html#cb62-82"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT</span>
+<span id="cb62-83"><a href="buildings.html#cb62-83"></a>    ),</span>
+<span id="cb62-84"><a href="buildings.html#cb62-84"></a>    <span class="dt">kbtu =</span> <span class="kw">c</span>(</span>
+<span id="cb62-85"><a href="buildings.html#cb62-85"></a>      zcta_bldg_stockton_summary<span class="op">$</span>ER_TOTALKBTU,</span>
+<span id="cb62-86"><a href="buildings.html#cb62-86"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GR_TOTALKBTU,</span>
+<span id="cb62-87"><a href="buildings.html#cb62-87"></a>      zcta_bldg_stockton_summary<span class="op">$</span>EC_TOTALKBTU,</span>
+<span id="cb62-88"><a href="buildings.html#cb62-88"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GC_TOTALKBTU,</span>
+<span id="cb62-89"><a href="buildings.html#cb62-89"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTALKBTU,</span>
+<span id="cb62-90"><a href="buildings.html#cb62-90"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTALKBTU,</span>
+<span id="cb62-91"><a href="buildings.html#cb62-91"></a>      zcta_bldg_stockton_summary<span class="op">$</span>E_TOTALKBTU,</span>
+<span id="cb62-92"><a href="buildings.html#cb62-92"></a>      zcta_bldg_stockton_summary<span class="op">$</span>G_TOTALKBTU,</span>
+<span id="cb62-93"><a href="buildings.html#cb62-93"></a>      zcta_bldg_stockton_summary<span class="op">$</span>TOTALKBTU</span>
+<span id="cb62-94"><a href="buildings.html#cb62-94"></a>    ),</span>
+<span id="cb62-95"><a href="buildings.html#cb62-95"></a>    <span class="dt">kbtusqft =</span> <span class="kw">c</span>(</span>
+<span id="cb62-96"><a href="buildings.html#cb62-96"></a>      zcta_bldg_stockton_summary<span class="op">$</span>ER_KBTUperSQFT,</span>
+<span id="cb62-97"><a href="buildings.html#cb62-97"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GR_KBTUperSQFT,</span>
+<span id="cb62-98"><a href="buildings.html#cb62-98"></a>      zcta_bldg_stockton_summary<span class="op">$</span>EC_KBTUperSQFT,</span>
+<span id="cb62-99"><a href="buildings.html#cb62-99"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GC_KBTUperSQFT,</span>
+<span id="cb62-100"><a href="buildings.html#cb62-100"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_KBTUperSQFT,</span>
+<span id="cb62-101"><a href="buildings.html#cb62-101"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_KBTUperSQFT,</span>
+<span id="cb62-102"><a href="buildings.html#cb62-102"></a>      zcta_bldg_stockton_summary<span class="op">$</span>E_KBTUperSQFT,</span>
+<span id="cb62-103"><a href="buildings.html#cb62-103"></a>      zcta_bldg_stockton_summary<span class="op">$</span>G_KBTUperSQFT,</span>
+<span id="cb62-104"><a href="buildings.html#cb62-104"></a>      zcta_bldg_stockton_summary<span class="op">$</span>TOTALKBTU<span class="op">/</span>(zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT)</span>
+<span id="cb62-105"><a href="buildings.html#cb62-105"></a>    )</span>
+<span id="cb62-106"><a href="buildings.html#cb62-106"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-107"><a href="buildings.html#cb62-107"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb62-108"><a href="buildings.html#cb62-108"></a>    <span class="dt">Type =</span> Type,</span>
+<span id="cb62-109"><a href="buildings.html#cb62-109"></a>    <span class="st">`</span><span class="dt">Number of Buildings</span><span class="st">`</span> =<span class="st"> </span></span>
+<span id="cb62-110"><a href="buildings.html#cb62-110"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb62-111"><a href="buildings.html#cb62-111"></a>        <span class="kw">is.na</span>(Bldg),</span>
+<span id="cb62-112"><a href="buildings.html#cb62-112"></a>        <span class="st">&quot;&quot;</span>,</span>
+<span id="cb62-113"><a href="buildings.html#cb62-113"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(Bldg,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb62-114"><a href="buildings.html#cb62-114"></a>      ),</span>
+<span id="cb62-115"><a href="buildings.html#cb62-115"></a>    <span class="st">`</span><span class="dt">Total Footprint</span><span class="st">`</span> =</span>
+<span id="cb62-116"><a href="buildings.html#cb62-116"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb62-117"><a href="buildings.html#cb62-117"></a>        <span class="kw">is.na</span>(Footprint),</span>
+<span id="cb62-118"><a href="buildings.html#cb62-118"></a>        <span class="st">&quot;&quot;</span>,</span>
+<span id="cb62-119"><a href="buildings.html#cb62-119"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(Footprint,<span class="op">-</span><span class="dv">6</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb62-120"><a href="buildings.html#cb62-120"></a>      ),</span>
+<span id="cb62-121"><a href="buildings.html#cb62-121"></a>    <span class="st">`</span><span class="dt">Total Sqft</span><span class="st">`</span> =</span>
+<span id="cb62-122"><a href="buildings.html#cb62-122"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb62-123"><a href="buildings.html#cb62-123"></a>        <span class="kw">is.na</span>(sqft),</span>
+<span id="cb62-124"><a href="buildings.html#cb62-124"></a>        <span class="st">&quot;&quot;</span>,</span>
+<span id="cb62-125"><a href="buildings.html#cb62-125"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(sqft,<span class="op">-</span><span class="dv">6</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb62-126"><a href="buildings.html#cb62-126"></a>      ),</span>
+<span id="cb62-127"><a href="buildings.html#cb62-127"></a>    <span class="st">`</span><span class="dt">Total kBTU</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(kbtu,<span class="op">-</span><span class="dv">7</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb62-128"><a href="buildings.html#cb62-128"></a>    <span class="st">`</span><span class="dt">kBTU/sqft</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(kbtusqft),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb62-129"><a href="buildings.html#cb62-129"></a>  )</span>
+<span id="cb62-130"><a href="buildings.html#cb62-130"></a></span>
+<span id="cb62-131"><a href="buildings.html#cb62-131"></a><span class="kw">kable</span>(</span>
+<span id="cb62-132"><a href="buildings.html#cb62-132"></a>  zcta_bldg_stockton_table, </span>
+<span id="cb62-133"><a href="buildings.html#cb62-133"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb62-134"><a href="buildings.html#cb62-134"></a>  <span class="dt">caption =</span> <span class="st">&#39;Summary of Building count, size, and energy usage for residential/commercial and electricity/gas. Data from PG&amp;E, 2018.&#39;</span></span>
+<span id="cb62-135"><a href="buildings.html#cb62-135"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-136"><a href="buildings.html#cb62-136"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-137"><a href="buildings.html#cb62-137"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:zcta-bldg-stockton-table">Table 2.22: </span>Summary of Building count, size, and energy usage for residential/commercial and electricity/gas. Data from PG&amp;E, 2018.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Number of Buildings
+</th>
+<th style="text-align:left;">
+Total Footprint
+</th>
+<th style="text-align:left;">
+Total Sqft
+</th>
+<th style="text-align:left;">
+Total kBTU
+</th>
+<th style="text-align:left;">
+kBTU/sqft
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Residential Electricity
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+2,700,000,000
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Residential Gas
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+4,370,000,000
+</td>
+<td style="text-align:left;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Commercial Electricity
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+2,620,000,000
+</td>
+<td style="text-align:left;">
+45
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Commercial Gas
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+1,210,000,000
+</td>
+<td style="text-align:left;">
+21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Residential Total
+</td>
+<td style="text-align:left;">
+91,000
+</td>
+<td style="text-align:left;">
+237,000,000
+</td>
+<td style="text-align:left;">
+288,000,000
+</td>
+<td style="text-align:left;">
+7,080,000,000
+</td>
+<td style="text-align:left;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Commercial Total
+</td>
+<td style="text-align:left;">
+6,000
+</td>
+<td style="text-align:left;">
+55,000,000
+</td>
+<td style="text-align:left;">
+58,000,000
+</td>
+<td style="text-align:left;">
+3,840,000,000
+</td>
+<td style="text-align:left;">
+66
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Electricity Total
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+5,330,000,000
+</td>
+<td style="text-align:left;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gas Total
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+5,580,000,000
+</td>
+<td style="text-align:left;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:left;">
+97,000
+</td>
+<td style="text-align:left;">
+291,000,000
+</td>
+<td style="text-align:left;">
+346,000,000
+</td>
+<td style="text-align:left;">
+10,910,000,000
+</td>
+<td style="text-align:left;">
+32
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="energy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ghg-forecast.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false,
+"info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

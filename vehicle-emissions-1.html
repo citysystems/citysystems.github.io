@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.6 Vehicle Emissions | Green Economy Analysis: Opportunities for Stockton</title>
+  <meta name="description" content="3.6 Vehicle Emissions | Green Economy Analysis: Opportunities for Stockton" />
+  <meta name="generator" content="bookdown 0.17.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.6 Vehicle Emissions | Green Economy Analysis: Opportunities for Stockton" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.6 Vehicle Emissions | Green Economy Analysis: Opportunities for Stockton" />
+  
+  
+  
+
+<meta name="author" content="City Systems" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="vehicle-miles-traveled.html"/>
+<link rel="next" href="resilience.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.js');
+  rCodeBlocks.each(function() {
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="approach.html"><a href="approach.html"><i class="fa fa-check"></i><b>1.1</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="baseline-assessment.html"><a href="baseline-assessment.html"><i class="fa fa-check"></i><b>2</b> Baseline Assessment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html"><i class="fa fa-check"></i><b>2.1</b> Population and Jobs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html#county-level-analysis"><i class="fa fa-check"></i><b>2.1.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="population-and-jobs.html"><a href="population-and-jobs.html#city-level-analysis"><i class="fa fa-check"></i><b>2.1.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="green-jobs.html"><a href="green-jobs.html"><i class="fa fa-check"></i><b>2.2</b> Green Jobs</a></li>
+<li class="chapter" data-level="2.3" data-path="ghg-inventory.html"><a href="ghg-inventory.html"><i class="fa fa-check"></i><b>2.3</b> 2005-2016 GHG Inventory</a></li>
+<li class="chapter" data-level="2.4" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html"><i class="fa fa-check"></i><b>2.4</b> Origin-Destination Commute Analysis</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#county-level-analysis-1"><i class="fa fa-check"></i><b>2.4.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.4.2" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#city-level-analysis-1"><i class="fa fa-check"></i><b>2.4.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.5</b> Commute Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#county-level-analysis-2"><i class="fa fa-check"></i><b>2.5.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.5.2" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#city-level-analysis-2"><i class="fa fa-check"></i><b>2.5.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="non-commute-vehicle-miles-traveled.html"><a href="non-commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.6</b> Non-Commute Vehicle Miles Traveled</a></li>
+<li class="chapter" data-level="2.7" data-path="vehicle-emissions.html"><a href="vehicle-emissions.html"><i class="fa fa-check"></i><b>2.7</b> Vehicle Emissions</a></li>
+<li class="chapter" data-level="2.8" data-path="energy.html"><a href="energy.html"><i class="fa fa-check"></i><b>2.8</b> Energy</a></li>
+<li class="chapter" data-level="2.9" data-path="buildings.html"><a href="buildings.html"><i class="fa fa-check"></i><b>2.9</b> Buildings</a></li>
+<li class="chapter" data-level="2.10" data-path="ghg-forecast.html"><a href="ghg-forecast.html"><i class="fa fa-check"></i><b>2.10</b> GHG Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="overview-of-green-economy-strategies.html"><a href="overview-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>3</b> Overview of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="building-utilization.html"><a href="building-utilization.html"><i class="fa fa-check"></i><b>3.1</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="building-utilization.html"><a href="building-utilization.html#revise-zoning-codes-in-medium-to-large-cities-to-facilitate-upzoning"><i class="fa fa-check"></i><b>3.1.1</b> Revise zoning codes in medium to large cities to facilitate upzoning</a></li>
+<li class="chapter" data-level="3.1.2" data-path="building-utilization.html"><a href="building-utilization.html#eliminate-minimum-parking"><i class="fa fa-check"></i><b>3.1.2</b> Eliminate minimum parking</a></li>
+<li class="chapter" data-level="3.1.3" data-path="building-utilization.html"><a href="building-utilization.html#encourage-accessory-dwelling-units"><i class="fa fa-check"></i><b>3.1.3</b> Encourage accessory dwelling units</a></li>
+<li class="chapter" data-level="3.1.4" data-path="building-utilization.html"><a href="building-utilization.html#encourage-micro-units"><i class="fa fa-check"></i><b>3.1.4</b> Encourage micro-units</a></li>
+<li class="chapter" data-level="3.1.5" data-path="building-utilization.html"><a href="building-utilization.html#provide-a-density-bonus-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.5</b> Provide a density bonus for affordable housing</a></li>
+<li class="chapter" data-level="3.1.6" data-path="building-utilization.html"><a href="building-utilization.html#develop-a-shared-equity-program-for-high-density-housing"><i class="fa fa-check"></i><b>3.1.6</b> Develop a shared equity program for high-density housing</a></li>
+<li class="chapter" data-level="3.1.7" data-path="building-utilization.html"><a href="building-utilization.html#match-homeowners-with-vacant-spaces-with-individuals-looking-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.7</b> Match homeowners with vacant spaces with individuals looking for affordable housing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="building-energy.html"><a href="building-energy.html"><i class="fa fa-check"></i><b>3.2</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="building-energy.html"><a href="building-energy.html#promote-solar-development-in-opportunity-zones"><i class="fa fa-check"></i><b>3.2.1</b> Promote solar development in Opportunity Zones</a></li>
+<li class="chapter" data-level="3.2.2" data-path="building-energy.html"><a href="building-energy.html#promote-a-solar-renewable-energy-certificate-program"><i class="fa fa-check"></i><b>3.2.2</b> Promote a Solar Renewable Energy Certificate program</a></li>
+<li class="chapter" data-level="3.2.3" data-path="building-energy.html"><a href="building-energy.html#set-energy-savings-standards-on-all-public-buildings-and-provide-financial-and-technical-assistance-for-commercial-private-sector-energy-savings"><i class="fa fa-check"></i><b>3.2.3</b> Set energy savings standards on all public buildings and provide financial and technical assistance for commercial private sector energy savings</a></li>
+<li class="chapter" data-level="3.2.4" data-path="building-energy.html"><a href="building-energy.html#create-a-fund-to-implement-energy-savings-projects"><i class="fa fa-check"></i><b>3.2.4</b> Create a fund to implement energy savings projects</a></li>
+<li class="chapter" data-level="3.2.5" data-path="building-energy.html"><a href="building-energy.html#enable-property-assessed-clean-energy-pace-financing"><i class="fa fa-check"></i><b>3.2.5</b> Enable property-assessed clean energy (PACE) financing</a></li>
+<li class="chapter" data-level="3.2.6" data-path="building-energy.html"><a href="building-energy.html#provide-consumer-oriented-programs-to-incentivize-energy-efficiency-retrofits-and-appliance-improvements"><i class="fa fa-check"></i><b>3.2.6</b> Provide consumer-oriented programs to incentivize energy efficiency retrofits and appliance improvements</a></li>
+<li class="chapter" data-level="3.2.7" data-path="building-energy.html"><a href="building-energy.html#provide-incentives-for-households-to-install-on-site-batteries-particularly-for-vulnerable-customers"><i class="fa fa-check"></i><b>3.2.7</b> Provide incentives for households to install on-site batteries, particularly for vulnerable customers</a></li>
+<li class="chapter" data-level="3.2.8" data-path="building-energy.html"><a href="building-energy.html#implement-reach-codes-which-go-beyond-state-minimum-requirements-for-energy-use-in-building-design-and-construction"><i class="fa fa-check"></i><b>3.2.8</b> Implement “reach” codes which go beyond state minimum requirements for energy use in building design and construction</a></li>
+<li class="chapter" data-level="3.2.9" data-path="building-energy.html"><a href="building-energy.html#use-waste-to-produce-electricity"><i class="fa fa-check"></i><b>3.2.9</b> Use waste to produce electricity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="employment-growth.html"><a href="employment-growth.html"><i class="fa fa-check"></i><b>3.3</b> Employment Growth</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="employment-growth.html"><a href="employment-growth.html#provide-training-and-coaching-for-low-income-workers-rather-than-unemployed-workers"><i class="fa fa-check"></i><b>3.3.1</b> Provide training and coaching for low-income workers, rather than unemployed workers</a></li>
+<li class="chapter" data-level="3.3.2" data-path="employment-growth.html"><a href="employment-growth.html#provide-green-oriented-job-training-and-education-pathways"><i class="fa fa-check"></i><b>3.3.2</b> Provide green-oriented job training and education pathways</a></li>
+<li class="chapter" data-level="3.3.3" data-path="employment-growth.html"><a href="employment-growth.html#create-a-scholarship-fund-for-students-wishing-to-pursue-eco-conscious-careers"><i class="fa fa-check"></i><b>3.3.3</b> Create a scholarship fund for students wishing to pursue eco-conscious careers</a></li>
+<li class="chapter" data-level="3.3.4" data-path="employment-growth.html"><a href="employment-growth.html#offer-continued-training-and-support-post-employment"><i class="fa fa-check"></i><b>3.3.4</b> Offer continued training and support post-employment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="local-jobs.html"><a href="local-jobs.html#offer-job-creation-tax-credit"><i class="fa fa-check"></i><b>3.4.1</b> Offer job creation tax credit</a></li>
+<li class="chapter" data-level="3.4.2" data-path="local-jobs.html"><a href="local-jobs.html#encourage-mortgage-refinancing"><i class="fa fa-check"></i><b>3.4.2</b> Encourage mortgage refinancing</a></li>
+<li class="chapter" data-level="3.4.3" data-path="local-jobs.html"><a href="local-jobs.html#develop-public-employment-program"><i class="fa fa-check"></i><b>3.4.3</b> Develop public employment program</a></li>
+<li class="chapter" data-level="3.4.4" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-advanced-industries"><i class="fa fa-check"></i><b>3.4.4</b> Provide tax credits to investors in advanced industries</a></li>
+<li class="chapter" data-level="3.4.5" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-community-development-corporations"><i class="fa fa-check"></i><b>3.4.5</b> Provide tax credits to investors in community development corporations</a></li>
+<li class="chapter" data-level="3.4.6" data-path="local-jobs.html"><a href="local-jobs.html#pursue-public-private-partnerships-for-commercial-development"><i class="fa fa-check"></i><b>3.4.6</b> Pursue public-private partnerships for commercial development</a></li>
+<li class="chapter" data-level="3.4.7" data-path="local-jobs.html"><a href="local-jobs.html#fund-economic-development-using-tax-base-sharing"><i class="fa fa-check"></i><b>3.4.7</b> Fund economic development using tax-base sharing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="local-jobs.html"><a href="local-jobs.html#pay-remote-workers-to-move-to-new-location"><i class="fa fa-check"></i><b>3.4.8</b> Pay remote workers to move to new location</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>3.5</b> Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#create-local-transportation-demand-management-ordinances"><i class="fa fa-check"></i><b>3.5.1</b> Create local transportation demand management ordinances</a></li>
+<li class="chapter" data-level="3.5.2" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#redesign-bus-network-to-prioritize-ridership-over-coverage"><i class="fa fa-check"></i><b>3.5.2</b> Redesign bus network to prioritize ridership over coverage</a></li>
+<li class="chapter" data-level="3.5.3" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#use-brt-corridors-to-reduce-travel-times-on-public-transit"><i class="fa fa-check"></i><b>3.5.3</b> Use BRT corridors to reduce travel times on public transit</a></li>
+<li class="chapter" data-level="3.5.4" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#promote-the-use-of-e-scooters-and-dockless-bicycles-to-reduce-reliance-on-private-cars"><i class="fa fa-check"></i><b>3.5.4</b> Promote the use of e-scooters and dockless bicycles to reduce reliance on private cars</a></li>
+<li class="chapter" data-level="3.5.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#rezone-areas-around-transit-stations-and-commercial-corridors-to-allow-for-high-density-residential-development"><i class="fa fa-check"></i><b>3.5.5</b> Rezone areas around transit stations and commercial corridors to allow for high-density residential development</a></li>
+<li class="chapter" data-level="3.5.6" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#offset-negative-externalities-of-traffic-through-tolls"><i class="fa fa-check"></i><b>3.5.6</b> Offset negative externalities of traffic through tolls</a></li>
+<li class="chapter" data-level="3.5.7" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#charge-for-parking"><i class="fa fa-check"></i><b>3.5.7</b> Charge for parking</a></li>
+<li class="chapter" data-level="3.5.8" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#give-carpoolers-priority-parking-at-transit-stops"><i class="fa fa-check"></i><b>3.5.8</b> Give carpoolers priority parking at transit stops</a></li>
+<li class="chapter" data-level="3.5.9" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#ban-personal-vehicles-from-certain-areas"><i class="fa fa-check"></i><b>3.5.9</b> Ban personal vehicles from certain areas</a></li>
+<li class="chapter" data-level="3.5.10" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#encourage-carsharing-strategies"><i class="fa fa-check"></i><b>3.5.10</b> Encourage carsharing strategies</a></li>
+<li class="chapter" data-level="3.5.11" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#provide-free-public-transit"><i class="fa fa-check"></i><b>3.5.11</b> Provide free public transit</a></li>
+<li class="chapter" data-level="3.5.12" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#subsidize-first-milelast-mile-transportation-services"><i class="fa fa-check"></i><b>3.5.12</b> Subsidize first-mile/last-mile transportation services</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html"><i class="fa fa-check"></i><b>3.6</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-for-pollutant-remediation-and-reduction-initiatives"><i class="fa fa-check"></i><b>3.6.1</b> Provide grants for pollutant remediation and reduction initiatives</a></li>
+<li class="chapter" data-level="3.6.2" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations"><i class="fa fa-check"></i><b>3.6.2</b> Provide commercial rebates for commercial building owners to install EV charging stations</a></li>
+<li class="chapter" data-level="3.6.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.6.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
+<li class="chapter" data-level="3.6.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.6.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
+<li class="chapter" data-level="3.6.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.6.5</b> Reduce vehicle speed limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="resilience.html"><a href="resilience.html"><i class="fa fa-check"></i><b>3.7</b> Resilience</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="resilience.html"><a href="resilience.html#promote-cool-surfaces-to-reduce-heat-island-effect"><i class="fa fa-check"></i><b>3.7.1</b> Promote cool surfaces to reduce heat island effect</a></li>
+<li class="chapter" data-level="3.7.2" data-path="resilience.html"><a href="resilience.html#promote-permeable-pavement-to-increase-groundwater-absorption"><i class="fa fa-check"></i><b>3.7.2</b> Promote permeable pavement to increase groundwater absorption</a></li>
+<li class="chapter" data-level="3.7.3" data-path="resilience.html"><a href="resilience.html#reclaim-urban-streams-and-rivers-to-increase-groundwater-absorption-and-filtration"><i class="fa fa-check"></i><b>3.7.3</b> Reclaim urban streams and rivers to increase groundwater absorption and filtration</a></li>
+<li class="chapter" data-level="3.7.4" data-path="resilience.html"><a href="resilience.html#use-green-infrastructure-to-improve-stormwater-management"><i class="fa fa-check"></i><b>3.7.4</b> Use green infrastructure to improve stormwater management</a></li>
+<li class="chapter" data-level="3.7.5" data-path="resilience.html"><a href="resilience.html#promote-urban-gardens-as-a-substitute-for-displaced-ecosystem-services"><i class="fa fa-check"></i><b>3.7.5</b> Promote urban gardens as a substitute for displaced ecosystem services</a></li>
+<li class="chapter" data-level="3.7.6" data-path="resilience.html"><a href="resilience.html#offer-rebates-for-flood-mitigation-projects"><i class="fa fa-check"></i><b>3.7.6</b> Offer rebates for flood mitigation projects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="resource-management.html"><a href="resource-management.html"><i class="fa fa-check"></i><b>3.8</b> Resource Management</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="resource-management.html"><a href="resource-management.html#develop-carbon-capture-storage-facilities"><i class="fa fa-check"></i><b>3.8.1</b> Develop carbon capture &amp; storage facilities</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="analysis-of-green-economy-strategies.html"><a href="analysis-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>4</b> Analysis of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methodology.html"><a href="methodology.html"><i class="fa fa-check"></i><b>4.1</b> Methodology</a></li>
+<li class="chapter" data-level="4.2" data-path="building-utilization-1.html"><a href="building-utilization-1.html"><i class="fa fa-check"></i><b>4.2</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="building-utilization-1.html"><a href="building-utilization-1.html#strategy-accessory-dwelling-units"><i class="fa fa-check"></i><b>4.2.1</b> Strategy: Accessory Dwelling Units</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="building-energy-1.html"><a href="building-energy-1.html"><i class="fa fa-check"></i><b>4.3</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="building-energy-1.html"><a href="building-energy-1.html#strategy-electrification"><i class="fa fa-check"></i><b>4.3.1</b> Strategy: Electrification</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html"><i class="fa fa-check"></i><b>4.4</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html#strategy-electric-vehicle-program"><i class="fa fa-check"></i><b>4.4.1</b> Strategy: Electric Vehicle Program</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="appendix-a-index-of-case-studies-by-place.html"><a href="appendix-a-index-of-case-studies-by-place.html"><i class="fa fa-check"></i><b>6</b> Appendix A: Index of Case Studies by Place</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Green Economy Analysis: Opportunities for Stockton</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="vehicle-emissions-1" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Vehicle Emissions</h2>
+<p>This domain focuses on strategies that reduce the emissions of combustion engine vehicles or increase the share of electric vehicles on the road.</p>
+<div id="provide-grants-for-pollutant-remediation-and-reduction-initiatives" class="section level3" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> Provide grants for pollutant remediation and reduction initiatives</h3>
+<p><img src="images/moyer.png" width="818" />
+<br>Source: <a href="https://www.baaqmd.gov/publications/air-currents/2019/080119">BAAQMD</a></p>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Location</th>
+<th align="left">Ventura County, CA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Details</td>
+<td align="left">The Carl Moyer Memorial Air Quality Standards Attainment Program, which is jointly run by CARB and the VCAPCB, provides grants for the following projects: Repower commercial fishing boats with lower emission engines; Repower farm equipment with lower emission engines; Replace emergency vehicles with lower emission engines; Replace heavy duty diesel trucks with lower emission engines; New, conversion of existing, or expansion of battery charging/alternative fueling stations.</td>
+</tr>
+<tr class="even">
+<td align="left">Links</td>
+<td align="left"><a href="http://www.vcapcd.org/grant_programs.htm#Clean_Air_Fund_">Ventura County Air Pollution Control District</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Implementation Costs &amp; Impact Factor</td>
+<td align="left">Since its inception, over $42 million was granted to businesses in Ventura County. In 2017, $4.5 million was allocated; in 2018, $2.5 million was allocated;iIn 2019, $6 million was allocated.</td>
+</tr>
+<tr class="even">
+<td align="left">Scalable Potential</td>
+<td align="left">The case study was funded by CARB, so the primary pathway is through CARB and the local air pollution district. Most funding is allocated to commercial uses.</td>
+</tr>
+<tr class="odd">
+<td align="left">Similar</td>
+<td align="left"><a href="https://www.baaqmd.gov/funding-and-incentives/public-agencies/county-program-manager-fund">Transportation Fund for Clean Air County Program Manager Fund, BAAQMD</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations" class="section level3" number="3.6.2">
+<h3><span class="header-section-number">3.6.2</span> Provide commercial rebates for commercial building owners to install EV charging stations</h3>
+<p><img src="images/ev.jpg" /><!-- -->
+<br>Source: <a href="https://corporate.walmart.com/newsroom/2019/06/06/electrify-america-walmart-announce-completion-of-over-120-charging-stations-at-walmart-stores-nationwide-with-plans-for-further-expansion">Walmart</a></p>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Location</th>
+<th align="left">Los Angeles, CA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Details</td>
+<td align="left">The Los Angeles Department of Water and Power (LADWP) provides rebates to commercial customers toward the purchase of a Level 2 electric vehicle charging station. Commercial customers who purchase and install EV charging stations for employee and public use can receive up to $5,000 for each charger, with up to $750 in additional rebate funds per extra charge port. Eligible customers may qualify for up to 40 rebate rewards depending on the number of parking spaces at the installation site. EV charging stations must be installed within the LADWP service area. Rebates are available on a first-come, first-served basis through June 30, 2021, or until funds are exhausted.</td>
+</tr>
+<tr class="even">
+<td align="left">Links</td>
+<td align="left"><a href="https://www.ladwp.com/ladwp/faces/ladwp/commercial/c-savemoney/c-sm-rebatesandprograms/c-sm-rp-commevstation?_adf.ctrl-state=ydg1eawf9_17&amp;_afrLoop=246802491623816">LADWP</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Implementation Costs &amp; Impact Factor</td>
+<td align="left"><a href="https://www.ladwp.com/cs/idcplg?IdcService=GET_FILE&amp;dDocName=OPLADWPCCB701489&amp;RevisionSelectionMethod=LatestReleased">See recent dashboard report</a>. As for February 2020, $31 million for Level 2 charging stations, with over 350 applications paid, pending, or reserved.</td>
+</tr>
+<tr class="even">
+<td align="left">Scalable Potential</td>
+<td align="left">Many parking structures in Stockton may be good candidates for incentivizing EV charging station installation.</td>
+</tr>
+<tr class="odd">
+<td align="left">Similar</td>
+<td align="left"><a href="https://www.cityofrc.us/sites/default/files/2019-08/ENG-RCMU-Commercial-EV-Rebate-Application_2019.pdf">Rancho Cucamonga Municipal Utility</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars" class="section level3" number="3.6.3">
+<h3><span class="header-section-number">3.6.3</span> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</h3>
+<p><img src="images/cleancars.jpg" /><!-- -->
+<br>Source: <a href="https://www.baaqmd.gov/funding-and-incentives/residents/clean-cars-for-all">BAAQMD</a></p>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Location</th>
+<th align="left">San Francisco Bay Area, CA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Details</td>
+<td align="left">The Bay Area Air Quality Management District’s (BAAQMD) Clean Cars for All program offers grants up to $9,500 to income-eligible residents to replace a vehicle eligible for retirement with a PEV or HEV. Eligible vehicles for replacement should have a model year 15 years or older than the current year. Recipients may buy or lease a new or used PEV or HEV. Grants vary depending on the household income and vehicle technology. Vehicles that are replaced must be turned in at an authorized dismantler. Individuals that purchase an all-electric vehicle are eligible to receive up to $2,000 for the purchase and installation of a Level 2 electric vehicle supply equipment.</td>
+</tr>
+<tr class="even">
+<td align="left">Links</td>
+<td align="left"><a href="https://www.baaqmd.gov/funding-and-incentives/residents/clean-cars-for-all">BAAQMD</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Implementation Costs &amp; Impact Factor</td>
+<td align="left">From 2015-2019, $112 million was allocated to Clean Cars 4 All from CARB ($10 million of which was from Volkswagen settlement funds). Of this, San Joaquin Valley APCD has expended about $9 million of $41 million to replace 1,450 vehicles (about 15 percent battery electric, 35 percent plug-in hybrid, 50 percent hybrid). <a href="https://ww2.arb.ca.gov/sites/default/files/2019-09/fy1920fundingplan.pdf">Read more here</a> and through <a href="https://www.valleyair.org/drivecleaninthesanjoaquin/replace/">Drive Clean in the San Joaquin</a>.</td>
+</tr>
+<tr class="even">
+<td align="left">Scalable Potential</td>
+<td align="left">Further grant opportunities are expected through the program in the coming years. Stockton could target underserved communities in future grant applications.</td>
+</tr>
+<tr class="odd">
+<td align="left">Similar</td>
+<td align="left"><a href="https://ww5.cityofpasadena.net/water-and-power/residentialevrebate/">City of Pasadena</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="engage-automobile-manufacturers-as-stakeholders-in-the-ev-market" class="section level3" number="3.6.4">
+<h3><span class="header-section-number">3.6.4</span> Engage automobile manufacturers as stakeholders in the EV market</h3>
+<p><img src="images/dealership.jpg" /><!-- -->
+<br>Source: <a href="https://electrek.co/2020/02/18/plug-in-america-campaign-ev-adoption-car-dealers/">Electrek</a></p>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Location</th>
+<th align="left">Arizona</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Details</td>
+<td align="left">Arizona requires car dealers to make information about alternative fuel vehicles and Arizona-based incentives for purchasing or leasing alternative fuel vehicles available to the public. The state also created an Electric Vehicles Arizona stakeholder group to bring together auto dealers and other interested parties so that they better understand the opportunities and barriers that electric vehicles face in the state.</td>
+</tr>
+<tr class="even">
+<td align="left">Links</td>
+<td align="left"><a href="https://carnegieendowment.org/files/electric_vehicles.pdf">Carnegie Endowment Report</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Implementation Costs &amp; Impact Factor</td>
+<td align="left">No implementation costs. <a href="https://evadoption.com/ev-market-share/ev-market-share-state/">Between 2017 and 2018</a>, AZ EV sales increased from 2,976 (0.90% of market share) to 7,086 (1.84% of market share).</td>
+</tr>
+<tr class="even">
+<td align="left">Scalable Potential</td>
+<td align="left">According to the California <a href="https://cleanvehiclerebate.org/eng/rebate-statistics">Clean Vehicle Rebate Project</a>, San Joaquin County customers have received about 3,000 rebates, compared to 366,000 state-wide, leaving a lot of growth potential compared to other counties.</td>
+</tr>
+<tr class="odd">
+<td align="left">Similar</td>
+<td align="left"><a href="https://www.chicago.gov/city/en/depts/cdot/supp_info/chicago_area_cleancities.html">Chicago Area Clean Cities</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="reduce-vehicle-speed-limits" class="section level3" number="3.6.5">
+<h3><span class="header-section-number">3.6.5</span> Reduce vehicle speed limits</h3>
+<p><img src="images/slow.png" width="1396" />
+<br>Source: <a href="https://nacto.org/wp-content/uploads/2012/10/ViolaRob_Neighborhood-Slow-Zones-NACTO-Conference-2012.pdf">NACTO</a></p>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="90%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Location</th>
+<th align="left">Massachusetts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Details</td>
+<td align="left">Introducing lower speed limits on motorways cuts fuel consumption and pollutant emissions. The exact impact is contingent upon vehicle type, driving patterns, frequency of speeding, congestion, and traffic diversion.</td>
+</tr>
+<tr class="even">
+<td align="left">Links</td>
+<td align="left"><a href="https://www.eea.europa.eu/themes/transport/speed-limits-fuel-consumption-and/speed-limits">European Environment Agency</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Implementation Costs &amp; Impact Factor</td>
+<td align="left">Pollution: Depending on <a href="https://www.eea.europa.eu/themes/transport/speed-limits-fuel-consumption-and/speed-limits">driving behavior</a>, it is possible to expect anything from 2-18% reductions in GHGs.<br>Public Health: In an 83-city <a href="https://ehjournal.biomedcentral.com/articles/10.1186/1476-069X-9-65">study</a>, PM2.5-related mortality reduction is worth $31 billion (2007 dollars).<br>Fatalities and Injuries: 2200 crashes, 18 fatalities, and 1200 injuries reduced in Massachusetts.<br>Economic Benefits: Massachusetts predicted to save $210 million (30mph to 25mph reduction).</td>
+</tr>
+<tr class="even">
+<td align="left">Scalable Potential</td>
+<td align="left">According to the California <a href="https://cleanvehiclerebate.org/eng/rebate-statistics">Clean Vehicle Rebate Project</a>, San Joaquin County customers have received about 3,000 rebates, compared to 366,000 state-wide, leaving a lot of growth potential compared to other counties.</td>
+</tr>
+<tr class="odd">
+<td align="left">Similar</td>
+<td align="left"><a href="https://www1.nyc.gov/html/dot/html/motorist/slowzones.shtml">NYC Neighborhood Slow Zones</a><br><a href="http://visionzerophl.com/get-involved">Philadelphia Neighborhood Slow Zones</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="vehicle-miles-traveled.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="resilience.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false,
+"info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

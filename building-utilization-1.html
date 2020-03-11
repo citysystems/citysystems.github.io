@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.2 Building Utilization | Green Economy Analysis: Opportunities for Stockton</title>
+  <meta name="description" content="4.2 Building Utilization | Green Economy Analysis: Opportunities for Stockton" />
+  <meta name="generator" content="bookdown 0.17.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.2 Building Utilization | Green Economy Analysis: Opportunities for Stockton" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.2 Building Utilization | Green Economy Analysis: Opportunities for Stockton" />
+  
+  
+  
+
+<meta name="author" content="City Systems" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="methodology.html"/>
+<link rel="next" href="building-energy-1.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.js');
+  rCodeBlocks.each(function() {
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="approach.html"><a href="approach.html"><i class="fa fa-check"></i><b>1.1</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="baseline-assessment.html"><a href="baseline-assessment.html"><i class="fa fa-check"></i><b>2</b> Baseline Assessment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html"><i class="fa fa-check"></i><b>2.1</b> Population and Jobs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html#county-level-analysis"><i class="fa fa-check"></i><b>2.1.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="population-and-jobs.html"><a href="population-and-jobs.html#city-level-analysis"><i class="fa fa-check"></i><b>2.1.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="green-jobs.html"><a href="green-jobs.html"><i class="fa fa-check"></i><b>2.2</b> Green Jobs</a></li>
+<li class="chapter" data-level="2.3" data-path="ghg-inventory.html"><a href="ghg-inventory.html"><i class="fa fa-check"></i><b>2.3</b> 2005-2016 GHG Inventory</a></li>
+<li class="chapter" data-level="2.4" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html"><i class="fa fa-check"></i><b>2.4</b> Origin-Destination Commute Analysis</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#county-level-analysis-1"><i class="fa fa-check"></i><b>2.4.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.4.2" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#city-level-analysis-1"><i class="fa fa-check"></i><b>2.4.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.5</b> Commute Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#county-level-analysis-2"><i class="fa fa-check"></i><b>2.5.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.5.2" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#city-level-analysis-2"><i class="fa fa-check"></i><b>2.5.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="non-commute-vehicle-miles-traveled.html"><a href="non-commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.6</b> Non-Commute Vehicle Miles Traveled</a></li>
+<li class="chapter" data-level="2.7" data-path="vehicle-emissions.html"><a href="vehicle-emissions.html"><i class="fa fa-check"></i><b>2.7</b> Vehicle Emissions</a></li>
+<li class="chapter" data-level="2.8" data-path="energy.html"><a href="energy.html"><i class="fa fa-check"></i><b>2.8</b> Energy</a></li>
+<li class="chapter" data-level="2.9" data-path="buildings.html"><a href="buildings.html"><i class="fa fa-check"></i><b>2.9</b> Buildings</a></li>
+<li class="chapter" data-level="2.10" data-path="ghg-forecast.html"><a href="ghg-forecast.html"><i class="fa fa-check"></i><b>2.10</b> GHG Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="overview-of-green-economy-strategies.html"><a href="overview-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>3</b> Overview of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="building-utilization.html"><a href="building-utilization.html"><i class="fa fa-check"></i><b>3.1</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="building-utilization.html"><a href="building-utilization.html#revise-zoning-codes-in-medium-to-large-cities-to-facilitate-upzoning"><i class="fa fa-check"></i><b>3.1.1</b> Revise zoning codes in medium to large cities to facilitate upzoning</a></li>
+<li class="chapter" data-level="3.1.2" data-path="building-utilization.html"><a href="building-utilization.html#eliminate-minimum-parking"><i class="fa fa-check"></i><b>3.1.2</b> Eliminate minimum parking</a></li>
+<li class="chapter" data-level="3.1.3" data-path="building-utilization.html"><a href="building-utilization.html#encourage-accessory-dwelling-units"><i class="fa fa-check"></i><b>3.1.3</b> Encourage accessory dwelling units</a></li>
+<li class="chapter" data-level="3.1.4" data-path="building-utilization.html"><a href="building-utilization.html#encourage-micro-units"><i class="fa fa-check"></i><b>3.1.4</b> Encourage micro-units</a></li>
+<li class="chapter" data-level="3.1.5" data-path="building-utilization.html"><a href="building-utilization.html#provide-a-density-bonus-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.5</b> Provide a density bonus for affordable housing</a></li>
+<li class="chapter" data-level="3.1.6" data-path="building-utilization.html"><a href="building-utilization.html#develop-a-shared-equity-program-for-high-density-housing"><i class="fa fa-check"></i><b>3.1.6</b> Develop a shared equity program for high-density housing</a></li>
+<li class="chapter" data-level="3.1.7" data-path="building-utilization.html"><a href="building-utilization.html#match-homeowners-with-vacant-spaces-with-individuals-looking-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.7</b> Match homeowners with vacant spaces with individuals looking for affordable housing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="building-energy.html"><a href="building-energy.html"><i class="fa fa-check"></i><b>3.2</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="building-energy.html"><a href="building-energy.html#promote-solar-development-in-opportunity-zones"><i class="fa fa-check"></i><b>3.2.1</b> Promote solar development in Opportunity Zones</a></li>
+<li class="chapter" data-level="3.2.2" data-path="building-energy.html"><a href="building-energy.html#promote-a-solar-renewable-energy-certificate-program"><i class="fa fa-check"></i><b>3.2.2</b> Promote a Solar Renewable Energy Certificate program</a></li>
+<li class="chapter" data-level="3.2.3" data-path="building-energy.html"><a href="building-energy.html#set-energy-savings-standards-on-all-public-buildings-and-provide-financial-and-technical-assistance-for-commercial-private-sector-energy-savings"><i class="fa fa-check"></i><b>3.2.3</b> Set energy savings standards on all public buildings and provide financial and technical assistance for commercial private sector energy savings</a></li>
+<li class="chapter" data-level="3.2.4" data-path="building-energy.html"><a href="building-energy.html#create-a-fund-to-implement-energy-savings-projects"><i class="fa fa-check"></i><b>3.2.4</b> Create a fund to implement energy savings projects</a></li>
+<li class="chapter" data-level="3.2.5" data-path="building-energy.html"><a href="building-energy.html#enable-property-assessed-clean-energy-pace-financing"><i class="fa fa-check"></i><b>3.2.5</b> Enable property-assessed clean energy (PACE) financing</a></li>
+<li class="chapter" data-level="3.2.6" data-path="building-energy.html"><a href="building-energy.html#provide-consumer-oriented-programs-to-incentivize-energy-efficiency-retrofits-and-appliance-improvements"><i class="fa fa-check"></i><b>3.2.6</b> Provide consumer-oriented programs to incentivize energy efficiency retrofits and appliance improvements</a></li>
+<li class="chapter" data-level="3.2.7" data-path="building-energy.html"><a href="building-energy.html#provide-incentives-for-households-to-install-on-site-batteries-particularly-for-vulnerable-customers"><i class="fa fa-check"></i><b>3.2.7</b> Provide incentives for households to install on-site batteries, particularly for vulnerable customers</a></li>
+<li class="chapter" data-level="3.2.8" data-path="building-energy.html"><a href="building-energy.html#implement-reach-codes-which-go-beyond-state-minimum-requirements-for-energy-use-in-building-design-and-construction"><i class="fa fa-check"></i><b>3.2.8</b> Implement “reach” codes which go beyond state minimum requirements for energy use in building design and construction</a></li>
+<li class="chapter" data-level="3.2.9" data-path="building-energy.html"><a href="building-energy.html#use-waste-to-produce-electricity"><i class="fa fa-check"></i><b>3.2.9</b> Use waste to produce electricity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="employment-growth.html"><a href="employment-growth.html"><i class="fa fa-check"></i><b>3.3</b> Employment Growth</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="employment-growth.html"><a href="employment-growth.html#provide-training-and-coaching-for-low-income-workers-rather-than-unemployed-workers"><i class="fa fa-check"></i><b>3.3.1</b> Provide training and coaching for low-income workers, rather than unemployed workers</a></li>
+<li class="chapter" data-level="3.3.2" data-path="employment-growth.html"><a href="employment-growth.html#provide-green-oriented-job-training-and-education-pathways"><i class="fa fa-check"></i><b>3.3.2</b> Provide green-oriented job training and education pathways</a></li>
+<li class="chapter" data-level="3.3.3" data-path="employment-growth.html"><a href="employment-growth.html#create-a-scholarship-fund-for-students-wishing-to-pursue-eco-conscious-careers"><i class="fa fa-check"></i><b>3.3.3</b> Create a scholarship fund for students wishing to pursue eco-conscious careers</a></li>
+<li class="chapter" data-level="3.3.4" data-path="employment-growth.html"><a href="employment-growth.html#offer-continued-training-and-support-post-employment"><i class="fa fa-check"></i><b>3.3.4</b> Offer continued training and support post-employment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="local-jobs.html"><a href="local-jobs.html#offer-job-creation-tax-credit"><i class="fa fa-check"></i><b>3.4.1</b> Offer job creation tax credit</a></li>
+<li class="chapter" data-level="3.4.2" data-path="local-jobs.html"><a href="local-jobs.html#encourage-mortgage-refinancing"><i class="fa fa-check"></i><b>3.4.2</b> Encourage mortgage refinancing</a></li>
+<li class="chapter" data-level="3.4.3" data-path="local-jobs.html"><a href="local-jobs.html#develop-public-employment-program"><i class="fa fa-check"></i><b>3.4.3</b> Develop public employment program</a></li>
+<li class="chapter" data-level="3.4.4" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-advanced-industries"><i class="fa fa-check"></i><b>3.4.4</b> Provide tax credits to investors in advanced industries</a></li>
+<li class="chapter" data-level="3.4.5" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-community-development-corporations"><i class="fa fa-check"></i><b>3.4.5</b> Provide tax credits to investors in community development corporations</a></li>
+<li class="chapter" data-level="3.4.6" data-path="local-jobs.html"><a href="local-jobs.html#pursue-public-private-partnerships-for-commercial-development"><i class="fa fa-check"></i><b>3.4.6</b> Pursue public-private partnerships for commercial development</a></li>
+<li class="chapter" data-level="3.4.7" data-path="local-jobs.html"><a href="local-jobs.html#fund-economic-development-using-tax-base-sharing"><i class="fa fa-check"></i><b>3.4.7</b> Fund economic development using tax-base sharing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="local-jobs.html"><a href="local-jobs.html#pay-remote-workers-to-move-to-new-location"><i class="fa fa-check"></i><b>3.4.8</b> Pay remote workers to move to new location</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>3.5</b> Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#create-local-transportation-demand-management-ordinances"><i class="fa fa-check"></i><b>3.5.1</b> Create local transportation demand management ordinances</a></li>
+<li class="chapter" data-level="3.5.2" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#redesign-bus-network-to-prioritize-ridership-over-coverage"><i class="fa fa-check"></i><b>3.5.2</b> Redesign bus network to prioritize ridership over coverage</a></li>
+<li class="chapter" data-level="3.5.3" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#use-brt-corridors-to-reduce-travel-times-on-public-transit"><i class="fa fa-check"></i><b>3.5.3</b> Use BRT corridors to reduce travel times on public transit</a></li>
+<li class="chapter" data-level="3.5.4" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#promote-the-use-of-e-scooters-and-dockless-bicycles-to-reduce-reliance-on-private-cars"><i class="fa fa-check"></i><b>3.5.4</b> Promote the use of e-scooters and dockless bicycles to reduce reliance on private cars</a></li>
+<li class="chapter" data-level="3.5.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#rezone-areas-around-transit-stations-and-commercial-corridors-to-allow-for-high-density-residential-development"><i class="fa fa-check"></i><b>3.5.5</b> Rezone areas around transit stations and commercial corridors to allow for high-density residential development</a></li>
+<li class="chapter" data-level="3.5.6" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#offset-negative-externalities-of-traffic-through-tolls"><i class="fa fa-check"></i><b>3.5.6</b> Offset negative externalities of traffic through tolls</a></li>
+<li class="chapter" data-level="3.5.7" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#charge-for-parking"><i class="fa fa-check"></i><b>3.5.7</b> Charge for parking</a></li>
+<li class="chapter" data-level="3.5.8" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#give-carpoolers-priority-parking-at-transit-stops"><i class="fa fa-check"></i><b>3.5.8</b> Give carpoolers priority parking at transit stops</a></li>
+<li class="chapter" data-level="3.5.9" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#ban-personal-vehicles-from-certain-areas"><i class="fa fa-check"></i><b>3.5.9</b> Ban personal vehicles from certain areas</a></li>
+<li class="chapter" data-level="3.5.10" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#encourage-carsharing-strategies"><i class="fa fa-check"></i><b>3.5.10</b> Encourage carsharing strategies</a></li>
+<li class="chapter" data-level="3.5.11" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#provide-free-public-transit"><i class="fa fa-check"></i><b>3.5.11</b> Provide free public transit</a></li>
+<li class="chapter" data-level="3.5.12" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#subsidize-first-milelast-mile-transportation-services"><i class="fa fa-check"></i><b>3.5.12</b> Subsidize first-mile/last-mile transportation services</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html"><i class="fa fa-check"></i><b>3.6</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-for-pollutant-remediation-and-reduction-initiatives"><i class="fa fa-check"></i><b>3.6.1</b> Provide grants for pollutant remediation and reduction initiatives</a></li>
+<li class="chapter" data-level="3.6.2" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations"><i class="fa fa-check"></i><b>3.6.2</b> Provide commercial rebates for commercial building owners to install EV charging stations</a></li>
+<li class="chapter" data-level="3.6.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.6.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
+<li class="chapter" data-level="3.6.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.6.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
+<li class="chapter" data-level="3.6.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.6.5</b> Reduce vehicle speed limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="resilience.html"><a href="resilience.html"><i class="fa fa-check"></i><b>3.7</b> Resilience</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="resilience.html"><a href="resilience.html#promote-cool-surfaces-to-reduce-heat-island-effect"><i class="fa fa-check"></i><b>3.7.1</b> Promote cool surfaces to reduce heat island effect</a></li>
+<li class="chapter" data-level="3.7.2" data-path="resilience.html"><a href="resilience.html#promote-permeable-pavement-to-increase-groundwater-absorption"><i class="fa fa-check"></i><b>3.7.2</b> Promote permeable pavement to increase groundwater absorption</a></li>
+<li class="chapter" data-level="3.7.3" data-path="resilience.html"><a href="resilience.html#reclaim-urban-streams-and-rivers-to-increase-groundwater-absorption-and-filtration"><i class="fa fa-check"></i><b>3.7.3</b> Reclaim urban streams and rivers to increase groundwater absorption and filtration</a></li>
+<li class="chapter" data-level="3.7.4" data-path="resilience.html"><a href="resilience.html#use-green-infrastructure-to-improve-stormwater-management"><i class="fa fa-check"></i><b>3.7.4</b> Use green infrastructure to improve stormwater management</a></li>
+<li class="chapter" data-level="3.7.5" data-path="resilience.html"><a href="resilience.html#promote-urban-gardens-as-a-substitute-for-displaced-ecosystem-services"><i class="fa fa-check"></i><b>3.7.5</b> Promote urban gardens as a substitute for displaced ecosystem services</a></li>
+<li class="chapter" data-level="3.7.6" data-path="resilience.html"><a href="resilience.html#offer-rebates-for-flood-mitigation-projects"><i class="fa fa-check"></i><b>3.7.6</b> Offer rebates for flood mitigation projects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="resource-management.html"><a href="resource-management.html"><i class="fa fa-check"></i><b>3.8</b> Resource Management</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="resource-management.html"><a href="resource-management.html#develop-carbon-capture-storage-facilities"><i class="fa fa-check"></i><b>3.8.1</b> Develop carbon capture &amp; storage facilities</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="analysis-of-green-economy-strategies.html"><a href="analysis-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>4</b> Analysis of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methodology.html"><a href="methodology.html"><i class="fa fa-check"></i><b>4.1</b> Methodology</a></li>
+<li class="chapter" data-level="4.2" data-path="building-utilization-1.html"><a href="building-utilization-1.html"><i class="fa fa-check"></i><b>4.2</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="building-utilization-1.html"><a href="building-utilization-1.html#strategy-accessory-dwelling-units"><i class="fa fa-check"></i><b>4.2.1</b> Strategy: Accessory Dwelling Units</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="building-energy-1.html"><a href="building-energy-1.html"><i class="fa fa-check"></i><b>4.3</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="building-energy-1.html"><a href="building-energy-1.html#strategy-electrification"><i class="fa fa-check"></i><b>4.3.1</b> Strategy: Electrification</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html"><i class="fa fa-check"></i><b>4.4</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html#strategy-electric-vehicle-program"><i class="fa fa-check"></i><b>4.4.1</b> Strategy: Electric Vehicle Program</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="appendix-a-index-of-case-studies-by-place.html"><a href="appendix-a-index-of-case-studies-by-place.html"><i class="fa fa-check"></i><b>6</b> Appendix A: Index of Case Studies by Place</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Green Economy Analysis: Opportunities for Stockton</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="building-utilization-1" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Building Utilization</h2>
+<p>As seen in <a href="ghg-forecast.html#ghg-forecast">Section 2.10</a>, Stockton’s population is estimated to grow from 315,000 in 2020 to 339,000 in 2040, and Stockton’s job count is estimated to grow from 125,000 in 2020 to 151,000 in 2040. The roughly 24,000 new residents and 26,000 jobs will of course have some baseline amount of energy use that can’t be avoided, but the particular ways in which buildings provide for their needs can be made more energy-efficient through specific strategies. This section will focus on ways to reduce the amount of space required per person, which primarily affects energy usage because less heating and cooling is required. Less space per person implies a more dense urban form, which also brings transportation benefits, which we account for elsewhere in the model.</p>
+<div id="strategy-accessory-dwelling-units" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Strategy: Accessory Dwelling Units</h3>
+<p>The 2019 California state legislative cycle resulted in <a href="building-utilization.html#encourage-accessory-dwelling-units">accessory dwelling units</a> (ADU) laws that took effect on 1/1/2020 and, among other changes, supercede local control to allow ADUs to be built on every single-family parcel. More specifically, local regulations cannot prevent a homeowner from applying to build an internal ADU of up to 500 sqft within their existing structure, as well as a detached ADU of up to 800 sqft in their backyard, with newly enforced maximum setbacks of 4ft from the side and rear. Exact regulatory details are still in flux as individual cities are expected to update their local ordinances to match the new state laws, and loopholes will inevitably come up; refer to <a href="https://www.hcd.ca.gov/policy-research/AccessoryDwellingUnits.shtml">CA Housing and Community Development</a> for the latest guidance.</p>
+<p>ADUs are being evaluated as a green economy strategy for the following key reasons.</p>
+<p>First, internal ADUs such as garage conversions directly align with the goals of Building Utilization, making more effective use of existing built floor area and promoting less energy-intensive residential living. According to the <a href="https://www.eia.gov/todayinenergy/detail.php?id=11731">U.S. Energy information Administration’s Residential Energy Consumption Survey</a> (RECS 2009) (see figure below), the energy use per household in 2-4 unit dwellings is roughly half of the energy use of a single-family household, so we will use the same assumption when considering the energy impact of internal ADUs. In other words, every new internal ADU development that Stockton can enable will effectively increase household count without increasing overall energy use, assuming those households would have otherwise lived in newly built single-family homes. This liberal assumption can inform an upper-end estimate of the energy consumption benefits of internal ADUs.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="building-utilization-1.html#cb67-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/energyuseduplex.png&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:energy-use-duplex-diagram"></span>
+<img src="images/energyuseduplex.png" alt="Site energy use by housing type. Source: RECS 2009." width="100%" />
+<p class="caption">
+Figure 4.2: Site energy use by housing type. Source: RECS 2009.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Second, detached ADUs, while not as effective as internal ADUs from a building utilization perspective, still are efficient compared to the average single-family dwelling because they are likely to have a smaller footprint in the constraints of backyard development. A robust model for the relationship between square footage and energy use is outside the scope of this study, so our simplified assumption will be as follows. According to the same RECS, <a href="https://www.nahbclassic.org/generic.aspx?genericContentID=237901&amp;fromGSA=1">as analyzed by the National Association of home Builders</a> (see figure below), about a third of single-family home energy consumption is for heating/cooling, while the rest is not significantly correlated with square footage. As previously estimated in <a href="buildings.html#buildings">Section 2.9</a>, the average residential unit size in Stockton today is about 3,200 sqft (conservative because the data includes multifamily units) and consumes about 78,000 kBTUs per year. So we can estimate that a detached ADU of half that size, 1,600 sqft, would reduce its energy consumption by a sixth (to 65,000 kBTUs per year), and so forth.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="building-utilization-1.html#cb68-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/nahbenergy.jpg&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:energy-sqft-diagram"></span>
+<img src="images/nahbenergy.jpg" alt="NAHB analysis of HVAC vs non-HVAC energy use. Source: RECS 2009." width="100%" />
+<p class="caption">
+Figure 4.3: NAHB analysis of HVAC vs non-HVAC energy use. Source: RECS 2009.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Third, ADUs of any type can be considered “infill growth” as they do not lead to expansion of existing urban boundaries or services. Considering transportation GHGs, we can assume that a household that lives in a new ADU will have the same transportation footprint as their neighbors, where otherwise they might live in newly-built housing that is likely to be further on the outskirts of town, away from jobs and amenities. For the purposes of this section, we will conclude by demonstrating that a progressive ADU strategy could target ADU development in the areas with the least amount of car-dependence, namely transit access to downtown and other neighborhood centers.</p>
+<p>Fourth, homeowners who develop ADUs may realize a new stream of rent revenue, building wealth for local residents, while renters may benefit from lower rents because ADUs are a form of naturally occurring affordable housing.</p>
+<p>The fundamental question, then, is: how many new ADUs can Stockton actively enable in the next two decades that wouldn’t have otherwise been built? It is unknown what the natural rate of ADU development is without local intervention, given the new state legislation; this remains to be seen in communities across the state as the laws have just taken effect. But for the purposes of our analysis, we will assume that the City of Stockton has a range of options from being the <em>least</em> supportive of ADU development (given that despite state legislation, local permitting processes, permit fees, information barriers, community opposition, and financial barriers could all work to curtail development) to the <em>most</em> supportive of ADU development (adopting many of the best practices <a href="building-utilization.html#encourage-accessory-dwelling-units">we reviewed in Chapter 3</a>), and we will quantify the size of that spectrum by estimating the number of ADUs that could be built based purely on physical characteristics of existing single-family parcels.</p>
+<p>The following is a breakdown of the number of residential parcels by housing type, based on 2018 County Assessor Records. Note that the apartment parcels contain multiple units, so the number of total housing units or households is not represented in this table. Also, our data does not clearly indicate existing ADUs, so the analysis assumes that all single family parcels do not currently have ADUs. We suspect that the existing number of permitted ADUs is relatively low.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="building-utilization-1.html#cb69-1"></a>projection &lt;-<span class="st"> &quot;+proj=utm +zone=10 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=ft +no_defs&quot;</span></span>
+<span id="cb69-2"><a href="building-utilization-1.html#cb69-2"></a></span>
+<span id="cb69-3"><a href="building-utilization-1.html#cb69-3"></a>stockton_boundary_influence_projected &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/SpheresOfInfluence/SpheresOfInfluence.shp&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-4"><a href="building-utilization-1.html#cb69-4"></a><span class="st">  </span><span class="kw">filter</span>(SPHERE <span class="op">==</span><span class="st"> &quot;STOCKTON&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-5"><a href="building-utilization-1.html#cb69-5"></a><span class="st">  </span><span class="kw">st_transform</span>(projection)</span>
+<span id="cb69-6"><a href="building-utilization-1.html#cb69-6"></a></span>
+<span id="cb69-7"><a href="building-utilization-1.html#cb69-7"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/sjc_parcels.Rdata&quot;</span>)</span>
+<span id="cb69-8"><a href="building-utilization-1.html#cb69-8"></a></span>
+<span id="cb69-9"><a href="building-utilization-1.html#cb69-9"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/stockton_parcels.Rdata&quot;</span>)</span>
+<span id="cb69-10"><a href="building-utilization-1.html#cb69-10"></a></span>
+<span id="cb69-11"><a href="building-utilization-1.html#cb69-11"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;</span>)</span>
+<span id="cb69-12"><a href="building-utilization-1.html#cb69-12"></a></span>
+<span id="cb69-13"><a href="building-utilization-1.html#cb69-13"></a>residential_bldg &lt;-</span>
+<span id="cb69-14"><a href="building-utilization-1.html#cb69-14"></a><span class="st">  </span>bldg_join <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-15"><a href="building-utilization-1.html#cb69-15"></a><span class="st">  </span><span class="kw">st_transform</span>(projection) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-16"><a href="building-utilization-1.html#cb69-16"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;R&quot;</span>)</span>
+<span id="cb69-17"><a href="building-utilization-1.html#cb69-17"></a></span>
+<span id="cb69-18"><a href="building-utilization-1.html#cb69-18"></a>stockton_residential_parcels &lt;-</span>
+<span id="cb69-19"><a href="building-utilization-1.html#cb69-19"></a><span class="st">  </span>stockton_parcels <span class="op">%&gt;%</span></span>
+<span id="cb69-20"><a href="building-utilization-1.html#cb69-20"></a><span class="st">  </span><span class="kw">filter</span>(APN <span class="op">%in%</span><span class="st"> </span>residential_bldg<span class="op">$</span>APN) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-21"><a href="building-utilization-1.html#cb69-21"></a><span class="st">  </span><span class="kw">left_join</span>(residential_bldg <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>), <span class="dt">by =</span><span class="st">&quot;APN&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-22"><a href="building-utilization-1.html#cb69-22"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">duplicated</span>(APN))</span>
+<span id="cb69-23"><a href="building-utilization-1.html#cb69-23"></a></span>
+<span id="cb69-24"><a href="building-utilization-1.html#cb69-24"></a>residential_bldg_summary &lt;-</span>
+<span id="cb69-25"><a href="building-utilization-1.html#cb69-25"></a><span class="st">  </span>stockton_residential_parcels <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-26"><a href="building-utilization-1.html#cb69-26"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb69-27"><a href="building-utilization-1.html#cb69-27"></a>    <span class="dt">Type =</span> </span>
+<span id="cb69-28"><a href="building-utilization-1.html#cb69-28"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb69-29"><a href="building-utilization-1.html#cb69-29"></a>        type <span class="op">==</span><span class="st"> </span><span class="dv">10</span> <span class="op">~</span><span class="st"> &quot;Single Family&quot;</span>,</span>
+<span id="cb69-30"><a href="building-utilization-1.html#cb69-30"></a>        type <span class="op">==</span><span class="st"> </span><span class="dv">21</span> <span class="op">~</span><span class="st"> &quot;Duplex&quot;</span>,</span>
+<span id="cb69-31"><a href="building-utilization-1.html#cb69-31"></a>        type <span class="op">==</span><span class="st"> </span><span class="dv">22</span> <span class="op">~</span><span class="st"> &quot;Apartment&quot;</span>,</span>
+<span id="cb69-32"><a href="building-utilization-1.html#cb69-32"></a>        <span class="kw">is.na</span>(type) <span class="op">~</span><span class="st"> &quot;Data Unavailable&quot;</span>,</span>
+<span id="cb69-33"><a href="building-utilization-1.html#cb69-33"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Other&quot;</span></span>
+<span id="cb69-34"><a href="building-utilization-1.html#cb69-34"></a>      )</span>
+<span id="cb69-35"><a href="building-utilization-1.html#cb69-35"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-36"><a href="building-utilization-1.html#cb69-36"></a><span class="st">  </span><span class="kw">group_by</span>(Type) <span class="op">%&gt;%</span></span>
+<span id="cb69-37"><a href="building-utilization-1.html#cb69-37"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-38"><a href="building-utilization-1.html#cb69-38"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb69-39"><a href="building-utilization-1.html#cb69-39"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Count =</span> <span class="kw">prettyNum</span>(<span class="kw">floor</span>(Count<span class="op">/</span><span class="dv">100</span>)<span class="op">*</span><span class="dv">100</span>,<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>))</span>
+<span id="cb69-40"><a href="building-utilization-1.html#cb69-40"></a></span>
+<span id="cb69-41"><a href="building-utilization-1.html#cb69-41"></a>residential_bldg_summary &lt;-<span class="st"> </span>residential_bldg_summary[<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">2</span>),]</span>
+<span id="cb69-42"><a href="building-utilization-1.html#cb69-42"></a></span>
+<span id="cb69-43"><a href="building-utilization-1.html#cb69-43"></a><span class="kw">kable</span>(</span>
+<span id="cb69-44"><a href="building-utilization-1.html#cb69-44"></a>  residential_bldg_summary,</span>
+<span id="cb69-45"><a href="building-utilization-1.html#cb69-45"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb69-46"><a href="building-utilization-1.html#cb69-46"></a>  <span class="dt">caption =</span> <span class="st">&#39;Number of residential parcels in Stockton by housing type.&#39;</span></span>
+<span id="cb69-47"><a href="building-utilization-1.html#cb69-47"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb69-48"><a href="building-utilization-1.html#cb69-48"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb69-49"><a href="building-utilization-1.html#cb69-49"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:units-by-type-table">Table 4.1: </span>Number of residential parcels in Stockton by housing type.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Single Family
+</td>
+<td style="text-align:left;">
+62,200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Duplex
+</td>
+<td style="text-align:left;">
+3,700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Apartment
+</td>
+<td style="text-align:left;">
+400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+1,000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Data Unavailable
+</td>
+<td style="text-align:left;">
+14,100
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Starting first with internal ADUs, technically all 66,000 single-family, duplex, and apartment parcels could build permitted internal ADUs (in fact more than one can be allowed in existing multifamily buildings). These are by definition smaller units (less than 500 sqft, typically converting an existing garage, attic, basement, or master bedroom), so can’t necessarily support larger household sizes.</p>
+<p>As projected in <a href="ghg-forecast.html#ghg-forecast">Section 2.10</a>, only 25,000 new residents are expected between 2020 and 2040. In other words, it could be possible to support this entire population growth (with little increase in building energy consumption) if just half of all eligible existing buildings were to convert existing space to internal ADUs. Of course, for a number of reasons including lifestyle preference (with internal ADUs perhaps being the least palatable social arrangement for two separate households), this is not literally feasible, but should signal the opportunity in encouraging ADU development.</p>
+<p>Detached ADUs may be more palatable (along with attached ADUs which are additions to an existing home, but these are not considered in our analysis), given the greater privacy between households, greater square footage, and potential reduced complexity of new construction vs. retrofitting existing buildings, but are more costly as well. Assessing the viability of detached ADUs is more complicated because it involves geospatial analysis.</p>
+<p>We developed a script that performs the following basic steps:</p>
+<ol style="list-style-type: decimal">
+<li>We acquired Parcel shapes from the <a href="http://www.stocktonca.gov/services/gis/mapdatDat.html">City of Stockton GIS database</a>.</li>
+<li>We acquired Building shapes from <a href="https://github.com/microsoft/USBuildingFootprints">Microsoft’s U.S. Building Footprint Data</a></li>
+<li>For each residential parcel, we produced the leftover yard area after removing 4ft setbacks, front yards (based on the closest distance from the existing building to the street edge), and the building (including a 5ft setback per municipal ordinances).</li>
+<li>Using an 8ft x 20ft shape (like <a href="https://mekamodular.com/models/standard/liberty-160/">the smallest ADU available on the market</a>), we traced this yard space to find the subset of space that can technically fit an orthogonal ADU design. This method does not account for obstructions like trees not represented in our data.</li>
+<li>We aggregated and quantified the square footage of this remaining “buildable area”.</li>
+</ol>
+<p>The following map shows what the analysis looks like for one block group in South Stockton.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="building-utilization-1.html#cb70-1"></a><span class="co"># yard_setbacks &lt;-</span></span>
+<span id="cb70-2"><a href="building-utilization-1.html#cb70-2"></a><span class="co">#   stockton_residential_parcels %&gt;%</span></span>
+<span id="cb70-3"><a href="building-utilization-1.html#cb70-3"></a><span class="co">#   st_buffer(-4, joinStyle = &quot;MITRE&quot;, mitreLimit = 1) # 4ft yard setback</span></span>
+<span id="cb70-4"><a href="building-utilization-1.html#cb70-4"></a><span class="co"># </span></span>
+<span id="cb70-5"><a href="building-utilization-1.html#cb70-5"></a><span class="co"># house_setbacks &lt;-</span></span>
+<span id="cb70-6"><a href="building-utilization-1.html#cb70-6"></a><span class="co">#   residential_bldg %&gt;%</span></span>
+<span id="cb70-7"><a href="building-utilization-1.html#cb70-7"></a><span class="co">#   st_buffer(5, joinStyle = &quot;MITRE&quot;, mitreLimit = 1) #5 ft house setback</span></span>
+<span id="cb70-8"><a href="building-utilization-1.html#cb70-8"></a><span class="co"># </span></span>
+<span id="cb70-9"><a href="building-utilization-1.html#cb70-9"></a><span class="co"># adu_available_land &lt;- NULL</span></span>
+<span id="cb70-10"><a href="building-utilization-1.html#cb70-10"></a><span class="co"># for(row in 1:floor(nrow(stockton_residential_parcels)/1000)){</span></span>
+<span id="cb70-11"><a href="building-utilization-1.html#cb70-11"></a><span class="co"># </span></span>
+<span id="cb70-12"><a href="building-utilization-1.html#cb70-12"></a><span class="co">#   start &lt;- row*1000-999</span></span>
+<span id="cb70-13"><a href="building-utilization-1.html#cb70-13"></a><span class="co"># </span></span>
+<span id="cb70-14"><a href="building-utilization-1.html#cb70-14"></a><span class="co">#   end &lt;- ifelse(</span></span>
+<span id="cb70-15"><a href="building-utilization-1.html#cb70-15"></a><span class="co">#     row &lt; floor(nrow(stockton_residential_parcels)/1000),</span></span>
+<span id="cb70-16"><a href="building-utilization-1.html#cb70-16"></a><span class="co">#     row*1000,</span></span>
+<span id="cb70-17"><a href="building-utilization-1.html#cb70-17"></a><span class="co">#     nrow(stockton_residential_parcels)</span></span>
+<span id="cb70-18"><a href="building-utilization-1.html#cb70-18"></a><span class="co">#   )</span></span>
+<span id="cb70-19"><a href="building-utilization-1.html#cb70-19"></a><span class="co"># </span></span>
+<span id="cb70-20"><a href="building-utilization-1.html#cb70-20"></a><span class="co">#   print(paste0(start,&quot; to &quot;,end))</span></span>
+<span id="cb70-21"><a href="building-utilization-1.html#cb70-21"></a><span class="co"># </span></span>
+<span id="cb70-22"><a href="building-utilization-1.html#cb70-22"></a><span class="co">#   available_land &lt;-</span></span>
+<span id="cb70-23"><a href="building-utilization-1.html#cb70-23"></a><span class="co">#     st_difference(yard_setbacks[which(yard_setbacks$APN %in% stockton_residential_parcels$APN[start:end]),], st_union(house_setbacks[which(house_setbacks$APN %in% stockton_residential_parcels$APN[start:end]),]))</span></span>
+<span id="cb70-24"><a href="building-utilization-1.html#cb70-24"></a><span class="co"># </span></span>
+<span id="cb70-25"><a href="building-utilization-1.html#cb70-25"></a><span class="co">#   adu_available_land &lt;-</span></span>
+<span id="cb70-26"><a href="building-utilization-1.html#cb70-26"></a><span class="co">#     adu_available_land %&gt;%</span></span>
+<span id="cb70-27"><a href="building-utilization-1.html#cb70-27"></a><span class="co">#     rbind(available_land)</span></span>
+<span id="cb70-28"><a href="building-utilization-1.html#cb70-28"></a><span class="co"># }</span></span>
+<span id="cb70-29"><a href="building-utilization-1.html#cb70-29"></a><span class="co"># save(adu_available_land, file = &quot;C:/Users/derek Ouyang/Google Drive/City Systems/Stockton Green Economy/ADU/adu_available_land.Rdata&quot;)</span></span>
+<span id="cb70-30"><a href="building-utilization-1.html#cb70-30"></a><span class="co"># </span></span>
+<span id="cb70-31"><a href="building-utilization-1.html#cb70-31"></a><span class="co"># yard_separation &lt;- #separates front and back yards into separate shapes</span></span>
+<span id="cb70-32"><a href="building-utilization-1.html#cb70-32"></a><span class="co">#   adu_available_land %&gt;%</span></span>
+<span id="cb70-33"><a href="building-utilization-1.html#cb70-33"></a><span class="co">#   as_Spatial() %&gt;%</span></span>
+<span id="cb70-34"><a href="building-utilization-1.html#cb70-34"></a><span class="co">#   sp::disaggregate() %&gt;%</span></span>
+<span id="cb70-35"><a href="building-utilization-1.html#cb70-35"></a><span class="co">#   st_as_sf()</span></span>
+<span id="cb70-36"><a href="building-utilization-1.html#cb70-36"></a><span class="co"># </span></span>
+<span id="cb70-37"><a href="building-utilization-1.html#cb70-37"></a><span class="co"># This creates the merged parcel shapes, so you can know that a parcel touches a street edge if it shares an edge with the block it&#39;s part of. the buffers are first filling in some small slivers, and then producing an end block shape that is 1ft inset from the original.</span></span>
+<span id="cb70-38"><a href="building-utilization-1.html#cb70-38"></a><span class="co"># stockton_parcels_dissolve &lt;-</span></span>
+<span id="cb70-39"><a href="building-utilization-1.html#cb70-39"></a><span class="co">#   stockton_parcels_extended %&gt;% </span></span>
+<span id="cb70-40"><a href="building-utilization-1.html#cb70-40"></a><span class="co">#   summarize() %&gt;% </span></span>
+<span id="cb70-41"><a href="building-utilization-1.html#cb70-41"></a><span class="co">#   st_buffer(1) %&gt;% </span></span>
+<span id="cb70-42"><a href="building-utilization-1.html#cb70-42"></a><span class="co">#   st_buffer(-2) %&gt;%</span></span>
+<span id="cb70-43"><a href="building-utilization-1.html#cb70-43"></a><span class="co">#   as_Spatial() %&gt;%</span></span>
+<span id="cb70-44"><a href="building-utilization-1.html#cb70-44"></a><span class="co">#   sp::disaggregate() %&gt;%</span></span>
+<span id="cb70-45"><a href="building-utilization-1.html#cb70-45"></a><span class="co">#   st_as_sf()</span></span>
+<span id="cb70-46"><a href="building-utilization-1.html#cb70-46"></a><span class="co"># </span></span>
+<span id="cb70-47"><a href="building-utilization-1.html#cb70-47"></a><span class="co"># save(stockton_parcels_dissolve, file = &quot;C:/Users/derek Ouyang/Google Drive/City Systems/Stockton Green Economy/ADU/stockton_parcels_dissolve.Rdata&quot;)</span></span>
+<span id="cb70-48"><a href="building-utilization-1.html#cb70-48"></a><span class="co"># load(&quot;C:/Users/derek Ouyang/Google Drive/City Systems/Stockton Green Economy/ADU/stockton_parcels_dissolve.Rdata&quot;)</span></span>
+<span id="cb70-49"><a href="building-utilization-1.html#cb70-49"></a><span class="co"># </span></span>
+<span id="cb70-50"><a href="building-utilization-1.html#cb70-50"></a><span class="co"># This creates the clips of each parcel with the block shapes from the previous line. because of the -1ft buffer, this creates little 1ft leftover crusts.</span></span>
+<span id="cb70-51"><a href="building-utilization-1.html#cb70-51"></a><span class="co"># </span></span>
+<span id="cb70-52"><a href="building-utilization-1.html#cb70-52"></a><span class="co"># for(row in 1:floor(nrow(stockton_parcels_dissolve)/100)){</span></span>
+<span id="cb70-53"><a href="building-utilization-1.html#cb70-53"></a><span class="co"># </span></span>
+<span id="cb70-54"><a href="building-utilization-1.html#cb70-54"></a><span class="co"># street_edges &lt;- NULL</span></span>
+<span id="cb70-55"><a href="building-utilization-1.html#cb70-55"></a><span class="co"># for(row in 1:floor(nrow(stockton_parcels_dissolve)/100)){</span></span>
+<span id="cb70-56"><a href="building-utilization-1.html#cb70-56"></a><span class="co">#   </span></span>
+<span id="cb70-57"><a href="building-utilization-1.html#cb70-57"></a><span class="co">#   start &lt;- row*100-99</span></span>
+<span id="cb70-58"><a href="building-utilization-1.html#cb70-58"></a><span class="co"># </span></span>
+<span id="cb70-59"><a href="building-utilization-1.html#cb70-59"></a><span class="co">#   end &lt;- ifelse(</span></span>
+<span id="cb70-60"><a href="building-utilization-1.html#cb70-60"></a><span class="co">#     row &lt; floor(nrow(stockton_parcels_dissolve)/100),</span></span>
+<span id="cb70-61"><a href="building-utilization-1.html#cb70-61"></a><span class="co">#     row*100,</span></span>
+<span id="cb70-62"><a href="building-utilization-1.html#cb70-62"></a><span class="co">#     nrow(stockton_parcels_dissolve)</span></span>
+<span id="cb70-63"><a href="building-utilization-1.html#cb70-63"></a><span class="co">#   )</span></span>
+<span id="cb70-64"><a href="building-utilization-1.html#cb70-64"></a><span class="co"># </span></span>
+<span id="cb70-65"><a href="building-utilization-1.html#cb70-65"></a><span class="co">#   print(paste0(start,&quot; to &quot;,end))</span></span>
+<span id="cb70-66"><a href="building-utilization-1.html#cb70-66"></a><span class="co">#   </span></span>
+<span id="cb70-67"><a href="building-utilization-1.html#cb70-67"></a><span class="co">#   street_edge &lt;- </span></span>
+<span id="cb70-68"><a href="building-utilization-1.html#cb70-68"></a><span class="co">#     stockton_residential_parcels[which(stockton_residential_parcels$APN %in% st_centroid(stockton_residential_parcels)[stockton_parcels_dissolve[start:end,],]$APN),] %&gt;% </span></span>
+<span id="cb70-69"><a href="building-utilization-1.html#cb70-69"></a><span class="co">#     mutate(</span></span>
+<span id="cb70-70"><a href="building-utilization-1.html#cb70-70"></a><span class="co">#       parcel_area = st_area(.) %&gt;% as.numeric()</span></span>
+<span id="cb70-71"><a href="building-utilization-1.html#cb70-71"></a><span class="co">#     ) %&gt;% </span></span>
+<span id="cb70-72"><a href="building-utilization-1.html#cb70-72"></a><span class="co">#     st_difference(st_union(stockton_parcels_dissolve[start:end,]))</span></span>
+<span id="cb70-73"><a href="building-utilization-1.html#cb70-73"></a><span class="co">#   </span></span>
+<span id="cb70-74"><a href="building-utilization-1.html#cb70-74"></a><span class="co">#   street_edges &lt;-</span></span>
+<span id="cb70-75"><a href="building-utilization-1.html#cb70-75"></a><span class="co">#     street_edges %&gt;% </span></span>
+<span id="cb70-76"><a href="building-utilization-1.html#cb70-76"></a><span class="co">#     rbind(street_edge)</span></span>
+<span id="cb70-77"><a href="building-utilization-1.html#cb70-77"></a><span class="co">#   </span></span>
+<span id="cb70-78"><a href="building-utilization-1.html#cb70-78"></a><span class="co">#   save(street_edges, file = &quot;C:/Users/derek Ouyang/Google Drive/City Systems/Stockton Green Economy/ADU/street_edges.Rdata&quot;)</span></span>
+<span id="cb70-79"><a href="building-utilization-1.html#cb70-79"></a><span class="co"># }</span></span>
+<span id="cb70-80"><a href="building-utilization-1.html#cb70-80"></a><span class="co"># </span></span>
+<span id="cb70-81"><a href="building-utilization-1.html#cb70-81"></a><span class="co"># load(&quot;C:/Users/derek Ouyang/Google Drive/City Systems/Stockton Green Economy/ADU/street_edges.Rdata&quot;)</span></span>
+<span id="cb70-82"><a href="building-utilization-1.html#cb70-82"></a><span class="co"># </span></span>
+<span id="cb70-83"><a href="building-utilization-1.html#cb70-83"></a><span class="co"># # Note that borders with water or green space may be incorrectly identified as street edges with this method. in EPA there are almost always buffer parcels for the baylands which prevent this from happening, but this may need to be addressed as a check on suspected throughlots using the street method, same as how the corner lot cases likely need to be sent to the street method.</span></span>
+<span id="cb70-84"><a href="building-utilization-1.html#cb70-84"></a><span class="co"># </span></span>
+<span id="cb70-85"><a href="building-utilization-1.html#cb70-85"></a><span class="co"># # Reviewing the throughlot cases can lead to manual identification of false positives, but this may not be worth the time to do. for now, this sets aside all cases of 2+ crusts to be treated in a separate analysis, since you&#39;d need to treat throughlots separately anyway.</span></span>
+<span id="cb70-86"><a href="building-utilization-1.html#cb70-86"></a><span class="co"># through_lots_or_misc &lt;-</span></span>
+<span id="cb70-87"><a href="building-utilization-1.html#cb70-87"></a><span class="co">#   street_edges %&gt;% </span></span>
+<span id="cb70-88"><a href="building-utilization-1.html#cb70-88"></a><span class="co">#   as_Spatial() %&gt;%</span></span>
+<span id="cb70-89"><a href="building-utilization-1.html#cb70-89"></a><span class="co">#   sp::disaggregate() %&gt;%</span></span>
+<span id="cb70-90"><a href="building-utilization-1.html#cb70-90"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb70-91"><a href="building-utilization-1.html#cb70-91"></a><span class="co">#   group_by(APN) %&gt;% </span></span>
+<span id="cb70-92"><a href="building-utilization-1.html#cb70-92"></a><span class="co">#   summarize(count = n()) %&gt;% </span></span>
+<span id="cb70-93"><a href="building-utilization-1.html#cb70-93"></a><span class="co">#   filter(count &gt; 1) %&gt;% </span></span>
+<span id="cb70-94"><a href="building-utilization-1.html#cb70-94"></a><span class="co">#   st_set_geometry(NULL) %&gt;% </span></span>
+<span id="cb70-95"><a href="building-utilization-1.html#cb70-95"></a><span class="co">#   left_join(stockton_parcels, by = &quot;APN&quot;) %&gt;% </span></span>
+<span id="cb70-96"><a href="building-utilization-1.html#cb70-96"></a><span class="co">#   st_as_sf()</span></span>
+<span id="cb70-97"><a href="building-utilization-1.html#cb70-97"></a><span class="co"># </span></span>
+<span id="cb70-98"><a href="building-utilization-1.html#cb70-98"></a><span class="co"># # This takes advantage of the convex hull operation to find bent crusts. 15% seems to be roughly the right ratio of the convex hull shape area to original parcel area to identify true corner conditions, but this will have some false positives and false negatives. these corner cases are set aside for now, likely need to be sent to the street matching script.</span></span>
+<span id="cb70-99"><a href="building-utilization-1.html#cb70-99"></a><span class="co"># corner_edges &lt;-</span></span>
+<span id="cb70-100"><a href="building-utilization-1.html#cb70-100"></a><span class="co">#   street_edges %&gt;%</span></span>
+<span id="cb70-101"><a href="building-utilization-1.html#cb70-101"></a><span class="co">#   filter(!APN %in% through_lots_or_misc$APN) %&gt;% </span></span>
+<span id="cb70-102"><a href="building-utilization-1.html#cb70-102"></a><span class="co">#   st_convex_hull() %&gt;% </span></span>
+<span id="cb70-103"><a href="building-utilization-1.html#cb70-103"></a><span class="co">#   mutate(</span></span>
+<span id="cb70-104"><a href="building-utilization-1.html#cb70-104"></a><span class="co">#     edge_area = st_area(.) %&gt;% as.numeric()</span></span>
+<span id="cb70-105"><a href="building-utilization-1.html#cb70-105"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb70-106"><a href="building-utilization-1.html#cb70-106"></a><span class="co">#   filter(edge_area &gt; parcel_area*0.15)</span></span>
+<span id="cb70-107"><a href="building-utilization-1.html#cb70-107"></a><span class="co"># </span></span>
+<span id="cb70-108"><a href="building-utilization-1.html#cb70-108"></a><span class="co"># This filters to the remaining one-crust parcels that are SFR. </span></span>
+<span id="cb70-109"><a href="building-utilization-1.html#cb70-109"></a><span class="co"># normal_residential_parcels &lt;-</span></span>
+<span id="cb70-110"><a href="building-utilization-1.html#cb70-110"></a><span class="co">#   street_edges %&gt;% </span></span>
+<span id="cb70-111"><a href="building-utilization-1.html#cb70-111"></a><span class="co">#   filter(!APN %in% through_lots_or_misc$APN) %&gt;%</span></span>
+<span id="cb70-112"><a href="building-utilization-1.html#cb70-112"></a><span class="co">#   as.data.frame() %&gt;% </span></span>
+<span id="cb70-113"><a href="building-utilization-1.html#cb70-113"></a><span class="co">#   rename(street_edge = geometry) %&gt;% </span></span>
+<span id="cb70-114"><a href="building-utilization-1.html#cb70-114"></a><span class="co">#   dplyr::select(APN,parcel_area,street_edge) %&gt;% </span></span>
+<span id="cb70-115"><a href="building-utilization-1.html#cb70-115"></a><span class="co">#   left_join(stockton_parcels, by = &quot;APN&quot;) %&gt;%</span></span>
+<span id="cb70-116"><a href="building-utilization-1.html#cb70-116"></a><span class="co">#   as.data.frame() %&gt;% </span></span>
+<span id="cb70-117"><a href="building-utilization-1.html#cb70-117"></a><span class="co">#   rename(parcel_geometry = geometry) %&gt;% </span></span>
+<span id="cb70-118"><a href="building-utilization-1.html#cb70-118"></a><span class="co">#   dplyr::select(APN,parcel_area,street_edge,parcel_geometry) %&gt;% </span></span>
+<span id="cb70-119"><a href="building-utilization-1.html#cb70-119"></a><span class="co">#   right_join(residential_bldg, by = &quot;APN&quot;) %&gt;%</span></span>
+<span id="cb70-120"><a href="building-utilization-1.html#cb70-120"></a><span class="co">#   filter(!is.na(parcel_area)) %&gt;% </span></span>
+<span id="cb70-121"><a href="building-utilization-1.html#cb70-121"></a><span class="co">#   rename(building_geometry = WKT) %&gt;% </span></span>
+<span id="cb70-122"><a href="building-utilization-1.html#cb70-122"></a><span class="co">#   st_as_sf()</span></span>
+<span id="cb70-123"><a href="building-utilization-1.html#cb70-123"></a><span class="co"># </span></span>
+<span id="cb70-124"><a href="building-utilization-1.html#cb70-124"></a><span class="co"># normal_residential_parcels_distance &lt;-</span></span>
+<span id="cb70-125"><a href="building-utilization-1.html#cb70-125"></a><span class="co">#   normal_residential_parcels %&gt;% </span></span>
+<span id="cb70-126"><a href="building-utilization-1.html#cb70-126"></a><span class="co">#   mutate(</span></span>
+<span id="cb70-127"><a href="building-utilization-1.html#cb70-127"></a><span class="co">#     distance_bldg_front =</span></span>
+<span id="cb70-128"><a href="building-utilization-1.html#cb70-128"></a><span class="co">#       1:nrow(normal_residential_parcels) %&gt;% </span></span>
+<span id="cb70-129"><a href="building-utilization-1.html#cb70-129"></a><span class="co">#       map(function(row){</span></span>
+<span id="cb70-130"><a href="building-utilization-1.html#cb70-130"></a><span class="co">#         if(row%%100 == 0) print(row)</span></span>
+<span id="cb70-131"><a href="building-utilization-1.html#cb70-131"></a><span class="co">#         st_nearest_points(normal_residential_parcels$street_edge[row],normal_residential_parcels$building_geometry[row]) %&gt;% </span></span>
+<span id="cb70-132"><a href="building-utilization-1.html#cb70-132"></a><span class="co">#           st_length()</span></span>
+<span id="cb70-133"><a href="building-utilization-1.html#cb70-133"></a><span class="co">#       }) %&gt;% </span></span>
+<span id="cb70-134"><a href="building-utilization-1.html#cb70-134"></a><span class="co">#       unlist()</span></span>
+<span id="cb70-135"><a href="building-utilization-1.html#cb70-135"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb70-136"><a href="building-utilization-1.html#cb70-136"></a><span class="co">#   arrange(APN, distance_bldg_front) %&gt;% </span></span>
+<span id="cb70-137"><a href="building-utilization-1.html#cb70-137"></a><span class="co">#   filter(!duplicated(APN))</span></span>
+<span id="cb70-138"><a href="building-utilization-1.html#cb70-138"></a><span class="co"># </span></span>
+<span id="cb70-139"><a href="building-utilization-1.html#cb70-139"></a><span class="co"># front_yard_setback &lt;-</span></span>
+<span id="cb70-140"><a href="building-utilization-1.html#cb70-140"></a><span class="co">#   1:nrow(normal_residential_parcels_distance) %&gt;% </span></span>
+<span id="cb70-141"><a href="building-utilization-1.html#cb70-141"></a><span class="co">#   map_dfr(function(row){</span></span>
+<span id="cb70-142"><a href="building-utilization-1.html#cb70-142"></a><span class="co">#     if(row%%100 == 0) print(row)</span></span>
+<span id="cb70-143"><a href="building-utilization-1.html#cb70-143"></a><span class="co">#     </span></span>
+<span id="cb70-144"><a href="building-utilization-1.html#cb70-144"></a><span class="co">#     normal_residential_parcels_distance[row,] %&gt;% </span></span>
+<span id="cb70-145"><a href="building-utilization-1.html#cb70-145"></a><span class="co">#       st_set_geometry(&quot;street_edge&quot;) %&gt;% </span></span>
+<span id="cb70-146"><a href="building-utilization-1.html#cb70-146"></a><span class="co">#       st_buffer(normal_residential_parcels_distance$distance_bldg_front[row],joinStyle = &quot;MITRE&quot;, mitreLimit = 1) %&gt;% </span></span>
+<span id="cb70-147"><a href="building-utilization-1.html#cb70-147"></a><span class="co">#       as.data.frame()</span></span>
+<span id="cb70-148"><a href="building-utilization-1.html#cb70-148"></a><span class="co">#   }) %&gt;% </span></span>
+<span id="cb70-149"><a href="building-utilization-1.html#cb70-149"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb70-150"><a href="building-utilization-1.html#cb70-150"></a><span class="co">#   st_set_crs(projection)</span></span>
+<span id="cb70-151"><a href="building-utilization-1.html#cb70-151"></a><span class="co"># </span></span>
+<span id="cb70-152"><a href="building-utilization-1.html#cb70-152"></a><span class="co"># yard_separation_front_yard_setback &lt;- NULL</span></span>
+<span id="cb70-153"><a href="building-utilization-1.html#cb70-153"></a><span class="co"># for(row in 1:floor(nrow(stockton_residential_parcels)/1000)){</span></span>
+<span id="cb70-154"><a href="building-utilization-1.html#cb70-154"></a><span class="co"># </span></span>
+<span id="cb70-155"><a href="building-utilization-1.html#cb70-155"></a><span class="co">#   start &lt;- row*1000-999</span></span>
+<span id="cb70-156"><a href="building-utilization-1.html#cb70-156"></a><span class="co"># </span></span>
+<span id="cb70-157"><a href="building-utilization-1.html#cb70-157"></a><span class="co">#   end &lt;- ifelse(</span></span>
+<span id="cb70-158"><a href="building-utilization-1.html#cb70-158"></a><span class="co">#     row &lt; floor(nrow(stockton_residential_parcels)/1000),</span></span>
+<span id="cb70-159"><a href="building-utilization-1.html#cb70-159"></a><span class="co">#     row*1000,</span></span>
+<span id="cb70-160"><a href="building-utilization-1.html#cb70-160"></a><span class="co">#     nrow(stockton_residential_parcels)</span></span>
+<span id="cb70-161"><a href="building-utilization-1.html#cb70-161"></a><span class="co">#   )</span></span>
+<span id="cb70-162"><a href="building-utilization-1.html#cb70-162"></a><span class="co"># </span></span>
+<span id="cb70-163"><a href="building-utilization-1.html#cb70-163"></a><span class="co">#   print(paste0(start,&quot; to &quot;,end))</span></span>
+<span id="cb70-164"><a href="building-utilization-1.html#cb70-164"></a><span class="co"># </span></span>
+<span id="cb70-165"><a href="building-utilization-1.html#cb70-165"></a><span class="co">#   yard_separation_temp_result &lt;-</span></span>
+<span id="cb70-166"><a href="building-utilization-1.html#cb70-166"></a><span class="co">#     yard_separation[which(yard_separation$APN %in% stockton_residential_parcels$APN[start:end]),]</span></span>
+<span id="cb70-167"><a href="building-utilization-1.html#cb70-167"></a><span class="co">#   </span></span>
+<span id="cb70-168"><a href="building-utilization-1.html#cb70-168"></a><span class="co">#   front_yard_setback_temp_result &lt;-</span></span>
+<span id="cb70-169"><a href="building-utilization-1.html#cb70-169"></a><span class="co">#     front_yard_setback[which(front_yard_setback$APN %in% stockton_residential_parcels$APN[start:end]),] %&gt;% </span></span>
+<span id="cb70-170"><a href="building-utilization-1.html#cb70-170"></a><span class="co">#     st_union()</span></span>
+<span id="cb70-171"><a href="building-utilization-1.html#cb70-171"></a><span class="co"># </span></span>
+<span id="cb70-172"><a href="building-utilization-1.html#cb70-172"></a><span class="co">#   yard_separation_front_yard_setback &lt;-</span></span>
+<span id="cb70-173"><a href="building-utilization-1.html#cb70-173"></a><span class="co">#     yard_separation_front_yard_setback %&gt;%</span></span>
+<span id="cb70-174"><a href="building-utilization-1.html#cb70-174"></a><span class="co">#     rbind(</span></span>
+<span id="cb70-175"><a href="building-utilization-1.html#cb70-175"></a><span class="co">#       st_difference(</span></span>
+<span id="cb70-176"><a href="building-utilization-1.html#cb70-176"></a><span class="co">#         yard_separation_temp_result,</span></span>
+<span id="cb70-177"><a href="building-utilization-1.html#cb70-177"></a><span class="co">#         front_yard_setback_temp_result</span></span>
+<span id="cb70-178"><a href="building-utilization-1.html#cb70-178"></a><span class="co">#       )</span></span>
+<span id="cb70-179"><a href="building-utilization-1.html#cb70-179"></a><span class="co">#     )</span></span>
+<span id="cb70-180"><a href="building-utilization-1.html#cb70-180"></a><span class="co"># }</span></span>
+<span id="cb70-181"><a href="building-utilization-1.html#cb70-181"></a><span class="co"># </span></span>
+<span id="cb70-182"><a href="building-utilization-1.html#cb70-182"></a><span class="co"># yard_separation_front_yard_setback &lt;-</span></span>
+<span id="cb70-183"><a href="building-utilization-1.html#cb70-183"></a><span class="co">#   yard_separation_front_yard_setback %&gt;% </span></span>
+<span id="cb70-184"><a href="building-utilization-1.html#cb70-184"></a><span class="co">#   mutate(</span></span>
+<span id="cb70-185"><a href="building-utilization-1.html#cb70-185"></a><span class="co">#     yard_area = st_area(.) %&gt;% as.numeric()</span></span>
+<span id="cb70-186"><a href="building-utilization-1.html#cb70-186"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb70-187"><a href="building-utilization-1.html#cb70-187"></a><span class="co">#   filter(yard_area &gt;= 160)</span></span>
+<span id="cb70-188"><a href="building-utilization-1.html#cb70-188"></a><span class="co"># </span></span>
+<span id="cb70-189"><a href="building-utilization-1.html#cb70-189"></a><span class="co"># normal_residential_parcels_yards &lt;-</span></span>
+<span id="cb70-190"><a href="building-utilization-1.html#cb70-190"></a><span class="co">#   normal_residential_parcels_distance %&gt;%</span></span>
+<span id="cb70-191"><a href="building-utilization-1.html#cb70-191"></a><span class="co">#   as.data.frame() %&gt;%</span></span>
+<span id="cb70-192"><a href="building-utilization-1.html#cb70-192"></a><span class="co">#   right_join(yard_separation_front_yard_setback %&gt;% dplyr::select(APN,yard_area), by = &quot;APN&quot;) %&gt;% </span></span>
+<span id="cb70-193"><a href="building-utilization-1.html#cb70-193"></a><span class="co">#   filter(!is.na(parcel_area)) %&gt;% </span></span>
+<span id="cb70-194"><a href="building-utilization-1.html#cb70-194"></a><span class="co">#   rename(yard_geometry = geometry) %&gt;% </span></span>
+<span id="cb70-195"><a href="building-utilization-1.html#cb70-195"></a><span class="co">#   st_set_geometry(&quot;yard_geometry&quot;)</span></span>
+<span id="cb70-196"><a href="building-utilization-1.html#cb70-196"></a><span class="co"># </span></span>
+<span id="cb70-197"><a href="building-utilization-1.html#cb70-197"></a><span class="co"># # Takes two points and calculates the slope between them. Reference 0 degrees would be due east, and positive degrees are in the clockwise direction.</span></span>
+<span id="cb70-198"><a href="building-utilization-1.html#cb70-198"></a><span class="co"># get_angle &lt;- function(pt1,pt2){</span></span>
+<span id="cb70-199"><a href="building-utilization-1.html#cb70-199"></a><span class="co">#   angle &lt;- atan2((pt2[2]-pt1[2]),(pt2[1]-pt1[1]))</span></span>
+<span id="cb70-200"><a href="building-utilization-1.html#cb70-200"></a><span class="co">#   return(angle)</span></span>
+<span id="cb70-201"><a href="building-utilization-1.html#cb70-201"></a><span class="co"># }</span></span>
+<span id="cb70-202"><a href="building-utilization-1.html#cb70-202"></a><span class="co"># </span></span>
+<span id="cb70-203"><a href="building-utilization-1.html#cb70-203"></a><span class="co"># # this creates a rotation matrix that can be multiplied by a point to get a point rotated counter-clockwise relative to (0,0). I found this online. Since my get_angle function gives degrees in the clockwise direction, it&#39;d be great to reverse this rot function, but I didn&#39;t bother to figure out the math -- just added a negative in get_adu below.</span></span>
+<span id="cb70-204"><a href="building-utilization-1.html#cb70-204"></a><span class="co"># rot &lt;- function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)</span></span>
+<span id="cb70-205"><a href="building-utilization-1.html#cb70-205"></a><span class="co"># </span></span>
+<span id="cb70-206"><a href="building-utilization-1.html#cb70-206"></a><span class="co"># get_adu_forward &lt;- function(centroid,width,length,angle){</span></span>
+<span id="cb70-207"><a href="building-utilization-1.html#cb70-207"></a><span class="co">#   # this is revised ADU, the 8x20 is shifted 6ft to the right before rotating, which might do better fitting at corners.</span></span>
+<span id="cb70-208"><a href="building-utilization-1.html#cb70-208"></a><span class="co">#   corner1 &lt;- st_point(centroid)+st_point(c(-width/2,-width/2))*rot(-angle) </span></span>
+<span id="cb70-209"><a href="building-utilization-1.html#cb70-209"></a><span class="co">#   corner2 &lt;- st_point(centroid)+st_point(c(length-width/2,-width/2))*rot(-angle) </span></span>
+<span id="cb70-210"><a href="building-utilization-1.html#cb70-210"></a><span class="co">#   corner3 &lt;- st_point(centroid)+st_point(c(length-width/2,width/2))*rot(-angle) </span></span>
+<span id="cb70-211"><a href="building-utilization-1.html#cb70-211"></a><span class="co">#   corner4 &lt;- st_point(centroid)+st_point(c(-width/2,width/2))*rot(-angle) </span></span>
+<span id="cb70-212"><a href="building-utilization-1.html#cb70-212"></a><span class="co">#   </span></span>
+<span id="cb70-213"><a href="building-utilization-1.html#cb70-213"></a><span class="co">#   </span></span>
+<span id="cb70-214"><a href="building-utilization-1.html#cb70-214"></a><span class="co">#   adu &lt;- </span></span>
+<span id="cb70-215"><a href="building-utilization-1.html#cb70-215"></a><span class="co">#     rbind(corner1,corner2,corner3,corner4,corner1) %&gt;%</span></span>
+<span id="cb70-216"><a href="building-utilization-1.html#cb70-216"></a><span class="co">#     list() %&gt;% </span></span>
+<span id="cb70-217"><a href="building-utilization-1.html#cb70-217"></a><span class="co">#     st_polygon() %&gt;% </span></span>
+<span id="cb70-218"><a href="building-utilization-1.html#cb70-218"></a><span class="co">#     st_sfc() %&gt;% </span></span>
+<span id="cb70-219"><a href="building-utilization-1.html#cb70-219"></a><span class="co">#     st_sf() %&gt;% </span></span>
+<span id="cb70-220"><a href="building-utilization-1.html#cb70-220"></a><span class="co">#     st_set_crs(projection)</span></span>
+<span id="cb70-221"><a href="building-utilization-1.html#cb70-221"></a><span class="co">#   </span></span>
+<span id="cb70-222"><a href="building-utilization-1.html#cb70-222"></a><span class="co">#   return(adu)</span></span>
+<span id="cb70-223"><a href="building-utilization-1.html#cb70-223"></a><span class="co"># }</span></span>
+<span id="cb70-224"><a href="building-utilization-1.html#cb70-224"></a><span class="co"># </span></span>
+<span id="cb70-225"><a href="building-utilization-1.html#cb70-225"></a><span class="co"># get_adu_sideways_counterclockwise &lt;- function(centroid,width,length,angle){</span></span>
+<span id="cb70-226"><a href="building-utilization-1.html#cb70-226"></a><span class="co">#   # this is a second revised ADU, the 8x20 is rotated 90 degrees relative to the previous one, so the ADU is sticking further into the inside of the yard area, which might do better fitting in certain areas that were previously unexplored.</span></span>
+<span id="cb70-227"><a href="building-utilization-1.html#cb70-227"></a><span class="co">#   corner1 &lt;- st_point(centroid)+st_point(c(-width/2,-width/2))*rot(-angle) </span></span>
+<span id="cb70-228"><a href="building-utilization-1.html#cb70-228"></a><span class="co">#   corner2 &lt;- st_point(centroid)+st_point(c(width/2,-width/2))*rot(-angle) </span></span>
+<span id="cb70-229"><a href="building-utilization-1.html#cb70-229"></a><span class="co">#   corner3 &lt;- st_point(centroid)+st_point(c(width/2,length-width/2))*rot(-angle) </span></span>
+<span id="cb70-230"><a href="building-utilization-1.html#cb70-230"></a><span class="co">#   corner4 &lt;- st_point(centroid)+st_point(c(-width/2,length-width/2))*rot(-angle) </span></span>
+<span id="cb70-231"><a href="building-utilization-1.html#cb70-231"></a><span class="co">#   </span></span>
+<span id="cb70-232"><a href="building-utilization-1.html#cb70-232"></a><span class="co">#   </span></span>
+<span id="cb70-233"><a href="building-utilization-1.html#cb70-233"></a><span class="co">#   adu &lt;- </span></span>
+<span id="cb70-234"><a href="building-utilization-1.html#cb70-234"></a><span class="co">#     rbind(corner1,corner2,corner3,corner4,corner1) %&gt;%</span></span>
+<span id="cb70-235"><a href="building-utilization-1.html#cb70-235"></a><span class="co">#     list() %&gt;% </span></span>
+<span id="cb70-236"><a href="building-utilization-1.html#cb70-236"></a><span class="co">#     st_polygon() %&gt;% </span></span>
+<span id="cb70-237"><a href="building-utilization-1.html#cb70-237"></a><span class="co">#     st_sfc() %&gt;% </span></span>
+<span id="cb70-238"><a href="building-utilization-1.html#cb70-238"></a><span class="co">#     st_sf() %&gt;% </span></span>
+<span id="cb70-239"><a href="building-utilization-1.html#cb70-239"></a><span class="co">#     st_set_crs(projection)</span></span>
+<span id="cb70-240"><a href="building-utilization-1.html#cb70-240"></a><span class="co">#   </span></span>
+<span id="cb70-241"><a href="building-utilization-1.html#cb70-241"></a><span class="co">#   return(adu)</span></span>
+<span id="cb70-242"><a href="building-utilization-1.html#cb70-242"></a><span class="co"># }</span></span>
+<span id="cb70-243"><a href="building-utilization-1.html#cb70-243"></a><span class="co"># </span></span>
+<span id="cb70-244"><a href="building-utilization-1.html#cb70-244"></a><span class="co"># # DO: note there was a typo in this (formerly adu3.5), the math for corners 3 and 4</span></span>
+<span id="cb70-245"><a href="building-utilization-1.html#cb70-245"></a><span class="co"># get_adu_sideways_clockwise &lt;- function(centroid,width,length,angle){</span></span>
+<span id="cb70-246"><a href="building-utilization-1.html#cb70-246"></a><span class="co">#   # this is the same as get_adu2 but mirrored, since depending on which way you&#39;re going around the track clockwise or counterclockwise you might be sticking inwards or outwards. (I haven&#39;t checked if it&#39;s always a certain direction, maybe it is and you can definitely know which of these functions is the one to use. In my test case go[5048,], get_adu3 was the correct one, and the track was going clockwise)</span></span>
+<span id="cb70-247"><a href="building-utilization-1.html#cb70-247"></a><span class="co">#   corner1 &lt;- st_point(centroid)+st_point(c(width/2,width/2))*rot(-angle) </span></span>
+<span id="cb70-248"><a href="building-utilization-1.html#cb70-248"></a><span class="co">#   corner2 &lt;- st_point(centroid)+st_point(c(-width/2,width/2))*rot(-angle) </span></span>
+<span id="cb70-249"><a href="building-utilization-1.html#cb70-249"></a><span class="co">#   corner3 &lt;- st_point(centroid)+st_point(c(-width/2,-length+width/2))*rot(-angle) </span></span>
+<span id="cb70-250"><a href="building-utilization-1.html#cb70-250"></a><span class="co">#   corner4 &lt;- st_point(centroid)+st_point(c(width/2,-length+width/2))*rot(-angle) </span></span>
+<span id="cb70-251"><a href="building-utilization-1.html#cb70-251"></a><span class="co">#   </span></span>
+<span id="cb70-252"><a href="building-utilization-1.html#cb70-252"></a><span class="co">#   adu &lt;- </span></span>
+<span id="cb70-253"><a href="building-utilization-1.html#cb70-253"></a><span class="co">#     rbind(corner1,corner2,corner3,corner4,corner1) %&gt;%</span></span>
+<span id="cb70-254"><a href="building-utilization-1.html#cb70-254"></a><span class="co">#     list() %&gt;% </span></span>
+<span id="cb70-255"><a href="building-utilization-1.html#cb70-255"></a><span class="co">#     st_polygon() %&gt;% </span></span>
+<span id="cb70-256"><a href="building-utilization-1.html#cb70-256"></a><span class="co">#     st_sfc() %&gt;% </span></span>
+<span id="cb70-257"><a href="building-utilization-1.html#cb70-257"></a><span class="co">#     st_sf() %&gt;% </span></span>
+<span id="cb70-258"><a href="building-utilization-1.html#cb70-258"></a><span class="co">#     st_set_crs(projection)</span></span>
+<span id="cb70-259"><a href="building-utilization-1.html#cb70-259"></a><span class="co">#   </span></span>
+<span id="cb70-260"><a href="building-utilization-1.html#cb70-260"></a><span class="co">#   return(adu)</span></span>
+<span id="cb70-261"><a href="building-utilization-1.html#cb70-261"></a><span class="co"># }</span></span>
+<span id="cb70-262"><a href="building-utilization-1.html#cb70-262"></a><span class="co"># </span></span>
+<span id="cb70-263"><a href="building-utilization-1.html#cb70-263"></a><span class="co"># length &lt;- 20</span></span>
+<span id="cb70-264"><a href="building-utilization-1.html#cb70-264"></a><span class="co"># width &lt;- 8</span></span>
+<span id="cb70-265"><a href="building-utilization-1.html#cb70-265"></a><span class="co"># increment &lt;- 2</span></span>
+<span id="cb70-266"><a href="building-utilization-1.html#cb70-266"></a><span class="co"># </span></span>
+<span id="cb70-267"><a href="building-utilization-1.html#cb70-267"></a><span class="co"># go &lt;- normal_residential_parcels_yards</span></span>
+<span id="cb70-268"><a href="building-utilization-1.html#cb70-268"></a><span class="co"># </span></span>
+<span id="cb70-269"><a href="building-utilization-1.html#cb70-269"></a><span class="co"># go_buffer &lt;- </span></span>
+<span id="cb70-270"><a href="building-utilization-1.html#cb70-270"></a><span class="co">#   go %&gt;% </span></span>
+<span id="cb70-271"><a href="building-utilization-1.html#cb70-271"></a><span class="co">#   st_buffer(-width/2-0.25,joinStyle=&quot;MITRE&quot;,mitreLimit=1)</span></span>
+<span id="cb70-272"><a href="building-utilization-1.html#cb70-272"></a><span class="co"># </span></span>
+<span id="cb70-273"><a href="building-utilization-1.html#cb70-273"></a><span class="co"># go_collected_buildable_area &lt;- NULL</span></span>
+<span id="cb70-274"><a href="building-utilization-1.html#cb70-274"></a><span class="co"># for(parcelRow in 1:nrow(go)){</span></span>
+<span id="cb70-275"><a href="building-utilization-1.html#cb70-275"></a><span class="co">#   </span></span>
+<span id="cb70-276"><a href="building-utilization-1.html#cb70-276"></a><span class="co">#   print(parcelRow)</span></span>
+<span id="cb70-277"><a href="building-utilization-1.html#cb70-277"></a><span class="co">#   cbuffer &lt;- go[parcelRow,]</span></span>
+<span id="cb70-278"><a href="building-utilization-1.html#cb70-278"></a><span class="co">#   go_adus &lt;- NULL</span></span>
+<span id="cb70-279"><a href="building-utilization-1.html#cb70-279"></a><span class="co">#   </span></span>
+<span id="cb70-280"><a href="building-utilization-1.html#cb70-280"></a><span class="co">#   parcel_coords &lt;-</span></span>
+<span id="cb70-281"><a href="building-utilization-1.html#cb70-281"></a><span class="co">#     go_buffer[parcelRow,] %&gt;%</span></span>
+<span id="cb70-282"><a href="building-utilization-1.html#cb70-282"></a><span class="co">#     st_coordinates()</span></span>
+<span id="cb70-283"><a href="building-utilization-1.html#cb70-283"></a><span class="co">#   </span></span>
+<span id="cb70-284"><a href="building-utilization-1.html#cb70-284"></a><span class="co">#   start &lt;- proc.time()</span></span>
+<span id="cb70-285"><a href="building-utilization-1.html#cb70-285"></a><span class="co">#   </span></span>
+<span id="cb70-286"><a href="building-utilization-1.html#cb70-286"></a><span class="co">#   if(is_empty(parcel_coords)){</span></span>
+<span id="cb70-287"><a href="building-utilization-1.html#cb70-287"></a><span class="co">#     parcel_coords &lt;- NULL</span></span>
+<span id="cb70-288"><a href="building-utilization-1.html#cb70-288"></a><span class="co">#   } else{</span></span>
+<span id="cb70-289"><a href="building-utilization-1.html#cb70-289"></a><span class="co">#     </span></span>
+<span id="cb70-290"><a href="building-utilization-1.html#cb70-290"></a><span class="co">#     for(point in 1:(nrow(parcel_coords)-1)){</span></span>
+<span id="cb70-291"><a href="building-utilization-1.html#cb70-291"></a><span class="co">#       </span></span>
+<span id="cb70-292"><a href="building-utilization-1.html#cb70-292"></a><span class="co">#       # print(point)</span></span>
+<span id="cb70-293"><a href="building-utilization-1.html#cb70-293"></a><span class="co">#       pt1 &lt;- parcel_coords[point,1:2]</span></span>
+<span id="cb70-294"><a href="building-utilization-1.html#cb70-294"></a><span class="co">#       pt2 &lt;- parcel_coords[point+1,1:2]</span></span>
+<span id="cb70-295"><a href="building-utilization-1.html#cb70-295"></a><span class="co">#       </span></span>
+<span id="cb70-296"><a href="building-utilization-1.html#cb70-296"></a><span class="co">#       line &lt;-</span></span>
+<span id="cb70-297"><a href="building-utilization-1.html#cb70-297"></a><span class="co">#         rbind(pt1,pt2) %&gt;%</span></span>
+<span id="cb70-298"><a href="building-utilization-1.html#cb70-298"></a><span class="co">#         st_linestring() %&gt;%</span></span>
+<span id="cb70-299"><a href="building-utilization-1.html#cb70-299"></a><span class="co">#         st_sfc() %&gt;%</span></span>
+<span id="cb70-300"><a href="building-utilization-1.html#cb70-300"></a><span class="co">#         st_sf() %&gt;%</span></span>
+<span id="cb70-301"><a href="building-utilization-1.html#cb70-301"></a><span class="co">#         st_set_crs(projection)</span></span>
+<span id="cb70-302"><a href="building-utilization-1.html#cb70-302"></a><span class="co"># </span></span>
+<span id="cb70-303"><a href="building-utilization-1.html#cb70-303"></a><span class="co">#       go_angle &lt;- get_angle(pt1,pt2)</span></span>
+<span id="cb70-304"><a href="building-utilization-1.html#cb70-304"></a><span class="co">#       </span></span>
+<span id="cb70-305"><a href="building-utilization-1.html#cb70-305"></a><span class="co">#       segments &lt;- </span></span>
+<span id="cb70-306"><a href="building-utilization-1.html#cb70-306"></a><span class="co">#         line %&gt;% </span></span>
+<span id="cb70-307"><a href="building-utilization-1.html#cb70-307"></a><span class="co">#         st_segmentize(increment) %&gt;% </span></span>
+<span id="cb70-308"><a href="building-utilization-1.html#cb70-308"></a><span class="co">#         st_coordinates()</span></span>
+<span id="cb70-309"><a href="building-utilization-1.html#cb70-309"></a><span class="co">#       </span></span>
+<span id="cb70-310"><a href="building-utilization-1.html#cb70-310"></a><span class="co">#       # forward/backward direction</span></span>
+<span id="cb70-311"><a href="building-utilization-1.html#cb70-311"></a><span class="co">#       segment &lt;- 1</span></span>
+<span id="cb70-312"><a href="building-utilization-1.html#cb70-312"></a><span class="co">#       first_forward_eligible_adu &lt;- NULL</span></span>
+<span id="cb70-313"><a href="building-utilization-1.html#cb70-313"></a><span class="co">#       while(is.null(first_forward_eligible_adu) &amp; segment &lt;= nrow(segments)){</span></span>
+<span id="cb70-314"><a href="building-utilization-1.html#cb70-314"></a><span class="co">#         adu_candidate &lt;- </span></span>
+<span id="cb70-315"><a href="building-utilization-1.html#cb70-315"></a><span class="co">#           get_adu_forward(segments[segment,1:2],width,length,go_angle) %&gt;% </span></span>
+<span id="cb70-316"><a href="building-utilization-1.html#cb70-316"></a><span class="co">#           filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-317"><a href="building-utilization-1.html#cb70-317"></a><span class="co">#         if(nrow(adu_candidate) &gt; 0) first_forward_eligible_adu &lt;- adu_candidate</span></span>
+<span id="cb70-318"><a href="building-utilization-1.html#cb70-318"></a><span class="co">#         segment &lt;- segment + 1</span></span>
+<span id="cb70-319"><a href="building-utilization-1.html#cb70-319"></a><span class="co">#       }</span></span>
+<span id="cb70-320"><a href="building-utilization-1.html#cb70-320"></a><span class="co">#       </span></span>
+<span id="cb70-321"><a href="building-utilization-1.html#cb70-321"></a><span class="co">#       #simple backwards check if forwards completely fails, just checking &quot;behind&quot; the forward track</span></span>
+<span id="cb70-322"><a href="building-utilization-1.html#cb70-322"></a><span class="co">#       last_forward_eligible_adu &lt;- NULL</span></span>
+<span id="cb70-323"><a href="building-utilization-1.html#cb70-323"></a><span class="co">#       if(is.null(first_forward_eligible_adu)){</span></span>
+<span id="cb70-324"><a href="building-utilization-1.html#cb70-324"></a><span class="co">#         for(segment in pmin(nrow(segments),(length-width/2)/increment):1){</span></span>
+<span id="cb70-325"><a href="building-utilization-1.html#cb70-325"></a><span class="co">#           adu_candidate &lt;- </span></span>
+<span id="cb70-326"><a href="building-utilization-1.html#cb70-326"></a><span class="co">#             get_adu_forward(segments[segment,1:2],width,length,go_angle + pi) %&gt;% </span></span>
+<span id="cb70-327"><a href="building-utilization-1.html#cb70-327"></a><span class="co">#             filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-328"><a href="building-utilization-1.html#cb70-328"></a><span class="co">#           if(nrow(adu_candidate) &gt; 0) last_forward_eligible_adu &lt;- adu_candidate</span></span>
+<span id="cb70-329"><a href="building-utilization-1.html#cb70-329"></a><span class="co">#         }</span></span>
+<span id="cb70-330"><a href="building-utilization-1.html#cb70-330"></a><span class="co">#       }</span></span>
+<span id="cb70-331"><a href="building-utilization-1.html#cb70-331"></a><span class="co">#       </span></span>
+<span id="cb70-332"><a href="building-utilization-1.html#cb70-332"></a><span class="co">#       segment &lt;- 1</span></span>
+<span id="cb70-333"><a href="building-utilization-1.html#cb70-333"></a><span class="co">#       first_sideways_eligible_adu &lt;- NULL</span></span>
+<span id="cb70-334"><a href="building-utilization-1.html#cb70-334"></a><span class="co">#       while(is.null(first_sideways_eligible_adu) &amp; segment &lt;= nrow(segments)){</span></span>
+<span id="cb70-335"><a href="building-utilization-1.html#cb70-335"></a><span class="co">#         adu_candidate &lt;- </span></span>
+<span id="cb70-336"><a href="building-utilization-1.html#cb70-336"></a><span class="co">#           get_adu_sideways_clockwise(segments[segment,1:2],width,length,go_angle) %&gt;% </span></span>
+<span id="cb70-337"><a href="building-utilization-1.html#cb70-337"></a><span class="co">#           filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-338"><a href="building-utilization-1.html#cb70-338"></a><span class="co">#         if(nrow(adu_candidate) &gt; 0) first_sideways_eligible_adu &lt;- adu_candidate</span></span>
+<span id="cb70-339"><a href="building-utilization-1.html#cb70-339"></a><span class="co">#         segment &lt;- segment + 1</span></span>
+<span id="cb70-340"><a href="building-utilization-1.html#cb70-340"></a><span class="co">#       }</span></span>
+<span id="cb70-341"><a href="building-utilization-1.html#cb70-341"></a><span class="co">#       </span></span>
+<span id="cb70-342"><a href="building-utilization-1.html#cb70-342"></a><span class="co">#       last_sideways_eligible_adu &lt;- NULL</span></span>
+<span id="cb70-343"><a href="building-utilization-1.html#cb70-343"></a><span class="co">#       if(is.null(first_sideways_eligible_adu)){</span></span>
+<span id="cb70-344"><a href="building-utilization-1.html#cb70-344"></a><span class="co">#         for(segment in pmin(nrow(segments),(length-width/2)/increment):1){</span></span>
+<span id="cb70-345"><a href="building-utilization-1.html#cb70-345"></a><span class="co">#           adu_candidate &lt;- </span></span>
+<span id="cb70-346"><a href="building-utilization-1.html#cb70-346"></a><span class="co">#             get_adu_sideways_counterclockwise(segments[segment,1:2],width,length,go_angle + pi) %&gt;% </span></span>
+<span id="cb70-347"><a href="building-utilization-1.html#cb70-347"></a><span class="co">#             filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-348"><a href="building-utilization-1.html#cb70-348"></a><span class="co">#           if(nrow(adu_candidate) &gt; 0) last_sideways_eligible_adu &lt;- adu_candidate</span></span>
+<span id="cb70-349"><a href="building-utilization-1.html#cb70-349"></a><span class="co">#         }</span></span>
+<span id="cb70-350"><a href="building-utilization-1.html#cb70-350"></a><span class="co">#       }</span></span>
+<span id="cb70-351"><a href="building-utilization-1.html#cb70-351"></a><span class="co">#       </span></span>
+<span id="cb70-352"><a href="building-utilization-1.html#cb70-352"></a><span class="co">#       # if no eligible ADU, next</span></span>
+<span id="cb70-353"><a href="building-utilization-1.html#cb70-353"></a><span class="co">#       if(is.null(first_forward_eligible_adu) &amp; </span></span>
+<span id="cb70-354"><a href="building-utilization-1.html#cb70-354"></a><span class="co">#          is.null(last_forward_eligible_adu) &amp;</span></span>
+<span id="cb70-355"><a href="building-utilization-1.html#cb70-355"></a><span class="co">#          is.null(first_sideways_eligible_adu) &amp;</span></span>
+<span id="cb70-356"><a href="building-utilization-1.html#cb70-356"></a><span class="co">#          is.null(last_sideways_eligible_adu)) next</span></span>
+<span id="cb70-357"><a href="building-utilization-1.html#cb70-357"></a><span class="co">#       </span></span>
+<span id="cb70-358"><a href="building-utilization-1.html#cb70-358"></a><span class="co">#       forward_churro &lt;- NULL</span></span>
+<span id="cb70-359"><a href="building-utilization-1.html#cb70-359"></a><span class="co">#       sideways_churro &lt;- NULL</span></span>
+<span id="cb70-360"><a href="building-utilization-1.html#cb70-360"></a><span class="co">#       </span></span>
+<span id="cb70-361"><a href="building-utilization-1.html#cb70-361"></a><span class="co">#       # finish checking forward_adu</span></span>
+<span id="cb70-362"><a href="building-utilization-1.html#cb70-362"></a><span class="co">#         </span></span>
+<span id="cb70-363"><a href="building-utilization-1.html#cb70-363"></a><span class="co">#       segment &lt;- nrow(segments)</span></span>
+<span id="cb70-364"><a href="building-utilization-1.html#cb70-364"></a><span class="co">#       last_forward_eligible_adu &lt;- NULL</span></span>
+<span id="cb70-365"><a href="building-utilization-1.html#cb70-365"></a><span class="co">#       while(is.null(last_forward_eligible_adu) &amp; segment &gt; 0){</span></span>
+<span id="cb70-366"><a href="building-utilization-1.html#cb70-366"></a><span class="co">#         adu_candidate &lt;- </span></span>
+<span id="cb70-367"><a href="building-utilization-1.html#cb70-367"></a><span class="co">#           get_adu_forward(segments[segment,1:2],width,length,go_angle + pi) %&gt;% </span></span>
+<span id="cb70-368"><a href="building-utilization-1.html#cb70-368"></a><span class="co">#           filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-369"><a href="building-utilization-1.html#cb70-369"></a><span class="co">#         if(nrow(adu_candidate) &gt; 0) last_forward_eligible_adu &lt;- adu_candidate</span></span>
+<span id="cb70-370"><a href="building-utilization-1.html#cb70-370"></a><span class="co">#         segment &lt;- segment - 1</span></span>
+<span id="cb70-371"><a href="building-utilization-1.html#cb70-371"></a><span class="co">#       }</span></span>
+<span id="cb70-372"><a href="building-utilization-1.html#cb70-372"></a><span class="co">#       </span></span>
+<span id="cb70-373"><a href="building-utilization-1.html#cb70-373"></a><span class="co">#       if(!is.null(last_forward_eligible_adu)){</span></span>
+<span id="cb70-374"><a href="building-utilization-1.html#cb70-374"></a><span class="co">#         forward_churro &lt;- </span></span>
+<span id="cb70-375"><a href="building-utilization-1.html#cb70-375"></a><span class="co">#           rbind(first_forward_eligible_adu, last_forward_eligible_adu) %&gt;% </span></span>
+<span id="cb70-376"><a href="building-utilization-1.html#cb70-376"></a><span class="co">#           summarise() %&gt;% </span></span>
+<span id="cb70-377"><a href="building-utilization-1.html#cb70-377"></a><span class="co">#           st_convex_hull() %&gt;% </span></span>
+<span id="cb70-378"><a href="building-utilization-1.html#cb70-378"></a><span class="co">#           filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-379"><a href="building-utilization-1.html#cb70-379"></a><span class="co">#       }</span></span>
+<span id="cb70-380"><a href="building-utilization-1.html#cb70-380"></a><span class="co">#       </span></span>
+<span id="cb70-381"><a href="building-utilization-1.html#cb70-381"></a><span class="co">#       # finish checking sideways adu</span></span>
+<span id="cb70-382"><a href="building-utilization-1.html#cb70-382"></a><span class="co">#         </span></span>
+<span id="cb70-383"><a href="building-utilization-1.html#cb70-383"></a><span class="co">#       segment &lt;- nrow(segments)</span></span>
+<span id="cb70-384"><a href="building-utilization-1.html#cb70-384"></a><span class="co">#       last_sideways_eligible_adu &lt;- NULL</span></span>
+<span id="cb70-385"><a href="building-utilization-1.html#cb70-385"></a><span class="co">#       while(is.null(last_sideways_eligible_adu) &amp; segment &gt; 0){</span></span>
+<span id="cb70-386"><a href="building-utilization-1.html#cb70-386"></a><span class="co">#         adu_candidate &lt;- </span></span>
+<span id="cb70-387"><a href="building-utilization-1.html#cb70-387"></a><span class="co">#           get_adu_sideways_counterclockwise(segments[segment,1:2],width,length,go_angle + pi) %&gt;% </span></span>
+<span id="cb70-388"><a href="building-utilization-1.html#cb70-388"></a><span class="co">#           filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-389"><a href="building-utilization-1.html#cb70-389"></a><span class="co">#         if(nrow(adu_candidate) &gt; 0) last_sideways_eligible_adu &lt;- adu_candidate</span></span>
+<span id="cb70-390"><a href="building-utilization-1.html#cb70-390"></a><span class="co">#         segment &lt;- segment - 1</span></span>
+<span id="cb70-391"><a href="building-utilization-1.html#cb70-391"></a><span class="co">#       }</span></span>
+<span id="cb70-392"><a href="building-utilization-1.html#cb70-392"></a><span class="co">#       </span></span>
+<span id="cb70-393"><a href="building-utilization-1.html#cb70-393"></a><span class="co">#       if(!is.null(last_sideways_eligible_adu)){</span></span>
+<span id="cb70-394"><a href="building-utilization-1.html#cb70-394"></a><span class="co">#         </span></span>
+<span id="cb70-395"><a href="building-utilization-1.html#cb70-395"></a><span class="co">#         sideways_churro &lt;- </span></span>
+<span id="cb70-396"><a href="building-utilization-1.html#cb70-396"></a><span class="co">#           rbind(first_sideways_eligible_adu, last_sideways_eligible_adu) %&gt;% </span></span>
+<span id="cb70-397"><a href="building-utilization-1.html#cb70-397"></a><span class="co">#           summarise() %&gt;% </span></span>
+<span id="cb70-398"><a href="building-utilization-1.html#cb70-398"></a><span class="co">#           st_convex_hull() %&gt;% </span></span>
+<span id="cb70-399"><a href="building-utilization-1.html#cb70-399"></a><span class="co">#           filter(st_covers(cbuffer,.,sparse=F))</span></span>
+<span id="cb70-400"><a href="building-utilization-1.html#cb70-400"></a><span class="co">#       }</span></span>
+<span id="cb70-401"><a href="building-utilization-1.html#cb70-401"></a><span class="co">#       </span></span>
+<span id="cb70-402"><a href="building-utilization-1.html#cb70-402"></a><span class="co">#       go_adus &lt;-</span></span>
+<span id="cb70-403"><a href="building-utilization-1.html#cb70-403"></a><span class="co">#         go_adus %&gt;% </span></span>
+<span id="cb70-404"><a href="building-utilization-1.html#cb70-404"></a><span class="co">#         rbind(</span></span>
+<span id="cb70-405"><a href="building-utilization-1.html#cb70-405"></a><span class="co">#           forward_churro,</span></span>
+<span id="cb70-406"><a href="building-utilization-1.html#cb70-406"></a><span class="co">#           sideways_churro</span></span>
+<span id="cb70-407"><a href="building-utilization-1.html#cb70-407"></a><span class="co">#         )</span></span>
+<span id="cb70-408"><a href="building-utilization-1.html#cb70-408"></a><span class="co">#     }</span></span>
+<span id="cb70-409"><a href="building-utilization-1.html#cb70-409"></a><span class="co">#   }</span></span>
+<span id="cb70-410"><a href="building-utilization-1.html#cb70-410"></a><span class="co">#     </span></span>
+<span id="cb70-411"><a href="building-utilization-1.html#cb70-411"></a><span class="co">#   if(is.null(go_adus) | is.null(parcel_coords)){</span></span>
+<span id="cb70-412"><a href="building-utilization-1.html#cb70-412"></a><span class="co">#     go_adus_merge &lt;-</span></span>
+<span id="cb70-413"><a href="building-utilization-1.html#cb70-413"></a><span class="co">#       st_sf(st_sfc(st_multipolygon())) %&gt;% </span></span>
+<span id="cb70-414"><a href="building-utilization-1.html#cb70-414"></a><span class="co">#         mutate(</span></span>
+<span id="cb70-415"><a href="building-utilization-1.html#cb70-415"></a><span class="co">#           APN = go$APN[parcelRow],</span></span>
+<span id="cb70-416"><a href="building-utilization-1.html#cb70-416"></a><span class="co">#           parcelRow = parcelRow,</span></span>
+<span id="cb70-417"><a href="building-utilization-1.html#cb70-417"></a><span class="co">#           compute_time = proc.time()[3] - start[3]</span></span>
+<span id="cb70-418"><a href="building-utilization-1.html#cb70-418"></a><span class="co">#         ) %&gt;% </span></span>
+<span id="cb70-419"><a href="building-utilization-1.html#cb70-419"></a><span class="co">#       rename(geometry = st_sfc.st_multipolygon...) %&gt;% </span></span>
+<span id="cb70-420"><a href="building-utilization-1.html#cb70-420"></a><span class="co">#       st_set_crs(projection)</span></span>
+<span id="cb70-421"><a href="building-utilization-1.html#cb70-421"></a><span class="co">#   } else {</span></span>
+<span id="cb70-422"><a href="building-utilization-1.html#cb70-422"></a><span class="co">#     go_adus_merge &lt;-</span></span>
+<span id="cb70-423"><a href="building-utilization-1.html#cb70-423"></a><span class="co">#       go_adus %&gt;%</span></span>
+<span id="cb70-424"><a href="building-utilization-1.html#cb70-424"></a><span class="co">#         st_make_valid() %&gt;% </span></span>
+<span id="cb70-425"><a href="building-utilization-1.html#cb70-425"></a><span class="co">#         st_buffer(0.1) %&gt;% </span></span>
+<span id="cb70-426"><a href="building-utilization-1.html#cb70-426"></a><span class="co">#         st_buffer(-0.1) %&gt;% </span></span>
+<span id="cb70-427"><a href="building-utilization-1.html#cb70-427"></a><span class="co">#         summarise() %&gt;% # can throw a self-intersection error</span></span>
+<span id="cb70-428"><a href="building-utilization-1.html#cb70-428"></a><span class="co">#         mutate(</span></span>
+<span id="cb70-429"><a href="building-utilization-1.html#cb70-429"></a><span class="co">#           APN = go$APN[parcelRow],</span></span>
+<span id="cb70-430"><a href="building-utilization-1.html#cb70-430"></a><span class="co">#           parcelRow = parcelRow,</span></span>
+<span id="cb70-431"><a href="building-utilization-1.html#cb70-431"></a><span class="co">#           compute_time = proc.time()[3] - start[3]</span></span>
+<span id="cb70-432"><a href="building-utilization-1.html#cb70-432"></a><span class="co">#         )</span></span>
+<span id="cb70-433"><a href="building-utilization-1.html#cb70-433"></a><span class="co">#   }</span></span>
+<span id="cb70-434"><a href="building-utilization-1.html#cb70-434"></a><span class="co">#   </span></span>
+<span id="cb70-435"><a href="building-utilization-1.html#cb70-435"></a><span class="co">#   go_collected_buildable_area &lt;- </span></span>
+<span id="cb70-436"><a href="building-utilization-1.html#cb70-436"></a><span class="co">#     go_collected_buildable_area %&gt;%</span></span>
+<span id="cb70-437"><a href="building-utilization-1.html#cb70-437"></a><span class="co">#     rbind(</span></span>
+<span id="cb70-438"><a href="building-utilization-1.html#cb70-438"></a><span class="co">#       go_adus_merge</span></span>
+<span id="cb70-439"><a href="building-utilization-1.html#cb70-439"></a><span class="co">#     )</span></span>
+<span id="cb70-440"><a href="building-utilization-1.html#cb70-440"></a><span class="co"># }</span></span>
+<span id="cb70-441"><a href="building-utilization-1.html#cb70-441"></a><span class="co"># </span></span>
+<span id="cb70-442"><a href="building-utilization-1.html#cb70-442"></a><span class="co"># clean_buildable_area &lt;-</span></span>
+<span id="cb70-443"><a href="building-utilization-1.html#cb70-443"></a><span class="co">#   go_collected_buildable_area %&gt;% </span></span>
+<span id="cb70-444"><a href="building-utilization-1.html#cb70-444"></a><span class="co">#   filter(!st_is_empty(.)) %&gt;% </span></span>
+<span id="cb70-445"><a href="building-utilization-1.html#cb70-445"></a><span class="co">#   st_buffer(2) %&gt;% </span></span>
+<span id="cb70-446"><a href="building-utilization-1.html#cb70-446"></a><span class="co">#   st_buffer(-2) %&gt;% </span></span>
+<span id="cb70-447"><a href="building-utilization-1.html#cb70-447"></a><span class="co">#   fill_holes(threshold = units::set_units(100000000, ft^2)) %&gt;% </span></span>
+<span id="cb70-448"><a href="building-utilization-1.html#cb70-448"></a><span class="co">#   as_Spatial() %&gt;% </span></span>
+<span id="cb70-449"><a href="building-utilization-1.html#cb70-449"></a><span class="co">#   sp::disaggregate() %&gt;% </span></span>
+<span id="cb70-450"><a href="building-utilization-1.html#cb70-450"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb70-451"><a href="building-utilization-1.html#cb70-451"></a><span class="co">#   mutate(</span></span>
+<span id="cb70-452"><a href="building-utilization-1.html#cb70-452"></a><span class="co">#     yard_area = st_area(.) %&gt;% as.numeric()</span></span>
+<span id="cb70-453"><a href="building-utilization-1.html#cb70-453"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb70-454"><a href="building-utilization-1.html#cb70-454"></a><span class="co">#   arrange(APN,desc(yard_area)) %&gt;% </span></span>
+<span id="cb70-455"><a href="building-utilization-1.html#cb70-455"></a><span class="co">#   filter(!duplicated(APN)) %&gt;% </span></span>
+<span id="cb70-456"><a href="building-utilization-1.html#cb70-456"></a><span class="co">#   mutate(</span></span>
+<span id="cb70-457"><a href="building-utilization-1.html#cb70-457"></a><span class="co">#     buildable_area = floor(yard_area/10)*10</span></span>
+<span id="cb70-458"><a href="building-utilization-1.html#cb70-458"></a><span class="co">#   )</span></span>
+<span id="cb70-459"><a href="building-utilization-1.html#cb70-459"></a></span>
+<span id="cb70-460"><a href="building-utilization-1.html#cb70-460"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/ADU/clean_buildable_area.Rdata&quot;</span>)</span>
+<span id="cb70-461"><a href="building-utilization-1.html#cb70-461"></a></span>
+<span id="cb70-462"><a href="building-utilization-1.html#cb70-462"></a>test_block_group &lt;-<span class="st"> </span></span>
+<span id="cb70-463"><a href="building-utilization-1.html#cb70-463"></a><span class="st">  </span><span class="kw">block_groups</span>(<span class="st">&quot;CA&quot;</span>, <span class="dt">cb =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb70-464"><a href="building-utilization-1.html#cb70-464"></a><span class="st">  </span><span class="kw">filter</span>(GEOID <span class="op">==</span><span class="st"> &quot;060770022011&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb70-465"><a href="building-utilization-1.html#cb70-465"></a><span class="st">  </span><span class="kw">st_transform</span>(projection)</span>
+<span id="cb70-466"><a href="building-utilization-1.html#cb70-466"></a></span>
+<span id="cb70-467"><a href="building-utilization-1.html#cb70-467"></a>test_buildable_area &lt;-<span class="st"> </span>clean_buildable_area[test_block_group,]</span>
+<span id="cb70-468"><a href="building-utilization-1.html#cb70-468"></a>test_parcels &lt;-<span class="st"> </span>normal_residential_parcels_yards[test_block_group,]</span>
+<span id="cb70-469"><a href="building-utilization-1.html#cb70-469"></a></span>
+<span id="cb70-470"><a href="building-utilization-1.html#cb70-470"></a><span class="co"># map &lt;- mapview(test_buildable_area$geometry, col.regions = &quot;green&quot;, lwd=0, layer.name= &quot;Buildable ADU Area&quot;) + </span></span>
+<span id="cb70-471"><a href="building-utilization-1.html#cb70-471"></a><span class="co">#   mapview(test_parcels %&gt;% st_set_geometry(&quot;parcel_geometry&quot;) %&gt;% dplyr::select(parcel_geometry), alpha.region=0, color = &quot;white&quot;, layer.name= &quot;Parcel Boundary&quot;) + </span></span>
+<span id="cb70-472"><a href="building-utilization-1.html#cb70-472"></a><span class="co">#   mapview(test_parcels %&gt;% st_set_geometry(&quot;building_geometry&quot;) %&gt;% dplyr::select(building_geometry), col.regions = &quot;tan&quot;, lwd=0.5, layer.name= &quot;Existing Building&quot;)</span></span>
+<span id="cb70-473"><a href="building-utilization-1.html#cb70-473"></a><span class="co"># </span></span>
+<span id="cb70-474"><a href="building-utilization-1.html#cb70-474"></a><span class="co"># mapshot(map, url = &quot;map-adu-example.html&quot;)</span></span>
+<span id="cb70-475"><a href="building-utilization-1.html#cb70-475"></a></span>
+<span id="cb70-476"><a href="building-utilization-1.html#cb70-476"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-adu-example.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:adu-example"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-adu-example.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 4.4: Demonstration of detached ADU geospatial analysis. Shown are parcels, existing building footprints, and buildable area.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>While the geospatial analysis is not perfect, and doesn’t account for other possible obstructions in a backyard, this result can be used to roughly estimate the number of parcels that could build detached ADUs, and examine the characteristics of those potential ADUs.</p>
+<p>We analyzed 85,625 residential parcels and found 64,188 with enough backyard space to build at least a 160 sqft ADU. The breakdown is shown below by area range. The cut-offs are based on market research showing the existence of a <a href="https://californiamodulars.com/roma/">576 sqft 2-bedroom ADU</a> and a <a href="https://californiamodulars.com/napoli/">989 sqft 3-bedroom ADU</a>. With over 2000 sqft of space, a greener option would be to completely redevelop the site to a higher density use, like a low-rise apartment.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="building-utilization-1.html#cb71-1"></a>buildable_area_summary &lt;-</span>
+<span id="cb71-2"><a href="building-utilization-1.html#cb71-2"></a><span class="st">  </span>clean_buildable_area <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-3"><a href="building-utilization-1.html#cb71-3"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb71-4"><a href="building-utilization-1.html#cb71-4"></a>    <span class="st">`</span><span class="dt">Buildable Area</span><span class="st">`</span> =</span>
+<span id="cb71-5"><a href="building-utilization-1.html#cb71-5"></a><span class="st">      </span><span class="kw">case_when</span>(</span>
+<span id="cb71-6"><a href="building-utilization-1.html#cb71-6"></a>        buildable_area <span class="op">&lt;</span><span class="st"> </span><span class="dv">600</span> <span class="op">~</span><span class="st"> &quot;160-600 sqft (studio or one bedroom)&quot;</span>,</span>
+<span id="cb71-7"><a href="building-utilization-1.html#cb71-7"></a>        buildable_area <span class="op">&lt;</span><span class="st"> </span><span class="dv">1000</span> <span class="op">~</span><span class="st"> &quot;600-1000 sqft (2 bedroom)&quot;</span>,</span>
+<span id="cb71-8"><a href="building-utilization-1.html#cb71-8"></a>        buildable_area <span class="op">&lt;</span><span class="st"> </span><span class="dv">2000</span> <span class="op">~</span><span class="st"> &quot;1000-2000 sqft (3 bedroom)&quot;</span>,</span>
+<span id="cb71-9"><a href="building-utilization-1.html#cb71-9"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;2000 sqft or more&quot;</span></span>
+<span id="cb71-10"><a href="building-utilization-1.html#cb71-10"></a>      )</span>
+<span id="cb71-11"><a href="building-utilization-1.html#cb71-11"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-12"><a href="building-utilization-1.html#cb71-12"></a><span class="st">  </span><span class="kw">group_by</span>(<span class="st">`</span><span class="dt">Buildable Area</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-13"><a href="building-utilization-1.html#cb71-13"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-14"><a href="building-utilization-1.html#cb71-14"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-15"><a href="building-utilization-1.html#cb71-15"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Count =</span> <span class="kw">prettyNum</span>(<span class="kw">floor</span>(Count<span class="op">/</span><span class="dv">100</span>)<span class="op">*</span><span class="dv">100</span>,<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>))</span>
+<span id="cb71-16"><a href="building-utilization-1.html#cb71-16"></a></span>
+<span id="cb71-17"><a href="building-utilization-1.html#cb71-17"></a>buildable_area_summary &lt;-<span class="st"> </span>buildable_area_summary[<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">3</span>),]</span>
+<span id="cb71-18"><a href="building-utilization-1.html#cb71-18"></a></span>
+<span id="cb71-19"><a href="building-utilization-1.html#cb71-19"></a><span class="kw">kable</span>(</span>
+<span id="cb71-20"><a href="building-utilization-1.html#cb71-20"></a>  buildable_area_summary,</span>
+<span id="cb71-21"><a href="building-utilization-1.html#cb71-21"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb71-22"><a href="building-utilization-1.html#cb71-22"></a>  <span class="dt">caption =</span> <span class="st">&#39;Stockton parcels with buildable area for detached ADUs.&#39;</span></span>
+<span id="cb71-23"><a href="building-utilization-1.html#cb71-23"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb71-24"><a href="building-utilization-1.html#cb71-24"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb71-25"><a href="building-utilization-1.html#cb71-25"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:buildable-area-summary">Table 4.2: </span>Stockton parcels with buildable area for detached ADUs.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Buildable Area
+</th>
+<th style="text-align:left;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+160-600 sqft (studio or one bedroom)
+</td>
+<td style="text-align:left;">
+10,900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+600-1000 sqft (2 bedroom)
+</td>
+<td style="text-align:left;">
+13,700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1000-2000 sqft (3 bedroom)
+</td>
+<td style="text-align:left;">
+20,700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2000 sqft or more
+</td>
+<td style="text-align:left;">
+18,700
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>These numbers further suggest that there is more than enough space in residential backyards to support all the expected population growth in Stockton over the next 20 years.</p>
+<p>Considering transportation footprint, Stockton could focus its outreach and incentives to the ADU-viable properties that are also extremely accessible to transit, so that the future ADU tenants are less likely to be car-dependent (this could be further ensured by restricting on-street parking and/or providing transit passes). For our demonstration, we defined this subset of the 64,000+ parcels as being within 15 minutes of walking + bus transit (with at least 20-minute frequency during commute hours) from Stockton’s downtown bus station, which provides transfers to many other destinations around town as well a commuter bus to the Bay Area. Even with this heavy constraint, we found over 2,600 eligible parcels, as shown below.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="building-utilization-1.html#cb72-1"></a>rtd_gtfs &lt;-<span class="st"> </span><span class="kw">read_gtfs</span>(<span class="st">&quot;http://sjrtd.com/RTD-GTFS/RTD-GTFS.zip&quot;</span>)</span>
+<span id="cb72-2"><a href="building-utilization-1.html#cb72-2"></a>rtd_stops &lt;-<span class="st"> </span></span>
+<span id="cb72-3"><a href="building-utilization-1.html#cb72-3"></a><span class="st">  </span><span class="kw">st_as_sf</span>(rtd_gtfs<span class="op">$</span>stops,<span class="dt">coords=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-4"><a href="building-utilization-1.html#cb72-4"></a><span class="st">  </span><span class="kw">st_set_crs</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-5"><a href="building-utilization-1.html#cb72-5"></a><span class="st">  </span><span class="kw">st_transform</span>(projection)</span>
+<span id="cb72-6"><a href="building-utilization-1.html#cb72-6"></a></span>
+<span id="cb72-7"><a href="building-utilization-1.html#cb72-7"></a>rtd_stops_downtownstation &lt;-</span>
+<span id="cb72-8"><a href="building-utilization-1.html#cb72-8"></a><span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;7258&quot;</span>,<span class="st">&quot;7017&quot;</span>,<span class="st">&quot;7155&quot;</span>,<span class="st">&quot;7003&quot;</span>,<span class="st">&quot;7006&quot;</span>,<span class="st">&quot;7025&quot;</span>)</span>
+<span id="cb72-9"><a href="building-utilization-1.html#cb72-9"></a></span>
+<span id="cb72-10"><a href="building-utilization-1.html#cb72-10"></a>rtd_stops_amtrak &lt;-</span>
+<span id="cb72-11"><a href="building-utilization-1.html#cb72-11"></a><span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;7029&quot;</span>,<span class="st">&quot;7032&quot;</span>)</span>
+<span id="cb72-12"><a href="building-utilization-1.html#cb72-12"></a></span>
+<span id="cb72-13"><a href="building-utilization-1.html#cb72-13"></a>start_hour &lt;-<span class="st"> </span><span class="dv">16</span></span>
+<span id="cb72-14"><a href="building-utilization-1.html#cb72-14"></a>end_hour &lt;-<span class="st"> </span><span class="dv">20</span></span>
+<span id="cb72-15"><a href="building-utilization-1.html#cb72-15"></a>max_time_minutes &lt;-<span class="st"> </span><span class="dv">15</span></span>
+<span id="cb72-16"><a href="building-utilization-1.html#cb72-16"></a></span>
+<span id="cb72-17"><a href="building-utilization-1.html#cb72-17"></a>stop_times &lt;-<span class="st"> </span><span class="kw">filter_stop_times</span>(rtd_gtfs, <span class="st">&quot;2020-02-24&quot;</span>, start_hour<span class="op">*</span><span class="dv">3600</span>, end_hour<span class="op">*</span><span class="dv">3600</span>)</span>
+<span id="cb72-18"><a href="building-utilization-1.html#cb72-18"></a></span>
+<span id="cb72-19"><a href="building-utilization-1.html#cb72-19"></a>stop_frequency &lt;-</span>
+<span id="cb72-20"><a href="building-utilization-1.html#cb72-20"></a><span class="st">  </span><span class="kw">get_stop_frequency</span>(</span>
+<span id="cb72-21"><a href="building-utilization-1.html#cb72-21"></a>    rtd_gtfs,</span>
+<span id="cb72-22"><a href="building-utilization-1.html#cb72-22"></a>    start_hour,</span>
+<span id="cb72-23"><a href="building-utilization-1.html#cb72-23"></a>    end_hour</span>
+<span id="cb72-24"><a href="building-utilization-1.html#cb72-24"></a>  )</span>
+<span id="cb72-25"><a href="building-utilization-1.html#cb72-25"></a></span>
+<span id="cb72-26"><a href="building-utilization-1.html#cb72-26"></a>rptr &lt;-<span class="st"> </span></span>
+<span id="cb72-27"><a href="building-utilization-1.html#cb72-27"></a><span class="st">  </span><span class="kw">raptor</span>(</span>
+<span id="cb72-28"><a href="building-utilization-1.html#cb72-28"></a>    stop_times, </span>
+<span id="cb72-29"><a href="building-utilization-1.html#cb72-29"></a>    rtd_gtfs<span class="op">$</span>transfers, </span>
+<span id="cb72-30"><a href="building-utilization-1.html#cb72-30"></a>    rtd_stops_downtownstation, </span>
+<span id="cb72-31"><a href="building-utilization-1.html#cb72-31"></a>    <span class="dt">departure_time_range =</span> (end_hour<span class="op">-</span>start_hour)<span class="op">*</span><span class="dv">3600</span>,</span>
+<span id="cb72-32"><a href="building-utilization-1.html#cb72-32"></a>    <span class="dt">keep =</span> <span class="st">&quot;shortest&quot;</span></span>
+<span id="cb72-33"><a href="building-utilization-1.html#cb72-33"></a>  )</span>
+<span id="cb72-34"><a href="building-utilization-1.html#cb72-34"></a></span>
+<span id="cb72-35"><a href="building-utilization-1.html#cb72-35"></a>downtown_accessible_stops &lt;-</span>
+<span id="cb72-36"><a href="building-utilization-1.html#cb72-36"></a><span class="st">  </span>rptr <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-37"><a href="building-utilization-1.html#cb72-37"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb72-38"><a href="building-utilization-1.html#cb72-38"></a>    <span class="dt">travel_time_minutes =</span> (min_arrival_time<span class="op">-</span>journey_departure_time)<span class="op">/</span><span class="dv">60</span>,</span>
+<span id="cb72-39"><a href="building-utilization-1.html#cb72-39"></a>    <span class="dt">walking_time_minutes =</span> max_time_minutes <span class="op">-</span><span class="st"> </span>travel_time_minutes</span>
+<span id="cb72-40"><a href="building-utilization-1.html#cb72-40"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-41"><a href="building-utilization-1.html#cb72-41"></a><span class="st">  </span><span class="kw">filter</span>(travel_time_minutes <span class="op">&lt;=</span><span class="st"> </span>max_time_minutes) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-42"><a href="building-utilization-1.html#cb72-42"></a><span class="st">  </span><span class="kw">left_join</span>(rtd_stops, <span class="dt">by =</span> <span class="st">&quot;stop_id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-43"><a href="building-utilization-1.html#cb72-43"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-44"><a href="building-utilization-1.html#cb72-44"></a><span class="st">  </span><span class="kw">left_join</span>(stop_frequency, <span class="dt">by =</span> <span class="st">&quot;stop_id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-45"><a href="building-utilization-1.html#cb72-45"></a><span class="st">  </span><span class="kw">filter</span>(departures <span class="op">&gt;=</span><span class="st"> </span>(end_hour<span class="op">-</span>start_hour)<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb72-46"><a href="building-utilization-1.html#cb72-46"></a></span>
+<span id="cb72-47"><a href="building-utilization-1.html#cb72-47"></a>downtown_accessible_zone &lt;-</span>
+<span id="cb72-48"><a href="building-utilization-1.html#cb72-48"></a><span class="st">  </span><span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(downtown_accessible_stops) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-49"><a href="building-utilization-1.html#cb72-49"></a><span class="st">  </span><span class="kw">map_dfr</span>(<span class="cf">function</span>(row){</span>
+<span id="cb72-50"><a href="building-utilization-1.html#cb72-50"></a>    downtown_accessible_stops[row,] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-51"><a href="building-utilization-1.html#cb72-51"></a><span class="st">      </span><span class="kw">st_buffer</span>(downtown_accessible_stops<span class="op">$</span>walking_time_minutes[row]<span class="op">/</span><span class="dv">20</span><span class="op">*</span><span class="dv">5280</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># convert minutes to ft assuming 20 minutes per mile walking</span></span>
+<span id="cb72-52"><a href="building-utilization-1.html#cb72-52"></a><span class="st">      </span><span class="kw">as.data.frame</span>()</span>
+<span id="cb72-53"><a href="building-utilization-1.html#cb72-53"></a>  }) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-54"><a href="building-utilization-1.html#cb72-54"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-55"><a href="building-utilization-1.html#cb72-55"></a><span class="st">  </span><span class="kw">st_set_crs</span>(projection)</span>
+<span id="cb72-56"><a href="building-utilization-1.html#cb72-56"></a></span>
+<span id="cb72-57"><a href="building-utilization-1.html#cb72-57"></a>downtown_accessible_adus &lt;-</span>
+<span id="cb72-58"><a href="building-utilization-1.html#cb72-58"></a><span class="st">  </span>clean_buildable_area[<span class="kw">which</span>(clean_buildable_area<span class="op">$</span>APN <span class="op">%in%</span><span class="st"> </span><span class="kw">st_centroid</span>(clean_buildable_area)[downtown_accessible_zone,]<span class="op">$</span>APN),]</span>
+<span id="cb72-59"><a href="building-utilization-1.html#cb72-59"></a></span>
+<span id="cb72-60"><a href="building-utilization-1.html#cb72-60"></a>downtown_accessible_adus_filtered &lt;-</span>
+<span id="cb72-61"><a href="building-utilization-1.html#cb72-61"></a><span class="st">  </span>downtown_accessible_adus <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-62"><a href="building-utilization-1.html#cb72-62"></a><span class="st">  </span><span class="kw">filter</span>(buildable_area <span class="op">&lt;</span><span class="st"> </span><span class="dv">15000</span>)</span>
+<span id="cb72-63"><a href="building-utilization-1.html#cb72-63"></a></span>
+<span id="cb72-64"><a href="building-utilization-1.html#cb72-64"></a>routes &lt;-<span class="st"> </span></span>
+<span id="cb72-65"><a href="building-utilization-1.html#cb72-65"></a><span class="st">  </span><span class="kw">get_route_geometry</span>(</span>
+<span id="cb72-66"><a href="building-utilization-1.html#cb72-66"></a>    rtd_gtfs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtfs_as_sf</span>(), </span>
+<span id="cb72-67"><a href="building-utilization-1.html#cb72-67"></a>    <span class="dt">route_ids =</span> downtown_accessible_stops<span class="op">$</span>route_id,</span>
+<span id="cb72-68"><a href="building-utilization-1.html#cb72-68"></a>    <span class="dt">service_ids =</span> downtown_accessible_stops<span class="op">$</span>service_id</span>
+<span id="cb72-69"><a href="building-utilization-1.html#cb72-69"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-70"><a href="building-utilization-1.html#cb72-70"></a><span class="st">  </span><span class="kw">st_transform</span>(projection)</span>
+<span id="cb72-71"><a href="building-utilization-1.html#cb72-71"></a></span>
+<span id="cb72-72"><a href="building-utilization-1.html#cb72-72"></a>downtownstation_stops &lt;-<span class="st"> </span></span>
+<span id="cb72-73"><a href="building-utilization-1.html#cb72-73"></a><span class="st">  </span>downtown_accessible_stops <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-74"><a href="building-utilization-1.html#cb72-74"></a><span class="st">  </span><span class="kw">filter</span>(stop_id <span class="op">%in%</span><span class="st"> </span>rtd_stops_downtownstation)</span>
+<span id="cb72-75"><a href="building-utilization-1.html#cb72-75"></a></span>
+<span id="cb72-76"><a href="building-utilization-1.html#cb72-76"></a><span class="co"># map &lt;- mapview(downtown_accessible_stops$geometry, layer.name= &quot;Bus Stops&quot;)+</span></span>
+<span id="cb72-77"><a href="building-utilization-1.html#cb72-77"></a><span class="co">#   mapview(downtownstation_stops$geometry, cex = 10, col.regions = &quot;red&quot;, layer.name = &quot;Downtown Bus Station&quot;) +</span></span>
+<span id="cb72-78"><a href="building-utilization-1.html#cb72-78"></a><span class="co">#   mapview(routes$geometry, layer.name = &quot;Bus Routes&quot;) +</span></span>
+<span id="cb72-79"><a href="building-utilization-1.html#cb72-79"></a><span class="co">#   mapview(downtown_accessible_adus_filtered$geometry, col.regions = &quot;green&quot;, lwd=0.5, layer.name= &quot;Buildable ADU Area&quot;)</span></span>
+<span id="cb72-80"><a href="building-utilization-1.html#cb72-80"></a><span class="co"># </span></span>
+<span id="cb72-81"><a href="building-utilization-1.html#cb72-81"></a><span class="co"># mapshot(map, url = &quot;map-accessible-adus.html&quot;)</span></span>
+<span id="cb72-82"><a href="building-utilization-1.html#cb72-82"></a></span>
+<span id="cb72-83"><a href="building-utilization-1.html#cb72-83"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-accessible-adus.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:accessible-adus"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-accessible-adus.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 4.5: Buildable areas for detached ADUs within 15 minutes of walking and transit from the Stockton downtown bus station.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Such sites are great opportunities to immediately conduct homeowner outreach to increase awareness of new state legislation and the opportunities associated with ADU development, including a possible source of wealth-building or living space for a growing family. This type of analysis could be scaled up to a city-wide strategy in partnership with Stockton’s Community Development Department.</p>
+<p>Below, we offer an example of how a progress ADU strategy could impact our GHG forecasts:</p>
+<ul>
+<li>The business-as-usual projection from <a href="ghg-forecast.html#ghg-forecast">Section 2.10</a> suggests that total residential building GHG emissions are already expected to decline from 209,000 tCO2/year in 2020 to 101,000 tCO2/year, driven by climate change that reduces gas heating needs, cleaner PG&amp;E electricity, and continuing trends in energy efficiency improvements and building utilization.</li>
+<li>As previously noted, 25,000 new residents are projected during the same time, contributing to about 7,400 of the 101,000 tCO2 in 2040.</li>
+<li>As part of a steady stream of single-family home retrofits happening over the next 20 years (partially driven by energy efficiency strategies covered later), homeowners could be actively encouraged to also consider the conversion of an underutilized space in their homes into an internal ADU, at the same time as other renovations. If just 1% of the 60,000+ single-family homes were to take up this opportunity, 6,000 internal ADUs could be developed, creating highly energy-efficient dwelling opportunities for some of the residential growth (which may include cases of younger Stocktonians growing up and moving into an internal ADU in the same home they grew up in, or their aging parents moving into the internal ADU and giving the main home to their children to start a new family).</li>
+<li>At the same time, homeowners could be actively encouraged to consider the development of detached ADUs, which can accommodate an even greater range of lifestyle preferences. If just 1% of the 60,000+ property owners eligible for detached ADUs were motivated to build a detached ADU, 6,000 additional detached ADUs could be made available that wouldn’t otherwise have existed.</li>
+<li>Assuming an average 2 residents per household, these 12,000 new ADUs could support nearly all of the new residential growth. Of course, other kinds of residential development can be expected elsewhere in Stockton during these two decades, particularly higher-density multifamily housing. But this ADU capacity could effectively mitigate any further development of detached single-family housing.</li>
+<li>Using our energy assumptions, 6,000 internal ADUs and 6,000 detached ADUs (assuming an average 600 sqft in size), compared to what could have been 12,000 new single-family homes, would only emit about 2,900 tCO2 compared to 7,400 in business-as-usual – a 2-3% reduction in 2040’s residential building GHG footprint.</li>
+<li>While the GHG reductions in building energy are relatively low because of the progressive reductions already expected in business-as-usual, the combined transportation impacts of ADU development could be relatively significant. There is a projected increase of 59,000 employed residents between 2020-2040. If half of the 12,000 ADUs could support transit-based commuting (given their location, like the demonstration above) for at least 6,000 employed residents (one per household) who would have otherwise been car-dependent, the reduction in projected commute GHGs would be about 46,000 tCO2 in 2040, bringing the total GHG reduction associated with ADU development to 53,000 tCO2 (2-3% of Stockton’s total tCO2 in 2016).</li>
+</ul>
+<p>Regarding the cost of implementation, more research is needed to quantify the size and effectiveness of different types of expenditures, like outreach to homeowners and reduced permit fees. It is safe to say that ADU development is primarily a market-driven opportunity that can potentially increase a city’s bottom line, since new ADU development can yield increased property taxes with less infrastructure development (pipes and roads) and urban servicing (police and fire) cost per unit compared to entirely new suburban growth. We recommend considering ADU promotion a net-zero $/tCO2 strategy, with each incremental ADU having the rough kinds of GHG benefits summarized in the table below:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ADU Type</th>
+<th align="left">tCO2/year Reduction (in 2040)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Detached ADU, 600sqft</td>
+<td align="left">0.2</td>
+</tr>
+<tr class="even">
+<td align="left">Internal ADU</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="odd">
+<td align="left">Detached ADU, 600sqft, transit-oriented</td>
+<td align="left">7.8</td>
+</tr>
+<tr class="even">
+<td align="left">Internal ADU, transit-oriented</td>
+<td align="left">8.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="methodology.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="building-energy-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false,
+"info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

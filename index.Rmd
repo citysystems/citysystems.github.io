@@ -1,0 +1,48 @@
+---
+title: "City Systems"
+output: 
+  bookdown::gitbook:
+    df_print: paged
+    split_by: section
+    config:
+      toc:
+        collapse: none
+        scroll_highlight: yes
+        before: null
+        after: null
+      toolbar:
+        position: fixed
+      edit : null
+      download: null
+      search: yes
+      fontsettings:
+        theme: white
+        family: sans
+        size: 2
+      sharing:
+        facebook: no
+        github: no
+        twitter: no
+        linkedin: no
+        weibo: no
+        instapaper: no
+        vk: no
+        all: no
+      info: no
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r libraries, include=FALSE}
+library(knitr)
+library(bookdown)
+library(tidyverse)
+opts_chunk$set(
+  echo = TRUE, 
+  warning=FALSE, 
+  message=FALSE,
+  cache=TRUE
+)
+```
+
+[Stockton Green Economy Analysis](#introduction)

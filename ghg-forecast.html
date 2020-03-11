@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.10 GHG Forecast | Green Economy Analysis: Opportunities for Stockton</title>
+  <meta name="description" content="2.10 GHG Forecast | Green Economy Analysis: Opportunities for Stockton" />
+  <meta name="generator" content="bookdown 0.17.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.10 GHG Forecast | Green Economy Analysis: Opportunities for Stockton" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.10 GHG Forecast | Green Economy Analysis: Opportunities for Stockton" />
+  
+  
+  
+
+<meta name="author" content="City Systems" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="buildings.html"/>
+<link rel="next" href="overview-of-green-economy-strategies.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.js');
+  rCodeBlocks.each(function() {
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="approach.html"><a href="approach.html"><i class="fa fa-check"></i><b>1.1</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="baseline-assessment.html"><a href="baseline-assessment.html"><i class="fa fa-check"></i><b>2</b> Baseline Assessment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html"><i class="fa fa-check"></i><b>2.1</b> Population and Jobs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html#county-level-analysis"><i class="fa fa-check"></i><b>2.1.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="population-and-jobs.html"><a href="population-and-jobs.html#city-level-analysis"><i class="fa fa-check"></i><b>2.1.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="green-jobs.html"><a href="green-jobs.html"><i class="fa fa-check"></i><b>2.2</b> Green Jobs</a></li>
+<li class="chapter" data-level="2.3" data-path="ghg-inventory.html"><a href="ghg-inventory.html"><i class="fa fa-check"></i><b>2.3</b> 2005-2016 GHG Inventory</a></li>
+<li class="chapter" data-level="2.4" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html"><i class="fa fa-check"></i><b>2.4</b> Origin-Destination Commute Analysis</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#county-level-analysis-1"><i class="fa fa-check"></i><b>2.4.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.4.2" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#city-level-analysis-1"><i class="fa fa-check"></i><b>2.4.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.5</b> Commute Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#county-level-analysis-2"><i class="fa fa-check"></i><b>2.5.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.5.2" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#city-level-analysis-2"><i class="fa fa-check"></i><b>2.5.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="non-commute-vehicle-miles-traveled.html"><a href="non-commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.6</b> Non-Commute Vehicle Miles Traveled</a></li>
+<li class="chapter" data-level="2.7" data-path="vehicle-emissions.html"><a href="vehicle-emissions.html"><i class="fa fa-check"></i><b>2.7</b> Vehicle Emissions</a></li>
+<li class="chapter" data-level="2.8" data-path="energy.html"><a href="energy.html"><i class="fa fa-check"></i><b>2.8</b> Energy</a></li>
+<li class="chapter" data-level="2.9" data-path="buildings.html"><a href="buildings.html"><i class="fa fa-check"></i><b>2.9</b> Buildings</a></li>
+<li class="chapter" data-level="2.10" data-path="ghg-forecast.html"><a href="ghg-forecast.html"><i class="fa fa-check"></i><b>2.10</b> GHG Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="overview-of-green-economy-strategies.html"><a href="overview-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>3</b> Overview of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="building-utilization.html"><a href="building-utilization.html"><i class="fa fa-check"></i><b>3.1</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="building-utilization.html"><a href="building-utilization.html#revise-zoning-codes-in-medium-to-large-cities-to-facilitate-upzoning"><i class="fa fa-check"></i><b>3.1.1</b> Revise zoning codes in medium to large cities to facilitate upzoning</a></li>
+<li class="chapter" data-level="3.1.2" data-path="building-utilization.html"><a href="building-utilization.html#eliminate-minimum-parking"><i class="fa fa-check"></i><b>3.1.2</b> Eliminate minimum parking</a></li>
+<li class="chapter" data-level="3.1.3" data-path="building-utilization.html"><a href="building-utilization.html#encourage-accessory-dwelling-units"><i class="fa fa-check"></i><b>3.1.3</b> Encourage accessory dwelling units</a></li>
+<li class="chapter" data-level="3.1.4" data-path="building-utilization.html"><a href="building-utilization.html#encourage-micro-units"><i class="fa fa-check"></i><b>3.1.4</b> Encourage micro-units</a></li>
+<li class="chapter" data-level="3.1.5" data-path="building-utilization.html"><a href="building-utilization.html#provide-a-density-bonus-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.5</b> Provide a density bonus for affordable housing</a></li>
+<li class="chapter" data-level="3.1.6" data-path="building-utilization.html"><a href="building-utilization.html#develop-a-shared-equity-program-for-high-density-housing"><i class="fa fa-check"></i><b>3.1.6</b> Develop a shared equity program for high-density housing</a></li>
+<li class="chapter" data-level="3.1.7" data-path="building-utilization.html"><a href="building-utilization.html#match-homeowners-with-vacant-spaces-with-individuals-looking-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.7</b> Match homeowners with vacant spaces with individuals looking for affordable housing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="building-energy.html"><a href="building-energy.html"><i class="fa fa-check"></i><b>3.2</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="building-energy.html"><a href="building-energy.html#promote-solar-development-in-opportunity-zones"><i class="fa fa-check"></i><b>3.2.1</b> Promote solar development in Opportunity Zones</a></li>
+<li class="chapter" data-level="3.2.2" data-path="building-energy.html"><a href="building-energy.html#promote-a-solar-renewable-energy-certificate-program"><i class="fa fa-check"></i><b>3.2.2</b> Promote a Solar Renewable Energy Certificate program</a></li>
+<li class="chapter" data-level="3.2.3" data-path="building-energy.html"><a href="building-energy.html#set-energy-savings-standards-on-all-public-buildings-and-provide-financial-and-technical-assistance-for-commercial-private-sector-energy-savings"><i class="fa fa-check"></i><b>3.2.3</b> Set energy savings standards on all public buildings and provide financial and technical assistance for commercial private sector energy savings</a></li>
+<li class="chapter" data-level="3.2.4" data-path="building-energy.html"><a href="building-energy.html#create-a-fund-to-implement-energy-savings-projects"><i class="fa fa-check"></i><b>3.2.4</b> Create a fund to implement energy savings projects</a></li>
+<li class="chapter" data-level="3.2.5" data-path="building-energy.html"><a href="building-energy.html#enable-property-assessed-clean-energy-pace-financing"><i class="fa fa-check"></i><b>3.2.5</b> Enable property-assessed clean energy (PACE) financing</a></li>
+<li class="chapter" data-level="3.2.6" data-path="building-energy.html"><a href="building-energy.html#provide-consumer-oriented-programs-to-incentivize-energy-efficiency-retrofits-and-appliance-improvements"><i class="fa fa-check"></i><b>3.2.6</b> Provide consumer-oriented programs to incentivize energy efficiency retrofits and appliance improvements</a></li>
+<li class="chapter" data-level="3.2.7" data-path="building-energy.html"><a href="building-energy.html#provide-incentives-for-households-to-install-on-site-batteries-particularly-for-vulnerable-customers"><i class="fa fa-check"></i><b>3.2.7</b> Provide incentives for households to install on-site batteries, particularly for vulnerable customers</a></li>
+<li class="chapter" data-level="3.2.8" data-path="building-energy.html"><a href="building-energy.html#implement-reach-codes-which-go-beyond-state-minimum-requirements-for-energy-use-in-building-design-and-construction"><i class="fa fa-check"></i><b>3.2.8</b> Implement “reach” codes which go beyond state minimum requirements for energy use in building design and construction</a></li>
+<li class="chapter" data-level="3.2.9" data-path="building-energy.html"><a href="building-energy.html#use-waste-to-produce-electricity"><i class="fa fa-check"></i><b>3.2.9</b> Use waste to produce electricity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="employment-growth.html"><a href="employment-growth.html"><i class="fa fa-check"></i><b>3.3</b> Employment Growth</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="employment-growth.html"><a href="employment-growth.html#provide-training-and-coaching-for-low-income-workers-rather-than-unemployed-workers"><i class="fa fa-check"></i><b>3.3.1</b> Provide training and coaching for low-income workers, rather than unemployed workers</a></li>
+<li class="chapter" data-level="3.3.2" data-path="employment-growth.html"><a href="employment-growth.html#provide-green-oriented-job-training-and-education-pathways"><i class="fa fa-check"></i><b>3.3.2</b> Provide green-oriented job training and education pathways</a></li>
+<li class="chapter" data-level="3.3.3" data-path="employment-growth.html"><a href="employment-growth.html#create-a-scholarship-fund-for-students-wishing-to-pursue-eco-conscious-careers"><i class="fa fa-check"></i><b>3.3.3</b> Create a scholarship fund for students wishing to pursue eco-conscious careers</a></li>
+<li class="chapter" data-level="3.3.4" data-path="employment-growth.html"><a href="employment-growth.html#offer-continued-training-and-support-post-employment"><i class="fa fa-check"></i><b>3.3.4</b> Offer continued training and support post-employment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="local-jobs.html"><a href="local-jobs.html#offer-job-creation-tax-credit"><i class="fa fa-check"></i><b>3.4.1</b> Offer job creation tax credit</a></li>
+<li class="chapter" data-level="3.4.2" data-path="local-jobs.html"><a href="local-jobs.html#encourage-mortgage-refinancing"><i class="fa fa-check"></i><b>3.4.2</b> Encourage mortgage refinancing</a></li>
+<li class="chapter" data-level="3.4.3" data-path="local-jobs.html"><a href="local-jobs.html#develop-public-employment-program"><i class="fa fa-check"></i><b>3.4.3</b> Develop public employment program</a></li>
+<li class="chapter" data-level="3.4.4" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-advanced-industries"><i class="fa fa-check"></i><b>3.4.4</b> Provide tax credits to investors in advanced industries</a></li>
+<li class="chapter" data-level="3.4.5" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-community-development-corporations"><i class="fa fa-check"></i><b>3.4.5</b> Provide tax credits to investors in community development corporations</a></li>
+<li class="chapter" data-level="3.4.6" data-path="local-jobs.html"><a href="local-jobs.html#pursue-public-private-partnerships-for-commercial-development"><i class="fa fa-check"></i><b>3.4.6</b> Pursue public-private partnerships for commercial development</a></li>
+<li class="chapter" data-level="3.4.7" data-path="local-jobs.html"><a href="local-jobs.html#fund-economic-development-using-tax-base-sharing"><i class="fa fa-check"></i><b>3.4.7</b> Fund economic development using tax-base sharing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="local-jobs.html"><a href="local-jobs.html#pay-remote-workers-to-move-to-new-location"><i class="fa fa-check"></i><b>3.4.8</b> Pay remote workers to move to new location</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>3.5</b> Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#create-local-transportation-demand-management-ordinances"><i class="fa fa-check"></i><b>3.5.1</b> Create local transportation demand management ordinances</a></li>
+<li class="chapter" data-level="3.5.2" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#redesign-bus-network-to-prioritize-ridership-over-coverage"><i class="fa fa-check"></i><b>3.5.2</b> Redesign bus network to prioritize ridership over coverage</a></li>
+<li class="chapter" data-level="3.5.3" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#use-brt-corridors-to-reduce-travel-times-on-public-transit"><i class="fa fa-check"></i><b>3.5.3</b> Use BRT corridors to reduce travel times on public transit</a></li>
+<li class="chapter" data-level="3.5.4" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#promote-the-use-of-e-scooters-and-dockless-bicycles-to-reduce-reliance-on-private-cars"><i class="fa fa-check"></i><b>3.5.4</b> Promote the use of e-scooters and dockless bicycles to reduce reliance on private cars</a></li>
+<li class="chapter" data-level="3.5.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#rezone-areas-around-transit-stations-and-commercial-corridors-to-allow-for-high-density-residential-development"><i class="fa fa-check"></i><b>3.5.5</b> Rezone areas around transit stations and commercial corridors to allow for high-density residential development</a></li>
+<li class="chapter" data-level="3.5.6" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#offset-negative-externalities-of-traffic-through-tolls"><i class="fa fa-check"></i><b>3.5.6</b> Offset negative externalities of traffic through tolls</a></li>
+<li class="chapter" data-level="3.5.7" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#charge-for-parking"><i class="fa fa-check"></i><b>3.5.7</b> Charge for parking</a></li>
+<li class="chapter" data-level="3.5.8" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#give-carpoolers-priority-parking-at-transit-stops"><i class="fa fa-check"></i><b>3.5.8</b> Give carpoolers priority parking at transit stops</a></li>
+<li class="chapter" data-level="3.5.9" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#ban-personal-vehicles-from-certain-areas"><i class="fa fa-check"></i><b>3.5.9</b> Ban personal vehicles from certain areas</a></li>
+<li class="chapter" data-level="3.5.10" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#encourage-carsharing-strategies"><i class="fa fa-check"></i><b>3.5.10</b> Encourage carsharing strategies</a></li>
+<li class="chapter" data-level="3.5.11" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#provide-free-public-transit"><i class="fa fa-check"></i><b>3.5.11</b> Provide free public transit</a></li>
+<li class="chapter" data-level="3.5.12" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#subsidize-first-milelast-mile-transportation-services"><i class="fa fa-check"></i><b>3.5.12</b> Subsidize first-mile/last-mile transportation services</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html"><i class="fa fa-check"></i><b>3.6</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-for-pollutant-remediation-and-reduction-initiatives"><i class="fa fa-check"></i><b>3.6.1</b> Provide grants for pollutant remediation and reduction initiatives</a></li>
+<li class="chapter" data-level="3.6.2" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations"><i class="fa fa-check"></i><b>3.6.2</b> Provide commercial rebates for commercial building owners to install EV charging stations</a></li>
+<li class="chapter" data-level="3.6.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.6.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
+<li class="chapter" data-level="3.6.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.6.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
+<li class="chapter" data-level="3.6.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.6.5</b> Reduce vehicle speed limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="resilience.html"><a href="resilience.html"><i class="fa fa-check"></i><b>3.7</b> Resilience</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="resilience.html"><a href="resilience.html#promote-cool-surfaces-to-reduce-heat-island-effect"><i class="fa fa-check"></i><b>3.7.1</b> Promote cool surfaces to reduce heat island effect</a></li>
+<li class="chapter" data-level="3.7.2" data-path="resilience.html"><a href="resilience.html#promote-permeable-pavement-to-increase-groundwater-absorption"><i class="fa fa-check"></i><b>3.7.2</b> Promote permeable pavement to increase groundwater absorption</a></li>
+<li class="chapter" data-level="3.7.3" data-path="resilience.html"><a href="resilience.html#reclaim-urban-streams-and-rivers-to-increase-groundwater-absorption-and-filtration"><i class="fa fa-check"></i><b>3.7.3</b> Reclaim urban streams and rivers to increase groundwater absorption and filtration</a></li>
+<li class="chapter" data-level="3.7.4" data-path="resilience.html"><a href="resilience.html#use-green-infrastructure-to-improve-stormwater-management"><i class="fa fa-check"></i><b>3.7.4</b> Use green infrastructure to improve stormwater management</a></li>
+<li class="chapter" data-level="3.7.5" data-path="resilience.html"><a href="resilience.html#promote-urban-gardens-as-a-substitute-for-displaced-ecosystem-services"><i class="fa fa-check"></i><b>3.7.5</b> Promote urban gardens as a substitute for displaced ecosystem services</a></li>
+<li class="chapter" data-level="3.7.6" data-path="resilience.html"><a href="resilience.html#offer-rebates-for-flood-mitigation-projects"><i class="fa fa-check"></i><b>3.7.6</b> Offer rebates for flood mitigation projects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="resource-management.html"><a href="resource-management.html"><i class="fa fa-check"></i><b>3.8</b> Resource Management</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="resource-management.html"><a href="resource-management.html#develop-carbon-capture-storage-facilities"><i class="fa fa-check"></i><b>3.8.1</b> Develop carbon capture &amp; storage facilities</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="analysis-of-green-economy-strategies.html"><a href="analysis-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>4</b> Analysis of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methodology.html"><a href="methodology.html"><i class="fa fa-check"></i><b>4.1</b> Methodology</a></li>
+<li class="chapter" data-level="4.2" data-path="building-utilization-1.html"><a href="building-utilization-1.html"><i class="fa fa-check"></i><b>4.2</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="building-utilization-1.html"><a href="building-utilization-1.html#strategy-accessory-dwelling-units"><i class="fa fa-check"></i><b>4.2.1</b> Strategy: Accessory Dwelling Units</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="building-energy-1.html"><a href="building-energy-1.html"><i class="fa fa-check"></i><b>4.3</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="building-energy-1.html"><a href="building-energy-1.html#strategy-electrification"><i class="fa fa-check"></i><b>4.3.1</b> Strategy: Electrification</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html"><i class="fa fa-check"></i><b>4.4</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html#strategy-electric-vehicle-program"><i class="fa fa-check"></i><b>4.4.1</b> Strategy: Electric Vehicle Program</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="appendix-a-index-of-case-studies-by-place.html"><a href="appendix-a-index-of-case-studies-by-place.html"><i class="fa fa-check"></i><b>6</b> Appendix A: Index of Case Studies by Place</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Green Economy Analysis: Opportunities for Stockton</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ghg-forecast" class="section level2" number="2.10">
+<h2><span class="header-section-number">2.10</span> GHG Forecast</h2>
+<p>For our “business-as-usual” forecast of GHG emissions through 2040, and for our subsequent exploration of intervention strategies, we will focus on the following sectors for which we have used available data to refine our models: transportation, commercial energy, and residential energy. These sectors represented 58% of ICLEI’s modeled emissions in 2016. The other sectors, particularly industrial energy which comprised 24% of 2016 emissions, are also significant opportunities for GHG reductions, but are outside of the scope of this analysis without better data.</p>
+<p>Our simplified model of transportation emissions assumes that commute one-way vehicle miles traveled per worker is on a linear trend based on recent data. Otherwise, our forecasts of growth in the number of employed residents drives changes in VMT and thus transportation emissions. Other “business-as-usual” factors, like a forecasted adoption of EVs, are not considered in this analysis.</p>
+<p>Our simplified model of energy emissions will assume that building square footage increases with population and job growth through fixed ratios, and an underlying energy use factor for commercial and residential electricity and gas will follow the same trends as the last six years through 2040. Otherwise, a basic climate change model of heating and cooling degree days will drive additional changes in the forecasts.</p>
+<p>In summary, the following assumptions go into inputs for the 2020-2040 forecast:</p>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="12%" />
+<col width="79%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Section</th>
+<th align="left">Assumption</th>
+<th align="left">Source/Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="population-and-jobs.html#population-and-jobs">2.1</a></td>
+<td align="left">Population increases</td>
+<td align="left"><a href="https://www.nature.com/articles/sdata20195">Nature study</a> by Mathew Hauer. Includes a “middle of the road” assumption for global sustainability. Population 15+ is used specifically to forecast employment.</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="population-and-jobs.html#population-and-jobs">2.1</a></td>
+<td align="left">Employment rate increases</td>
+<td align="left">Our choice: employment rate increases linearly based on trend from 2010-2018.</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="population-and-jobs.html#population-and-jobs">2.1</a></td>
+<td align="left">Job to employed residents ratio decreases</td>
+<td align="left">Our choice: J/ER ratio decreases linearly based on trend from 2010-2018.</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="commute-vehicle-miles-traveled.html#commute-vehicle-miles-traveled">2.5</a></td>
+<td align="left">Commute one-way VMT per worker increases</td>
+<td align="left">Our choice: Commute VMT/worker increases linearly based on trend from 2011-2017.</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="non-commute-vehicle-miles-traveled.html#non-commute-vehicle-miles-traveled">2.6</a></td>
+<td align="left">Non-commute VMT per resident stays constant</td>
+<td align="left">Our choice: Without trend information, we assume non-commute VMT/resident stays constant. Further analysis pending data collection is likely to reveal an upwards trend over the past few years.</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="vehicle-emissions.html#vehicle-emissions">2.7</a></td>
+<td align="left">GHG per vehicle mile decreases</td>
+<td align="left">CARB <a href="https://ww2.arb.ca.gov/our-work/programs/mobile-source-emissions-inventory/msei-modeling-tools">EMFAC2017</a> model forecasts declining emissions rates based on assumed alignment with state and federal regulations.</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="vehicle-emissions.html#vehicle-emissions">2.7</a></td>
+<td align="left">Electric vehicle adoption increases</td>
+<td align="left">CARB <a href="https://ww2.arb.ca.gov/our-work/programs/mobile-source-emissions-inventory/msei-modeling-tools">EMFAC2017</a> model forecasts increasing EV adoption based on regressions on historical data.</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="energy.html#energy">2.8</a></td>
+<td align="left">PG&amp;E electricity emissions factor decreases</td>
+<td align="left">Our choice: We assume a linear forecast which runs from 2017’s reported factor towards a 2045 target of 100% clean energy.</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="energy.html#energy">2.8</a></td>
+<td align="left">Heating and cooling degree days</td>
+<td align="left"><a href="https://cal-adapt.org/tools/degree-days">Cal-Adapt</a> forecasts using the average simulation (CanESM2) under the Representative Concentration Pathway (RCP) 4.5 scenario</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="energy.html#energy">2.8</a></td>
+<td align="left">Energy use per capita per degree-day decreases</td>
+<td align="left">Our choice: combining climate, energy, and population/jobs data, we found downwards trends between 2013-2018 and assumed these trends to continue to 2040. For Commercial Gas, we leveled out the forecast at 1 kBTU/job/HDD from 2035 on.</td>
+</tr>
+</tbody>
+</table>
+<p>The table below shows the results of the various assumptions above on quantitative inputs for each year, which are used to calculate GHG emissions.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="ghg-forecast.html#cb63-1"></a>summary_TCO2E_norm_projection &lt;-</span>
+<span id="cb63-2"><a href="ghg-forecast.html#cb63-2"></a><span class="st">  </span>summary_TCO2E_norm_all</span>
+<span id="cb63-3"><a href="ghg-forecast.html#cb63-3"></a></span>
+<span id="cb63-4"><a href="ghg-forecast.html#cb63-4"></a>summary_TCO2E_norm_projection[<span class="dv">7</span><span class="op">:</span><span class="dv">11</span>,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2020</span>,<span class="dv">2025</span>,<span class="dv">2030</span>,<span class="dv">2035</span>,<span class="dv">2040</span>)</span>
+<span id="cb63-5"><a href="ghg-forecast.html#cb63-5"></a></span>
+<span id="cb63-6"><a href="ghg-forecast.html#cb63-6"></a>ghg_forecast_prep &lt;-</span>
+<span id="cb63-7"><a href="ghg-forecast.html#cb63-7"></a><span class="st">  </span>summary_TCO2E_norm_projection <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-8"><a href="ghg-forecast.html#cb63-8"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="st">`</span><span class="dt">Heating Degree Days</span><span class="st">`</span>,<span class="op">-</span><span class="st">`</span><span class="dt">Cooling Degree Days</span><span class="st">`</span>,<span class="op">-</span>Residents,<span class="op">-</span>Jobs) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-9"><a href="ghg-forecast.html#cb63-9"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb63-10"><a href="ghg-forecast.html#cb63-10"></a>    <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span> =</span>
+<span id="cb63-11"><a href="ghg-forecast.html#cb63-11"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb63-12"><a href="ghg-forecast.html#cb63-12"></a>        Year <span class="op">&lt;</span><span class="st"> </span><span class="dv">2020</span>,</span>
+<span id="cb63-13"><a href="ghg-forecast.html#cb63-13"></a>        <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span>,</span>
+<span id="cb63-14"><a href="ghg-forecast.html#cb63-14"></a>        <span class="kw">lm</span>(</span>
+<span id="cb63-15"><a href="ghg-forecast.html#cb63-15"></a>          <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-16"><a href="ghg-forecast.html#cb63-16"></a>        )<span class="op">$</span>coefficients[<span class="dv">1</span>]<span class="op">+</span></span>
+<span id="cb63-17"><a href="ghg-forecast.html#cb63-17"></a><span class="st">          </span><span class="kw">lm</span>(</span>
+<span id="cb63-18"><a href="ghg-forecast.html#cb63-18"></a>            <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-19"><a href="ghg-forecast.html#cb63-19"></a>          )<span class="op">$</span>coefficients[<span class="dv">2</span>]<span class="op">*</span>Year</span>
+<span id="cb63-20"><a href="ghg-forecast.html#cb63-20"></a>      ),</span>
+<span id="cb63-21"><a href="ghg-forecast.html#cb63-21"></a>    <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span> =</span>
+<span id="cb63-22"><a href="ghg-forecast.html#cb63-22"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb63-23"><a href="ghg-forecast.html#cb63-23"></a>        Year <span class="op">&lt;</span><span class="st"> </span><span class="dv">2020</span>,</span>
+<span id="cb63-24"><a href="ghg-forecast.html#cb63-24"></a>        <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span>,</span>
+<span id="cb63-25"><a href="ghg-forecast.html#cb63-25"></a>        <span class="kw">lm</span>(</span>
+<span id="cb63-26"><a href="ghg-forecast.html#cb63-26"></a>          <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-27"><a href="ghg-forecast.html#cb63-27"></a>        )<span class="op">$</span>coefficients[<span class="dv">1</span>]<span class="op">+</span></span>
+<span id="cb63-28"><a href="ghg-forecast.html#cb63-28"></a><span class="st">          </span><span class="kw">lm</span>(</span>
+<span id="cb63-29"><a href="ghg-forecast.html#cb63-29"></a>            <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-30"><a href="ghg-forecast.html#cb63-30"></a>          )<span class="op">$</span>coefficients[<span class="dv">2</span>]<span class="op">*</span>Year</span>
+<span id="cb63-31"><a href="ghg-forecast.html#cb63-31"></a>      ),</span>
+<span id="cb63-32"><a href="ghg-forecast.html#cb63-32"></a>    <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span> =</span>
+<span id="cb63-33"><a href="ghg-forecast.html#cb63-33"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb63-34"><a href="ghg-forecast.html#cb63-34"></a>        Year <span class="op">&lt;</span><span class="st"> </span><span class="dv">2020</span>,</span>
+<span id="cb63-35"><a href="ghg-forecast.html#cb63-35"></a>        <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span>,</span>
+<span id="cb63-36"><a href="ghg-forecast.html#cb63-36"></a>        <span class="kw">lm</span>(</span>
+<span id="cb63-37"><a href="ghg-forecast.html#cb63-37"></a>          <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-38"><a href="ghg-forecast.html#cb63-38"></a>        )<span class="op">$</span>coefficients[<span class="dv">1</span>]<span class="op">+</span></span>
+<span id="cb63-39"><a href="ghg-forecast.html#cb63-39"></a><span class="st">          </span><span class="kw">lm</span>(</span>
+<span id="cb63-40"><a href="ghg-forecast.html#cb63-40"></a>            <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-41"><a href="ghg-forecast.html#cb63-41"></a>          )<span class="op">$</span>coefficients[<span class="dv">2</span>]<span class="op">*</span>Year</span>
+<span id="cb63-42"><a href="ghg-forecast.html#cb63-42"></a>      ),</span>
+<span id="cb63-43"><a href="ghg-forecast.html#cb63-43"></a>    <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span> =</span>
+<span id="cb63-44"><a href="ghg-forecast.html#cb63-44"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb63-45"><a href="ghg-forecast.html#cb63-45"></a>        Year <span class="op">&lt;</span><span class="st"> </span><span class="dv">2020</span>,</span>
+<span id="cb63-46"><a href="ghg-forecast.html#cb63-46"></a>        <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span>,</span>
+<span id="cb63-47"><a href="ghg-forecast.html#cb63-47"></a>        <span class="kw">lm</span>(</span>
+<span id="cb63-48"><a href="ghg-forecast.html#cb63-48"></a>          <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-49"><a href="ghg-forecast.html#cb63-49"></a>        )<span class="op">$</span>coefficients[<span class="dv">1</span>]<span class="op">+</span></span>
+<span id="cb63-50"><a href="ghg-forecast.html#cb63-50"></a><span class="st">          </span><span class="kw">lm</span>(</span>
+<span id="cb63-51"><a href="ghg-forecast.html#cb63-51"></a>            <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb63-52"><a href="ghg-forecast.html#cb63-52"></a>          )<span class="op">$</span>coefficients[<span class="dv">2</span>]<span class="op">*</span>Year</span>
+<span id="cb63-53"><a href="ghg-forecast.html#cb63-53"></a>      ),</span>
+<span id="cb63-54"><a href="ghg-forecast.html#cb63-54"></a>    <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span> =</span>
+<span id="cb63-55"><a href="ghg-forecast.html#cb63-55"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb63-56"><a href="ghg-forecast.html#cb63-56"></a>        <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span> <span class="op">&lt;</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb63-57"><a href="ghg-forecast.html#cb63-57"></a>        <span class="dv">1</span>,</span>
+<span id="cb63-58"><a href="ghg-forecast.html#cb63-58"></a>        <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span></span>
+<span id="cb63-59"><a href="ghg-forecast.html#cb63-59"></a>      )</span>
+<span id="cb63-60"><a href="ghg-forecast.html#cb63-60"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-61"><a href="ghg-forecast.html#cb63-61"></a><span class="st">  </span><span class="kw">left_join</span>(hdd, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;Year&quot;</span> =<span class="st"> &quot;YEAR&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-62"><a href="ghg-forecast.html#cb63-62"></a><span class="st">  </span><span class="kw">left_join</span>(cdd, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;Year&quot;</span> =<span class="st"> &quot;YEAR&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-63"><a href="ghg-forecast.html#cb63-63"></a><span class="st">  </span><span class="kw">left_join</span>(pop_jobs_stockton_w_projection <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(Year, Population, <span class="st">`</span><span class="dt">Employed Residents</span><span class="st">`</span>, Jobs), <span class="dt">by =</span> <span class="st">&quot;Year&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-64"><a href="ghg-forecast.html#cb63-64"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_commute_vmt_tractmode <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(Year, vmt, jobs_car), <span class="dt">by =</span> <span class="st">&quot;Year&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-65"><a href="ghg-forecast.html#cb63-65"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb63-66"><a href="ghg-forecast.html#cb63-66"></a>    <span class="dt">vmtperjob =</span> vmt<span class="op">/</span>jobs_car</span>
+<span id="cb63-67"><a href="ghg-forecast.html#cb63-67"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-68"><a href="ghg-forecast.html#cb63-68"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>vmt,<span class="op">-</span>jobs_car) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-69"><a href="ghg-forecast.html#cb63-69"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb63-70"><a href="ghg-forecast.html#cb63-70"></a>    <span class="dt">vmtperjob =</span></span>
+<span id="cb63-71"><a href="ghg-forecast.html#cb63-71"></a>      <span class="kw">ifelse</span>(</span>
+<span id="cb63-72"><a href="ghg-forecast.html#cb63-72"></a>        Year <span class="op">&lt;</span><span class="st"> </span><span class="dv">2018</span>,</span>
+<span id="cb63-73"><a href="ghg-forecast.html#cb63-73"></a>        vmtperjob,</span>
+<span id="cb63-74"><a href="ghg-forecast.html#cb63-74"></a>        <span class="kw">lm</span>(</span>
+<span id="cb63-75"><a href="ghg-forecast.html#cb63-75"></a>          vmtperjob[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</span>
+<span id="cb63-76"><a href="ghg-forecast.html#cb63-76"></a>        )<span class="op">$</span>coefficients[<span class="dv">1</span>]<span class="op">+</span></span>
+<span id="cb63-77"><a href="ghg-forecast.html#cb63-77"></a><span class="st">          </span><span class="kw">lm</span>(</span>
+<span id="cb63-78"><a href="ghg-forecast.html#cb63-78"></a>            vmtperjob[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="op">~</span><span class="st"> </span>Year[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</span>
+<span id="cb63-79"><a href="ghg-forecast.html#cb63-79"></a>          )<span class="op">$</span>coefficients[<span class="dv">2</span>]<span class="op">*</span>Year</span>
+<span id="cb63-80"><a href="ghg-forecast.html#cb63-80"></a>      )</span>
+<span id="cb63-81"><a href="ghg-forecast.html#cb63-81"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-82"><a href="ghg-forecast.html#cb63-82"></a><span class="st">  </span><span class="kw">left_join</span>(pge_elec_emissions_factor, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;Year&quot;</span> =<span class="st"> &quot;year&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-83"><a href="ghg-forecast.html#cb63-83"></a><span class="st">  </span><span class="kw">left_join</span>(vehicle_emissions_trend, <span class="dt">by =</span> <span class="st">&quot;Year&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-84"><a href="ghg-forecast.html#cb63-84"></a><span class="st">  </span><span class="kw">left_join</span>(vehicle_electric_trend, <span class="dt">by =</span> <span class="st">&quot;Year&quot;</span>)</span>
+<span id="cb63-85"><a href="ghg-forecast.html#cb63-85"></a></span>
+<span id="cb63-86"><a href="ghg-forecast.html#cb63-86"></a>ghg_forecast_table_prep &lt;-</span>
+<span id="cb63-87"><a href="ghg-forecast.html#cb63-87"></a><span class="st">  </span>ghg_forecast_prep <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-88"><a href="ghg-forecast.html#cb63-88"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb63-89"><a href="ghg-forecast.html#cb63-89"></a>    <span class="dt">Year =</span> Year,</span>
+<span id="cb63-90"><a href="ghg-forecast.html#cb63-90"></a>    <span class="dt">Population =</span> <span class="kw">prettyNum</span>(<span class="kw">round</span>(Population,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb63-91"><a href="ghg-forecast.html#cb63-91"></a>    <span class="st">`</span><span class="dt">Employed Residents</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Employed Residents</span><span class="st">`</span>,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb63-92"><a href="ghg-forecast.html#cb63-92"></a>    <span class="dt">Jobs =</span> <span class="kw">prettyNum</span>(<span class="kw">round</span>(Jobs,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb63-93"><a href="ghg-forecast.html#cb63-93"></a>    <span class="st">`</span><span class="dt">One-way Commute VMT per Car-dependent Worker</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(vmtperjob),</span>
+<span id="cb63-94"><a href="ghg-forecast.html#cb63-94"></a>    <span class="st">`</span><span class="dt">gCO2 per Vehicle Mile</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(<span class="st">`</span><span class="dt">gCO2/mile</span><span class="st">`</span>),</span>
+<span id="cb63-95"><a href="ghg-forecast.html#cb63-95"></a>    <span class="st">`</span><span class="dt">Percent EVs</span><span class="st">`</span> =<span class="st"> </span>count,</span>
+<span id="cb63-96"><a href="ghg-forecast.html#cb63-96"></a>    <span class="st">`</span><span class="dt">PG&amp;E Electricity Emissions Factor</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(factor),</span>
+<span id="cb63-97"><a href="ghg-forecast.html#cb63-97"></a>    <span class="st">`</span><span class="dt">Heating Degree Days</span><span class="st">`</span> =<span class="st"> </span>hdd,</span>
+<span id="cb63-98"><a href="ghg-forecast.html#cb63-98"></a>    <span class="st">`</span><span class="dt">Cooling Degree Days</span><span class="st">`</span> =<span class="st"> </span>cdd,</span>
+<span id="cb63-99"><a href="ghg-forecast.html#cb63-99"></a>    <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(<span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span>,<span class="dv">1</span>),</span>
+<span id="cb63-100"><a href="ghg-forecast.html#cb63-100"></a>    <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(<span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span>,<span class="dv">1</span>),</span>
+<span id="cb63-101"><a href="ghg-forecast.html#cb63-101"></a>    <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(<span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span>,<span class="dv">1</span>),</span>
+<span id="cb63-102"><a href="ghg-forecast.html#cb63-102"></a>    <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(<span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span>,<span class="dv">1</span>)</span>
+<span id="cb63-103"><a href="ghg-forecast.html#cb63-103"></a>  )</span>
+<span id="cb63-104"><a href="ghg-forecast.html#cb63-104"></a></span>
+<span id="cb63-105"><a href="ghg-forecast.html#cb63-105"></a><span class="kw">kable</span>(</span>
+<span id="cb63-106"><a href="ghg-forecast.html#cb63-106"></a>  ghg_forecast_table_prep,</span>
+<span id="cb63-107"><a href="ghg-forecast.html#cb63-107"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb63-108"><a href="ghg-forecast.html#cb63-108"></a>  <span class="dt">caption =</span> <span class="st">&#39;Input assumptions for GHG forecast to 2040.&#39;</span></span>
+<span id="cb63-109"><a href="ghg-forecast.html#cb63-109"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-110"><a href="ghg-forecast.html#cb63-110"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb63-111"><a href="ghg-forecast.html#cb63-111"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ghg-forecast-prep">Table 2.23: </span>Input assumptions for GHG forecast to 2040.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:left;">
+Population
+</th>
+<th style="text-align:left;">
+Employed Residents
+</th>
+<th style="text-align:left;">
+Jobs
+</th>
+<th style="text-align:right;">
+One-way Commute VMT per Car-dependent Worker
+</th>
+<th style="text-align:right;">
+gCO2 per Vehicle Mile
+</th>
+<th style="text-align:right;">
+Percent EVs
+</th>
+<th style="text-align:right;">
+PG&amp;E Electricity Emissions Factor
+</th>
+<th style="text-align:right;">
+Heating Degree Days
+</th>
+<th style="text-align:right;">
+Cooling Degree Days
+</th>
+<th style="text-align:right;">
+Residential Electricity, kBTU/resident/CDD
+</th>
+<th style="text-align:right;">
+Residential Gas, kBTU/resident/HDD
+</th>
+<th style="text-align:right;">
+Commercial Electricity, kBTU/job/CDD
+</th>
+<th style="text-align:right;">
+Commercial Gas, kBTU/job/HDD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:left;">
+298,000
+</td>
+<td style="text-align:left;">
+109,000
+</td>
+<td style="text-align:left;">
+106,000
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+481
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+427
+</td>
+<td style="text-align:right;">
+2090
+</td>
+<td style="text-align:right;">
+2029
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+11.5
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:left;">
+302,000
+</td>
+<td style="text-align:left;">
+116,000
+</td>
+<td style="text-align:left;">
+107,000
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+471
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+435
+</td>
+<td style="text-align:right;">
+2246
+</td>
+<td style="text-align:right;">
+1811
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+5.9
+</td>
+<td style="text-align:right;">
+14.1
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+306,000
+</td>
+<td style="text-align:left;">
+117,000
+</td>
+<td style="text-align:left;">
+114,000
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+463
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+405
+</td>
+<td style="text-align:right;">
+2065
+</td>
+<td style="text-align:right;">
+1970
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+12.1
+</td>
+<td style="text-align:right;">
+4.9
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+307,000
+</td>
+<td style="text-align:left;">
+123,000
+</td>
+<td style="text-align:left;">
+116,000
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+452
+</td>
+<td style="text-align:right;">
+0.22
+</td>
+<td style="text-align:right;">
+294
+</td>
+<td style="text-align:right;">
+1689
+</td>
+<td style="text-align:right;">
+1700
+</td>
+<td style="text-align:right;">
+5.3
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+13.9
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+310,000
+</td>
+<td style="text-align:left;">
+131,000
+</td>
+<td style="text-align:left;">
+117,000
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+439
+</td>
+<td style="text-align:right;">
+0.36
+</td>
+<td style="text-align:right;">
+210
+</td>
+<td style="text-align:right;">
+2244
+</td>
+<td style="text-align:right;">
+1807
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:right;">
+12.6
+</td>
+<td style="text-align:right;">
+4.3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+311,000
+</td>
+<td style="text-align:left;">
+129,000
+</td>
+<td style="text-align:left;">
+118,000
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+425
+</td>
+<td style="text-align:right;">
+0.50
+</td>
+<td style="text-align:right;">
+202
+</td>
+<td style="text-align:right;">
+2304
+</td>
+<td style="text-align:right;">
+2107
+</td>
+<td style="text-align:right;">
+4.1
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+10.5
+</td>
+<td style="text-align:right;">
+4.4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+315,000
+</td>
+<td style="text-align:left;">
+138,000
+</td>
+<td style="text-align:left;">
+125,000
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+399
+</td>
+<td style="text-align:right;">
+0.84
+</td>
+<td style="text-align:right;">
+188
+</td>
+<td style="text-align:right;">
+2082
+</td>
+<td style="text-align:right;">
+1866
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+11.5
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2025
+</td>
+<td style="text-align:left;">
+323,000
+</td>
+<td style="text-align:left;">
+154,000
+</td>
+<td style="text-align:left;">
+134,000
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+336
+</td>
+<td style="text-align:right;">
+2.21
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+2410
+</td>
+<td style="text-align:right;">
+2106
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2030
+</td>
+<td style="text-align:left;">
+329,000
+</td>
+<td style="text-align:left;">
+169,000
+</td>
+<td style="text-align:left;">
+141,000
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+292
+</td>
+<td style="text-align:right;">
+3.62
+</td>
+<td style="text-align:right;">
+112
+</td>
+<td style="text-align:right;">
+2087
+</td>
+<td style="text-align:right;">
+2309
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+4.4
+</td>
+<td style="text-align:right;">
+9.3
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2035
+</td>
+<td style="text-align:left;">
+335,000
+</td>
+<td style="text-align:left;">
+183,000
+</td>
+<td style="text-align:left;">
+146,000
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+268
+</td>
+<td style="text-align:right;">
+4.60
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+2260
+</td>
+<td style="text-align:right;">
+2286
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2040
+</td>
+<td style="text-align:left;">
+339,000
+</td>
+<td style="text-align:left;">
+197,000
+</td>
+<td style="text-align:left;">
+151,000
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+256
+</td>
+<td style="text-align:right;">
+5.19
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+2082
+</td>
+<td style="text-align:right;">
+2112
+</td>
+<td style="text-align:right;">
+3.2
+</td>
+<td style="text-align:right;">
+2.7
+</td>
+<td style="text-align:right;">
+7.1
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The inputs above result in the following GHG forecasts.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="ghg-forecast.html#cb64-1"></a>ghg_forecast &lt;-</span>
+<span id="cb64-2"><a href="ghg-forecast.html#cb64-2"></a><span class="st">  </span>ghg_forecast_prep <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-3"><a href="ghg-forecast.html#cb64-3"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb64-4"><a href="ghg-forecast.html#cb64-4"></a>    <span class="dt">Year =</span> Year,</span>
+<span id="cb64-5"><a href="ghg-forecast.html#cb64-5"></a>    <span class="dt">transport =</span> vmtperjob <span class="op">*</span><span class="st"> `</span><span class="dt">Employed Residents</span><span class="st">`</span> <span class="op">*</span><span class="dv">2</span><span class="op">*</span><span class="fl">369.39</span><span class="op">*</span><span class="st">`</span><span class="dt">gCO2/mile</span><span class="st">`</span><span class="op">*</span><span class="fl">1.1023e-6</span> <span class="op">+</span><span class="st"> `</span><span class="dt">Employed Residents</span><span class="st">`</span><span class="op">*</span><span class="dv">2</span><span class="op">*</span><span class="fl">369.39</span><span class="op">*</span><span class="st">`</span><span class="dt">gCO2/trip</span><span class="st">`</span><span class="op">*</span><span class="fl">1.1023e-6</span>,</span>
+<span id="cb64-6"><a href="ghg-forecast.html#cb64-6"></a>    <span class="dt">amenity =</span> <span class="dv">4100</span> <span class="op">*</span><span class="st"> </span>Population<span class="op">*</span><span class="st">`</span><span class="dt">gCO2/mile</span><span class="st">`</span><span class="op">*</span><span class="fl">1.1023e-6</span>,</span>
+<span id="cb64-7"><a href="ghg-forecast.html#cb64-7"></a>    <span class="dt">residential =</span> <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span><span class="op">*</span>Population<span class="op">*</span>cdd<span class="op">*</span><span class="fl">2.9307e-7</span><span class="op">*</span><span class="fl">0.000453592</span> <span class="op">+</span><span class="st"> `</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span><span class="op">*</span>Population<span class="op">*</span>hdd<span class="op">/</span><span class="fl">99.9761</span><span class="op">*</span><span class="fl">0.00531</span>,</span>
+<span id="cb64-8"><a href="ghg-forecast.html#cb64-8"></a>    <span class="dt">commercial =</span> <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span><span class="op">*</span>Jobs<span class="op">*</span>cdd<span class="op">*</span><span class="fl">2.9307e-7</span><span class="op">*</span><span class="fl">0.000453592</span> <span class="op">+</span><span class="st"> `</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span><span class="op">*</span>Jobs<span class="op">*</span>hdd<span class="op">/</span><span class="fl">99.9761</span><span class="op">*</span><span class="fl">0.00531</span></span>
+<span id="cb64-9"><a href="ghg-forecast.html#cb64-9"></a>  )</span>
+<span id="cb64-10"><a href="ghg-forecast.html#cb64-10"></a></span>
+<span id="cb64-11"><a href="ghg-forecast.html#cb64-11"></a>ghg_forecast_table &lt;-</span>
+<span id="cb64-12"><a href="ghg-forecast.html#cb64-12"></a><span class="st">  </span>ghg_forecast <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-13"><a href="ghg-forecast.html#cb64-13"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb64-14"><a href="ghg-forecast.html#cb64-14"></a>    <span class="dt">Year=</span>Year,</span>
+<span id="cb64-15"><a href="ghg-forecast.html#cb64-15"></a>    <span class="st">`</span><span class="dt">Commute tCO2</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(transport,<span class="op">-</span><span class="dv">4</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb64-16"><a href="ghg-forecast.html#cb64-16"></a>    <span class="st">`</span><span class="dt">Non-Commute tCO2</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(amenity,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb64-17"><a href="ghg-forecast.html#cb64-17"></a>    <span class="st">`</span><span class="dt">Residential Building tCO2</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(residential,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb64-18"><a href="ghg-forecast.html#cb64-18"></a>    <span class="st">`</span><span class="dt">Commercial Building tCO2</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(commercial,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb64-19"><a href="ghg-forecast.html#cb64-19"></a>  )</span>
+<span id="cb64-20"><a href="ghg-forecast.html#cb64-20"></a></span>
+<span id="cb64-21"><a href="ghg-forecast.html#cb64-21"></a><span class="kw">kable</span>(</span>
+<span id="cb64-22"><a href="ghg-forecast.html#cb64-22"></a>  ghg_forecast_table,</span>
+<span id="cb64-23"><a href="ghg-forecast.html#cb64-23"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb64-24"><a href="ghg-forecast.html#cb64-24"></a>  <span class="dt">caption =</span> <span class="st">&#39;GHG forecast to 2040 for three subsets of GHG emissions.&#39;</span></span>
+<span id="cb64-25"><a href="ghg-forecast.html#cb64-25"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-26"><a href="ghg-forecast.html#cb64-26"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-27"><a href="ghg-forecast.html#cb64-27"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ghg-forecast">Table 2.24: </span>GHG forecast to 2040 for three subsets of GHG emissions.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:left;">
+Commute tCO2
+</th>
+<th style="text-align:left;">
+Non-Commute tCO2
+</th>
+<th style="text-align:left;">
+Residential Building tCO2
+</th>
+<th style="text-align:left;">
+Commercial Building tCO2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:left;">
+910,000
+</td>
+<td style="text-align:left;">
+648,000
+</td>
+<td style="text-align:left;">
+255,000
+</td>
+<td style="text-align:left;">
+67,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:left;">
+980,000
+</td>
+<td style="text-align:left;">
+644,000
+</td>
+<td style="text-align:left;">
+213,000
+</td>
+<td style="text-align:left;">
+60,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+930,000
+</td>
+<td style="text-align:left;">
+639,000
+</td>
+<td style="text-align:left;">
+225,000
+</td>
+<td style="text-align:left;">
+61,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+980,000
+</td>
+<td style="text-align:left;">
+627,000
+</td>
+<td style="text-align:left;">
+220,000
+</td>
+<td style="text-align:left;">
+52,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+1,080,000
+</td>
+<td style="text-align:left;">
+617,000
+</td>
+<td style="text-align:left;">
+229,000
+</td>
+<td style="text-align:left;">
+60,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+1,030,000
+</td>
+<td style="text-align:left;">
+598,000
+</td>
+<td style="text-align:left;">
+232,000
+</td>
+<td style="text-align:left;">
+64,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+1,060,000
+</td>
+<td style="text-align:left;">
+567,000
+</td>
+<td style="text-align:left;">
+209,000
+</td>
+<td style="text-align:left;">
+53,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2025
+</td>
+<td style="text-align:left;">
+1,080,000
+</td>
+<td style="text-align:left;">
+490,000
+</td>
+<td style="text-align:left;">
+214,000
+</td>
+<td style="text-align:left;">
+48,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2030
+</td>
+<td style="text-align:left;">
+1,100,000
+</td>
+<td style="text-align:left;">
+434,000
+</td>
+<td style="text-align:left;">
+159,000
+</td>
+<td style="text-align:left;">
+26,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2035
+</td>
+<td style="text-align:left;">
+1,170,000
+</td>
+<td style="text-align:left;">
+405,000
+</td>
+<td style="text-align:left;">
+142,000
+</td>
+<td style="text-align:left;">
+18,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2040
+</td>
+<td style="text-align:left;">
+1,280,000
+</td>
+<td style="text-align:left;">
+392,000
+</td>
+<td style="text-align:left;">
+101,000
+</td>
+<td style="text-align:left;">
+17,000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="ghg-forecast.html#cb65-1"></a>ghg_forecast <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-2"><a href="ghg-forecast.html#cb65-2"></a><span class="st">  </span><span class="kw">gather</span>(<span class="op">-</span>Year, <span class="dt">key =</span> <span class="st">&quot;Sector&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;tCO2&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-3"><a href="ghg-forecast.html#cb65-3"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb65-4"><a href="ghg-forecast.html#cb65-4"></a>    <span class="dt">Sector =</span> <span class="kw">case_when</span>(</span>
+<span id="cb65-5"><a href="ghg-forecast.html#cb65-5"></a>      Sector <span class="op">==</span><span class="st"> &quot;transport&quot;</span> <span class="op">~</span><span class="st"> &quot;Commute Transportation&quot;</span>,</span>
+<span id="cb65-6"><a href="ghg-forecast.html#cb65-6"></a>      Sector <span class="op">==</span><span class="st"> &quot;amenity&quot;</span> <span class="op">~</span><span class="st"> &quot;Non-commute Transportation&quot;</span>,</span>
+<span id="cb65-7"><a href="ghg-forecast.html#cb65-7"></a>      Sector <span class="op">==</span><span class="st"> &quot;residential&quot;</span> <span class="op">~</span><span class="st"> &quot;Residential Building&quot;</span>,</span>
+<span id="cb65-8"><a href="ghg-forecast.html#cb65-8"></a>      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Commercial Building&quot;</span></span>
+<span id="cb65-9"><a href="ghg-forecast.html#cb65-9"></a>    ),</span>
+<span id="cb65-10"><a href="ghg-forecast.html#cb65-10"></a>    <span class="dt">Sector =</span> <span class="kw">factor</span>(Sector, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Commercial Building&quot;</span>,<span class="st">&quot;Residential Building&quot;</span>,<span class="st">&quot;Non-commute Transportation&quot;</span>, <span class="st">&quot;Commute Transportation&quot;</span>))</span>
+<span id="cb65-11"><a href="ghg-forecast.html#cb65-11"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-12"><a href="ghg-forecast.html#cb65-12"></a><span class="st">  </span><span class="kw">ggplot</span>(</span>
+<span id="cb65-13"><a href="ghg-forecast.html#cb65-13"></a>    <span class="kw">aes</span>(</span>
+<span id="cb65-14"><a href="ghg-forecast.html#cb65-14"></a>      <span class="dt">x =</span> Year,</span>
+<span id="cb65-15"><a href="ghg-forecast.html#cb65-15"></a>      <span class="dt">y =</span> tCO2,</span>
+<span id="cb65-16"><a href="ghg-forecast.html#cb65-16"></a>      <span class="dt">fill =</span> Sector</span>
+<span id="cb65-17"><a href="ghg-forecast.html#cb65-17"></a>    )</span>
+<span id="cb65-18"><a href="ghg-forecast.html#cb65-18"></a>  ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb65-19"><a href="ghg-forecast.html#cb65-19"></a><span class="st">  </span><span class="kw">geom_area</span>()</span></code></pre></div>
+<div class="figure"><span id="fig:ghg-forecast-plot"></span>
+<img src="stockton_greeneconomy_files/figure-html/ghg-forecast-plot-1.png" alt="GHG forecast to 2040 for three subsets of GHG emissions." width="672" />
+<p class="caption">
+Figure 2.40: GHG forecast to 2040 for three subsets of GHG emissions.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The general insight is that transportation emissions are expected to increase while building emissions are expected to decrease, such that transportation emissions is even greater relative to buiding emissions than it is today.</p>
+<p>Many differences in inputs exist between this analysis and ICLEI’s 2016 GHG Inventory, including the following:</p>
+<ul>
+<li>ICLEI’s VMT data came from a source that was only available at the SJC level and was scaled down to Stockton by population, whereas our VMT data is based on the routed distance of LODES origin-destinations. The difference these methods results in is significant (2.5 billion vs. 1.5 billion annual VMTs) and should be investigated in further work. Our Transportation tCO2 number is only for passenger commuters, whereas ICLEI’s number includes many other modes.</li>
+<li>ICLEI’s electricity and gas data was obtained directly from PG&amp;E, while ours was downloaded at the zip code level from their public data portal. Since our zip codes include many parcels outside of the Stockton city boundary, it’s likely our consumption is for a larger population. As for commercial energy, ICLEI’s commercial data was combined with industrial data, while ours is separated, so that could explain why our commercial consumption numbers our lower.</li>
+</ul>
+<p>The assumptions built into these forecasts are necessarily simplistic given the scope of this analysis. In particular, linear trendlines should be refined into nonlinear functions given a better understanding of growth limits for each of the domains. It’s also worth noting that some trends based on the past few years, like the desirable decline in building emissions, may be heavily influenced by active strategic policymaking, the kind which this report is meant to guide for the future. That means that “business-as-usual” is not necessarily “doing nothing” but “successfully continuing to implement progressive policies” (e.g. PG&amp;E successfully meeting its aggressive decarbonization strategies).</p>
+</div>
+<!-- </div> -->
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="buildings.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="overview-of-green-economy-strategies.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false,
+"info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

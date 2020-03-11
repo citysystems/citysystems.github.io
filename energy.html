@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.8 Energy | Green Economy Analysis: Opportunities for Stockton</title>
+  <meta name="description" content="2.8 Energy | Green Economy Analysis: Opportunities for Stockton" />
+  <meta name="generator" content="bookdown 0.17.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.8 Energy | Green Economy Analysis: Opportunities for Stockton" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.8 Energy | Green Economy Analysis: Opportunities for Stockton" />
+  
+  
+  
+
+<meta name="author" content="City Systems" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="vehicle-emissions.html"/>
+<link rel="next" href="buildings.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.js');
+  rCodeBlocks.each(function() {
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="approach.html"><a href="approach.html"><i class="fa fa-check"></i><b>1.1</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="baseline-assessment.html"><a href="baseline-assessment.html"><i class="fa fa-check"></i><b>2</b> Baseline Assessment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html"><i class="fa fa-check"></i><b>2.1</b> Population and Jobs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html#county-level-analysis"><i class="fa fa-check"></i><b>2.1.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="population-and-jobs.html"><a href="population-and-jobs.html#city-level-analysis"><i class="fa fa-check"></i><b>2.1.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="green-jobs.html"><a href="green-jobs.html"><i class="fa fa-check"></i><b>2.2</b> Green Jobs</a></li>
+<li class="chapter" data-level="2.3" data-path="ghg-inventory.html"><a href="ghg-inventory.html"><i class="fa fa-check"></i><b>2.3</b> 2005-2016 GHG Inventory</a></li>
+<li class="chapter" data-level="2.4" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html"><i class="fa fa-check"></i><b>2.4</b> Origin-Destination Commute Analysis</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#county-level-analysis-1"><i class="fa fa-check"></i><b>2.4.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.4.2" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#city-level-analysis-1"><i class="fa fa-check"></i><b>2.4.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.5</b> Commute Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#county-level-analysis-2"><i class="fa fa-check"></i><b>2.5.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.5.2" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#city-level-analysis-2"><i class="fa fa-check"></i><b>2.5.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="non-commute-vehicle-miles-traveled.html"><a href="non-commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.6</b> Non-Commute Vehicle Miles Traveled</a></li>
+<li class="chapter" data-level="2.7" data-path="vehicle-emissions.html"><a href="vehicle-emissions.html"><i class="fa fa-check"></i><b>2.7</b> Vehicle Emissions</a></li>
+<li class="chapter" data-level="2.8" data-path="energy.html"><a href="energy.html"><i class="fa fa-check"></i><b>2.8</b> Energy</a></li>
+<li class="chapter" data-level="2.9" data-path="buildings.html"><a href="buildings.html"><i class="fa fa-check"></i><b>2.9</b> Buildings</a></li>
+<li class="chapter" data-level="2.10" data-path="ghg-forecast.html"><a href="ghg-forecast.html"><i class="fa fa-check"></i><b>2.10</b> GHG Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="overview-of-green-economy-strategies.html"><a href="overview-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>3</b> Overview of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="building-utilization.html"><a href="building-utilization.html"><i class="fa fa-check"></i><b>3.1</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="building-utilization.html"><a href="building-utilization.html#revise-zoning-codes-in-medium-to-large-cities-to-facilitate-upzoning"><i class="fa fa-check"></i><b>3.1.1</b> Revise zoning codes in medium to large cities to facilitate upzoning</a></li>
+<li class="chapter" data-level="3.1.2" data-path="building-utilization.html"><a href="building-utilization.html#eliminate-minimum-parking"><i class="fa fa-check"></i><b>3.1.2</b> Eliminate minimum parking</a></li>
+<li class="chapter" data-level="3.1.3" data-path="building-utilization.html"><a href="building-utilization.html#encourage-accessory-dwelling-units"><i class="fa fa-check"></i><b>3.1.3</b> Encourage accessory dwelling units</a></li>
+<li class="chapter" data-level="3.1.4" data-path="building-utilization.html"><a href="building-utilization.html#encourage-micro-units"><i class="fa fa-check"></i><b>3.1.4</b> Encourage micro-units</a></li>
+<li class="chapter" data-level="3.1.5" data-path="building-utilization.html"><a href="building-utilization.html#provide-a-density-bonus-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.5</b> Provide a density bonus for affordable housing</a></li>
+<li class="chapter" data-level="3.1.6" data-path="building-utilization.html"><a href="building-utilization.html#develop-a-shared-equity-program-for-high-density-housing"><i class="fa fa-check"></i><b>3.1.6</b> Develop a shared equity program for high-density housing</a></li>
+<li class="chapter" data-level="3.1.7" data-path="building-utilization.html"><a href="building-utilization.html#match-homeowners-with-vacant-spaces-with-individuals-looking-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.7</b> Match homeowners with vacant spaces with individuals looking for affordable housing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="building-energy.html"><a href="building-energy.html"><i class="fa fa-check"></i><b>3.2</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="building-energy.html"><a href="building-energy.html#promote-solar-development-in-opportunity-zones"><i class="fa fa-check"></i><b>3.2.1</b> Promote solar development in Opportunity Zones</a></li>
+<li class="chapter" data-level="3.2.2" data-path="building-energy.html"><a href="building-energy.html#promote-a-solar-renewable-energy-certificate-program"><i class="fa fa-check"></i><b>3.2.2</b> Promote a Solar Renewable Energy Certificate program</a></li>
+<li class="chapter" data-level="3.2.3" data-path="building-energy.html"><a href="building-energy.html#set-energy-savings-standards-on-all-public-buildings-and-provide-financial-and-technical-assistance-for-commercial-private-sector-energy-savings"><i class="fa fa-check"></i><b>3.2.3</b> Set energy savings standards on all public buildings and provide financial and technical assistance for commercial private sector energy savings</a></li>
+<li class="chapter" data-level="3.2.4" data-path="building-energy.html"><a href="building-energy.html#create-a-fund-to-implement-energy-savings-projects"><i class="fa fa-check"></i><b>3.2.4</b> Create a fund to implement energy savings projects</a></li>
+<li class="chapter" data-level="3.2.5" data-path="building-energy.html"><a href="building-energy.html#enable-property-assessed-clean-energy-pace-financing"><i class="fa fa-check"></i><b>3.2.5</b> Enable property-assessed clean energy (PACE) financing</a></li>
+<li class="chapter" data-level="3.2.6" data-path="building-energy.html"><a href="building-energy.html#provide-consumer-oriented-programs-to-incentivize-energy-efficiency-retrofits-and-appliance-improvements"><i class="fa fa-check"></i><b>3.2.6</b> Provide consumer-oriented programs to incentivize energy efficiency retrofits and appliance improvements</a></li>
+<li class="chapter" data-level="3.2.7" data-path="building-energy.html"><a href="building-energy.html#provide-incentives-for-households-to-install-on-site-batteries-particularly-for-vulnerable-customers"><i class="fa fa-check"></i><b>3.2.7</b> Provide incentives for households to install on-site batteries, particularly for vulnerable customers</a></li>
+<li class="chapter" data-level="3.2.8" data-path="building-energy.html"><a href="building-energy.html#implement-reach-codes-which-go-beyond-state-minimum-requirements-for-energy-use-in-building-design-and-construction"><i class="fa fa-check"></i><b>3.2.8</b> Implement “reach” codes which go beyond state minimum requirements for energy use in building design and construction</a></li>
+<li class="chapter" data-level="3.2.9" data-path="building-energy.html"><a href="building-energy.html#use-waste-to-produce-electricity"><i class="fa fa-check"></i><b>3.2.9</b> Use waste to produce electricity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="employment-growth.html"><a href="employment-growth.html"><i class="fa fa-check"></i><b>3.3</b> Employment Growth</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="employment-growth.html"><a href="employment-growth.html#provide-training-and-coaching-for-low-income-workers-rather-than-unemployed-workers"><i class="fa fa-check"></i><b>3.3.1</b> Provide training and coaching for low-income workers, rather than unemployed workers</a></li>
+<li class="chapter" data-level="3.3.2" data-path="employment-growth.html"><a href="employment-growth.html#provide-green-oriented-job-training-and-education-pathways"><i class="fa fa-check"></i><b>3.3.2</b> Provide green-oriented job training and education pathways</a></li>
+<li class="chapter" data-level="3.3.3" data-path="employment-growth.html"><a href="employment-growth.html#create-a-scholarship-fund-for-students-wishing-to-pursue-eco-conscious-careers"><i class="fa fa-check"></i><b>3.3.3</b> Create a scholarship fund for students wishing to pursue eco-conscious careers</a></li>
+<li class="chapter" data-level="3.3.4" data-path="employment-growth.html"><a href="employment-growth.html#offer-continued-training-and-support-post-employment"><i class="fa fa-check"></i><b>3.3.4</b> Offer continued training and support post-employment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="local-jobs.html"><a href="local-jobs.html#offer-job-creation-tax-credit"><i class="fa fa-check"></i><b>3.4.1</b> Offer job creation tax credit</a></li>
+<li class="chapter" data-level="3.4.2" data-path="local-jobs.html"><a href="local-jobs.html#encourage-mortgage-refinancing"><i class="fa fa-check"></i><b>3.4.2</b> Encourage mortgage refinancing</a></li>
+<li class="chapter" data-level="3.4.3" data-path="local-jobs.html"><a href="local-jobs.html#develop-public-employment-program"><i class="fa fa-check"></i><b>3.4.3</b> Develop public employment program</a></li>
+<li class="chapter" data-level="3.4.4" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-advanced-industries"><i class="fa fa-check"></i><b>3.4.4</b> Provide tax credits to investors in advanced industries</a></li>
+<li class="chapter" data-level="3.4.5" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-community-development-corporations"><i class="fa fa-check"></i><b>3.4.5</b> Provide tax credits to investors in community development corporations</a></li>
+<li class="chapter" data-level="3.4.6" data-path="local-jobs.html"><a href="local-jobs.html#pursue-public-private-partnerships-for-commercial-development"><i class="fa fa-check"></i><b>3.4.6</b> Pursue public-private partnerships for commercial development</a></li>
+<li class="chapter" data-level="3.4.7" data-path="local-jobs.html"><a href="local-jobs.html#fund-economic-development-using-tax-base-sharing"><i class="fa fa-check"></i><b>3.4.7</b> Fund economic development using tax-base sharing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="local-jobs.html"><a href="local-jobs.html#pay-remote-workers-to-move-to-new-location"><i class="fa fa-check"></i><b>3.4.8</b> Pay remote workers to move to new location</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>3.5</b> Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#create-local-transportation-demand-management-ordinances"><i class="fa fa-check"></i><b>3.5.1</b> Create local transportation demand management ordinances</a></li>
+<li class="chapter" data-level="3.5.2" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#redesign-bus-network-to-prioritize-ridership-over-coverage"><i class="fa fa-check"></i><b>3.5.2</b> Redesign bus network to prioritize ridership over coverage</a></li>
+<li class="chapter" data-level="3.5.3" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#use-brt-corridors-to-reduce-travel-times-on-public-transit"><i class="fa fa-check"></i><b>3.5.3</b> Use BRT corridors to reduce travel times on public transit</a></li>
+<li class="chapter" data-level="3.5.4" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#promote-the-use-of-e-scooters-and-dockless-bicycles-to-reduce-reliance-on-private-cars"><i class="fa fa-check"></i><b>3.5.4</b> Promote the use of e-scooters and dockless bicycles to reduce reliance on private cars</a></li>
+<li class="chapter" data-level="3.5.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#rezone-areas-around-transit-stations-and-commercial-corridors-to-allow-for-high-density-residential-development"><i class="fa fa-check"></i><b>3.5.5</b> Rezone areas around transit stations and commercial corridors to allow for high-density residential development</a></li>
+<li class="chapter" data-level="3.5.6" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#offset-negative-externalities-of-traffic-through-tolls"><i class="fa fa-check"></i><b>3.5.6</b> Offset negative externalities of traffic through tolls</a></li>
+<li class="chapter" data-level="3.5.7" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#charge-for-parking"><i class="fa fa-check"></i><b>3.5.7</b> Charge for parking</a></li>
+<li class="chapter" data-level="3.5.8" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#give-carpoolers-priority-parking-at-transit-stops"><i class="fa fa-check"></i><b>3.5.8</b> Give carpoolers priority parking at transit stops</a></li>
+<li class="chapter" data-level="3.5.9" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#ban-personal-vehicles-from-certain-areas"><i class="fa fa-check"></i><b>3.5.9</b> Ban personal vehicles from certain areas</a></li>
+<li class="chapter" data-level="3.5.10" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#encourage-carsharing-strategies"><i class="fa fa-check"></i><b>3.5.10</b> Encourage carsharing strategies</a></li>
+<li class="chapter" data-level="3.5.11" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#provide-free-public-transit"><i class="fa fa-check"></i><b>3.5.11</b> Provide free public transit</a></li>
+<li class="chapter" data-level="3.5.12" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#subsidize-first-milelast-mile-transportation-services"><i class="fa fa-check"></i><b>3.5.12</b> Subsidize first-mile/last-mile transportation services</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html"><i class="fa fa-check"></i><b>3.6</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-for-pollutant-remediation-and-reduction-initiatives"><i class="fa fa-check"></i><b>3.6.1</b> Provide grants for pollutant remediation and reduction initiatives</a></li>
+<li class="chapter" data-level="3.6.2" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations"><i class="fa fa-check"></i><b>3.6.2</b> Provide commercial rebates for commercial building owners to install EV charging stations</a></li>
+<li class="chapter" data-level="3.6.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.6.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
+<li class="chapter" data-level="3.6.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.6.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
+<li class="chapter" data-level="3.6.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.6.5</b> Reduce vehicle speed limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="resilience.html"><a href="resilience.html"><i class="fa fa-check"></i><b>3.7</b> Resilience</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="resilience.html"><a href="resilience.html#promote-cool-surfaces-to-reduce-heat-island-effect"><i class="fa fa-check"></i><b>3.7.1</b> Promote cool surfaces to reduce heat island effect</a></li>
+<li class="chapter" data-level="3.7.2" data-path="resilience.html"><a href="resilience.html#promote-permeable-pavement-to-increase-groundwater-absorption"><i class="fa fa-check"></i><b>3.7.2</b> Promote permeable pavement to increase groundwater absorption</a></li>
+<li class="chapter" data-level="3.7.3" data-path="resilience.html"><a href="resilience.html#reclaim-urban-streams-and-rivers-to-increase-groundwater-absorption-and-filtration"><i class="fa fa-check"></i><b>3.7.3</b> Reclaim urban streams and rivers to increase groundwater absorption and filtration</a></li>
+<li class="chapter" data-level="3.7.4" data-path="resilience.html"><a href="resilience.html#use-green-infrastructure-to-improve-stormwater-management"><i class="fa fa-check"></i><b>3.7.4</b> Use green infrastructure to improve stormwater management</a></li>
+<li class="chapter" data-level="3.7.5" data-path="resilience.html"><a href="resilience.html#promote-urban-gardens-as-a-substitute-for-displaced-ecosystem-services"><i class="fa fa-check"></i><b>3.7.5</b> Promote urban gardens as a substitute for displaced ecosystem services</a></li>
+<li class="chapter" data-level="3.7.6" data-path="resilience.html"><a href="resilience.html#offer-rebates-for-flood-mitigation-projects"><i class="fa fa-check"></i><b>3.7.6</b> Offer rebates for flood mitigation projects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="resource-management.html"><a href="resource-management.html"><i class="fa fa-check"></i><b>3.8</b> Resource Management</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="resource-management.html"><a href="resource-management.html#develop-carbon-capture-storage-facilities"><i class="fa fa-check"></i><b>3.8.1</b> Develop carbon capture &amp; storage facilities</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="analysis-of-green-economy-strategies.html"><a href="analysis-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>4</b> Analysis of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methodology.html"><a href="methodology.html"><i class="fa fa-check"></i><b>4.1</b> Methodology</a></li>
+<li class="chapter" data-level="4.2" data-path="building-utilization-1.html"><a href="building-utilization-1.html"><i class="fa fa-check"></i><b>4.2</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="building-utilization-1.html"><a href="building-utilization-1.html#strategy-accessory-dwelling-units"><i class="fa fa-check"></i><b>4.2.1</b> Strategy: Accessory Dwelling Units</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="building-energy-1.html"><a href="building-energy-1.html"><i class="fa fa-check"></i><b>4.3</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="building-energy-1.html"><a href="building-energy-1.html#strategy-electrification"><i class="fa fa-check"></i><b>4.3.1</b> Strategy: Electrification</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html"><i class="fa fa-check"></i><b>4.4</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html#strategy-electric-vehicle-program"><i class="fa fa-check"></i><b>4.4.1</b> Strategy: Electric Vehicle Program</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="appendix-a-index-of-case-studies-by-place.html"><a href="appendix-a-index-of-case-studies-by-place.html"><i class="fa fa-check"></i><b>6</b> Appendix A: Index of Case Studies by Place</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Green Economy Analysis: Opportunities for Stockton</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="energy" class="section level2" number="2.8">
+<h2><span class="header-section-number">2.8</span> Energy</h2>
+<p>After transportation, buildings are the next largest source of emissions based on the ICLEI GHG inventories. Our best source of energy data is from <a href="https://pge-energydatarequest.com/public_datasets">PG&amp;E’s Energy Data Request Program</a>, which provides total customers, total kWh of electricity, and total therms of gas usage per zipcode per month dating back to 2013. We used the following zip code tabulation areas (ZCTAs), close proxies of customer zip codes, to represent Stockton.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="energy.html#cb50-1"></a>zcta &lt;-<span class="st"> </span><span class="kw">zctas</span>(<span class="dt">starts_with=</span><span class="st">&quot;95&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-2"><a href="energy.html#cb50-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ZCTA5CE10 =</span> <span class="kw">as.numeric</span>(ZCTA5CE10))</span>
+<span id="cb50-3"><a href="energy.html#cb50-3"></a><span class="co"># zips_stockton &lt;- st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/ZipCodes/ZipCodes.shp&quot;) %&gt;% st_transform(st_crs(zcta)) #this was downloaded from Stockton GIS site to do a quick visual check of the difference between ZCTA and zip code. We determined they were pretty much the same.</span></span>
+<span id="cb50-4"><a href="energy.html#cb50-4"></a></span>
+<span id="cb50-5"><a href="energy.html#cb50-5"></a>stockton_boundary_influence &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/SpheresOfInfluence/SpheresOfInfluence.shp&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-6"><a href="energy.html#cb50-6"></a><span class="st">  </span><span class="kw">filter</span>(SPHERE <span class="op">==</span><span class="st"> &quot;STOCKTON&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-7"><a href="energy.html#cb50-7"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="kw">st_crs</span>(zcta)) <span class="co">#stockton boundary is legit but really spotty, so i prefer using sphere of influence from the County GIS page.</span></span>
+<span id="cb50-8"><a href="energy.html#cb50-8"></a></span>
+<span id="cb50-9"><a href="energy.html#cb50-9"></a><span class="co">#2 of the 3 shapes are tiny little triangles to get rid of.</span></span>
+<span id="cb50-10"><a href="energy.html#cb50-10"></a>stockton_boundary_influence &lt;-<span class="st"> </span>stockton_boundary_influence[<span class="dv">1</span>,] </span>
+<span id="cb50-11"><a href="energy.html#cb50-11"></a></span>
+<span id="cb50-12"><a href="energy.html#cb50-12"></a>zcta_stockton &lt;-<span class="st"> </span>zcta[stockton_boundary_influence,] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-13"><a href="energy.html#cb50-13"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>ZCTA5CE10 <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;95242&quot;</span>,<span class="st">&quot;95240&quot;</span>,<span class="st">&quot;95336&quot;</span>,<span class="st">&quot;95330&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-14"><a href="energy.html#cb50-14"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(ZCTA5CE10) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-15"><a href="energy.html#cb50-15"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">ZIPCODE =</span> ZCTA5CE10) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb50-16"><a href="energy.html#cb50-16"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ZIPCODE =</span> <span class="kw">as.numeric</span>(ZIPCODE))</span>
+<span id="cb50-17"><a href="energy.html#cb50-17"></a>  <span class="co">#these are some extraneous zip codes that just barely touch the sphere of influence that i manually decided to remove.</span></span>
+<span id="cb50-18"><a href="energy.html#cb50-18"></a><span class="co"># zcta_stockton &lt;- zcta[which(zcta$ZCTA5CE10 %in% st_centroid(zcta)[stockton_boundary_influence,]$ZCTA5CE10),] #this would be the go-to script to do a location by centroid within, but it&#39;s not as useful in this specific case.</span></span>
+<span id="cb50-19"><a href="energy.html#cb50-19"></a></span>
+<span id="cb50-20"><a href="energy.html#cb50-20"></a><span class="co"># map = mapview(zcta_stockton$geometry) + mapview(stockton_boundary$geometry, alpha.regions = 0, color = &quot;red&quot;, lwd = 4)</span></span>
+<span id="cb50-21"><a href="energy.html#cb50-21"></a><span class="co"># </span></span>
+<span id="cb50-22"><a href="energy.html#cb50-22"></a><span class="co"># mapshot(map, url = &quot;map-zcta.html&quot;)</span></span>
+<span id="cb50-23"><a href="energy.html#cb50-23"></a></span>
+<span id="cb50-24"><a href="energy.html#cb50-24"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-zcta.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:zcta"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-zcta.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.30: Zip code tabulation areas used to represent Stockton population estimates. The red outline is the official city boundary.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>PG&amp;E’s data had some minor formatting errors that were manually corrected:</p>
+<ul>
+<li>For 2014 Q3 Gas, fields “Total Therms” and “Average Therms” renamed to match the fields in all other datasets.</li>
+<li>For 2017 Q4 Electricity and 2017 Q4 Gas, duplicate September values were removed.</li>
+</ul>
+<p>Also, because of privacy regulations, the PG&amp;E data has many gaps in industrial and agricultural energy usage. Even though industrial energy usage may be a significant contributor to emissions, as the ICLEI report suggests, without more consistent data we decided to leave industrial energy analysis out of our report.</p>
+<p>After downloading and aggregating the PG&amp;E residential and commercial data by month and year, we converted electricity and gas energy usage to tCO2e. For gas, we converted therms to tCO2e based a factor from the <a href="https://www.eia.gov/environment/emissions/co2_vol_mass.php">U.S. Energy Information Administration</a> (assuming that PG&amp;E’s natural gas emits at this rate, and that it doesn’t change from year to year). For electricity, we converted kWh to tCO2e for the appropriate year using the table provided by PG&amp;E in their <a href="http://www.pgecorp.com/corp_responsibility/reports/2019/en02_climate_change.html">2019 Corporate Responsibility Report</a>, under the table titled “Benchmarking Greenhouse Gas Emissions for Delivered Electricity”. Because the latest emissions data is 210 lbs CO2 per MWh for 2017, and SB 100 signed into law September 2018 requires state energy agencies to adopt a 100 percent clean energy by 2045 planning goal, we assume the emissions factor will decrease by 7.5 lbs CO2 per MWh each year, resulting in a value of 202.5 for 2018.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="energy.html#cb51-1"></a><span class="co">#Note: Elec- Industrial mostly 0&#39;s, 95206 suddenly shows up with ~70 customers in 2014 Q3/Q4, 2015 Q1, 2016 M2/M3, 2018 M6/M9</span></span>
+<span id="cb51-2"><a href="energy.html#cb51-2"></a></span>
+<span id="cb51-3"><a href="energy.html#cb51-3"></a>pge_elec_emissions_factor &lt;-</span>
+<span id="cb51-4"><a href="energy.html#cb51-4"></a><span class="st">  </span><span class="kw">data.frame</span>(</span>
+<span id="cb51-5"><a href="energy.html#cb51-5"></a>    <span class="dt">year =</span> <span class="kw">c</span>(<span class="dv">2013</span><span class="op">:</span><span class="dv">2018</span>,<span class="dv">2020</span>,<span class="dv">2025</span>,<span class="dv">2030</span>,<span class="dv">2035</span>,<span class="dv">2040</span>),</span>
+<span id="cb51-6"><a href="energy.html#cb51-6"></a>    <span class="dt">factor =</span> <span class="kw">c</span>(<span class="dv">427</span>,<span class="fl">434.92</span>,<span class="fl">404.51</span>,<span class="fl">293.67</span>,<span class="dv">210</span>,<span class="fl">202.5</span>,<span class="fl">187.5</span>,<span class="dv">150</span>,<span class="fl">112.5</span>,<span class="dv">75</span>,<span class="fl">37.5</span>)</span>
+<span id="cb51-7"><a href="energy.html#cb51-7"></a>  )</span>
+<span id="cb51-8"><a href="energy.html#cb51-8"></a><span class="co"># </span></span>
+<span id="cb51-9"><a href="energy.html#cb51-9"></a><span class="co"># pge_data &lt;-</span></span>
+<span id="cb51-10"><a href="energy.html#cb51-10"></a><span class="co">#   2013:2018 %&gt;% # Supply a list of years, 2013 to 2018. Recall the syntax for a list of numbers from past assignments.</span></span>
+<span id="cb51-11"><a href="energy.html#cb51-11"></a><span class="co">#   map_dfr(function(year){ # This is another variation of map() that automatically binds rows together into a dataframe (what we used rbindlist() in the past for), assuming you’re working with dataframes. Otherwise it works exactly the same way as map().</span></span>
+<span id="cb51-12"><a href="energy.html#cb51-12"></a><span class="co"># </span></span>
+<span id="cb51-13"><a href="energy.html#cb51-13"></a><span class="co">#     factor &lt;- pge_elec_emissions_factor$factor[match(year,pge_elec_emissions_factor$year)] # You will want to use match() to get the correct emissions factor from the lookup table you made in the previous chunk. Refer back to the lines where we used match() on acs_vars in the past for the correct syntax.</span></span>
+<span id="cb51-14"><a href="energy.html#cb51-14"></a><span class="co"># </span></span>
+<span id="cb51-15"><a href="energy.html#cb51-15"></a><span class="co">#     1:4 %&gt;% # Look closely at the PG&amp;E datasets and you’ll see that the data is organized by quarter, and we’ll need to refer to the quarter in the filename when we load CSVs. Supply a list of quarters here.</span></span>
+<span id="cb51-16"><a href="energy.html#cb51-16"></a><span class="co">#       map_dfr(function(quarter){</span></span>
+<span id="cb51-17"><a href="energy.html#cb51-17"></a><span class="co"># </span></span>
+<span id="cb51-18"><a href="energy.html#cb51-18"></a><span class="co">#         c(&quot;Electric&quot;,&quot;Gas&quot;) %&gt;% # The datasets are either for Electricity or Gas. Look carefully at how these are written in the filenames, and supply a c() with both strings here.</span></span>
+<span id="cb51-19"><a href="energy.html#cb51-19"></a><span class="co">#           map_dfr(function(type){</span></span>
+<span id="cb51-20"><a href="energy.html#cb51-20"></a><span class="co"># </span></span>
+<span id="cb51-21"><a href="energy.html#cb51-21"></a><span class="co">#             filename &lt;-</span></span>
+<span id="cb51-22"><a href="energy.html#cb51-22"></a><span class="co">#               paste0(</span></span>
+<span id="cb51-23"><a href="energy.html#cb51-23"></a><span class="co">#                 &quot;F:/Data Library/PG&amp;E/PGE_&quot;,</span></span>
+<span id="cb51-24"><a href="energy.html#cb51-24"></a><span class="co">#                 year,</span></span>
+<span id="cb51-25"><a href="energy.html#cb51-25"></a><span class="co">#                 &quot;_Q&quot;,</span></span>
+<span id="cb51-26"><a href="energy.html#cb51-26"></a><span class="co">#                 quarter,</span></span>
+<span id="cb51-27"><a href="energy.html#cb51-27"></a><span class="co">#                 &quot;_&quot;,</span></span>
+<span id="cb51-28"><a href="energy.html#cb51-28"></a><span class="co">#                 type,</span></span>
+<span id="cb51-29"><a href="energy.html#cb51-29"></a><span class="co">#                 &quot;UsageByZip.csv&quot;</span></span>
+<span id="cb51-30"><a href="energy.html#cb51-30"></a><span class="co">#               )</span></span>
+<span id="cb51-31"><a href="energy.html#cb51-31"></a><span class="co"># </span></span>
+<span id="cb51-32"><a href="energy.html#cb51-32"></a><span class="co">#             data &lt;- # This will load the CSV and then manipulate</span></span>
+<span id="cb51-33"><a href="energy.html#cb51-33"></a><span class="co">#               read_csv(filename) %&gt;%</span></span>
+<span id="cb51-34"><a href="energy.html#cb51-34"></a><span class="co">#               rename_all(toupper) %&gt;% # This is part of cleaning the messy CSVs, since sometimes the field names were lowercase and sometimes they were uppercase. This makes them all uppercase so there is no issue referring to them below.</span></span>
+<span id="cb51-35"><a href="energy.html#cb51-35"></a><span class="co">#               filter(ZIPCODE %in% zcta_stockton$ZIPCODE) %&gt;%</span></span>
+<span id="cb51-36"><a href="energy.html#cb51-36"></a><span class="co">#               mutate(</span></span>
+<span id="cb51-37"><a href="energy.html#cb51-37"></a><span class="co">#                 CUSTOMERCLASS =</span></span>
+<span id="cb51-38"><a href="energy.html#cb51-38"></a><span class="co">#                   case_when(</span></span>
+<span id="cb51-39"><a href="energy.html#cb51-39"></a><span class="co">#                     CUSTOMERCLASS == &quot;Elec- Residential&quot; ~ &quot;ER&quot;,</span></span>
+<span id="cb51-40"><a href="energy.html#cb51-40"></a><span class="co">#                     CUSTOMERCLASS == &quot;Gas- Residential&quot; ~ &quot;GR&quot;,</span></span>
+<span id="cb51-41"><a href="energy.html#cb51-41"></a><span class="co">#                     CUSTOMERCLASS == &quot;Elec- Commercial&quot; ~ &quot;EC&quot;,</span></span>
+<span id="cb51-42"><a href="energy.html#cb51-42"></a><span class="co">#                     CUSTOMERCLASS == &quot;Elec- Industrial&quot; ~ &quot;EI&quot;,</span></span>
+<span id="cb51-43"><a href="energy.html#cb51-43"></a><span class="co">#                     CUSTOMERCLASS == &quot;Elec- Agricultural&quot; ~ &quot;EA&quot;,</span></span>
+<span id="cb51-44"><a href="energy.html#cb51-44"></a><span class="co">#                     TRUE ~ &quot;GC&quot;</span></span>
+<span id="cb51-45"><a href="energy.html#cb51-45"></a><span class="co">#                   ),</span></span>
+<span id="cb51-46"><a href="energy.html#cb51-46"></a><span class="co">#                 TOTALKBTU =</span></span>
+<span id="cb51-47"><a href="energy.html#cb51-47"></a><span class="co">#                   ifelse(</span></span>
+<span id="cb51-48"><a href="energy.html#cb51-48"></a><span class="co">#                     substr(CUSTOMERCLASS,1,1) == &quot;E&quot;,</span></span>
+<span id="cb51-49"><a href="energy.html#cb51-49"></a><span class="co">#                     TOTALKWH*3.4121416331,</span></span>
+<span id="cb51-50"><a href="energy.html#cb51-50"></a><span class="co">#                     TOTALTHM*99.9761</span></span>
+<span id="cb51-51"><a href="energy.html#cb51-51"></a><span class="co">#                   ),</span></span>
+<span id="cb51-52"><a href="energy.html#cb51-52"></a><span class="co">#                 TOTALTCO2E =</span></span>
+<span id="cb51-53"><a href="energy.html#cb51-53"></a><span class="co">#                   ifelse(</span></span>
+<span id="cb51-54"><a href="energy.html#cb51-54"></a><span class="co">#                     substr(CUSTOMERCLASS,1,1) == &quot;E&quot;,</span></span>
+<span id="cb51-55"><a href="energy.html#cb51-55"></a><span class="co">#                     TOTALKWH*factor/1000*0.000453592,</span></span>
+<span id="cb51-56"><a href="energy.html#cb51-56"></a><span class="co">#                     TOTALTHM*0.00531</span></span>
+<span id="cb51-57"><a href="energy.html#cb51-57"></a><span class="co">#                   )</span></span>
+<span id="cb51-58"><a href="energy.html#cb51-58"></a><span class="co">#               ) %&gt;%</span></span>
+<span id="cb51-59"><a href="energy.html#cb51-59"></a><span class="co">#               dplyr::select(</span></span>
+<span id="cb51-60"><a href="energy.html#cb51-60"></a><span class="co">#                 ZIPCODE,</span></span>
+<span id="cb51-61"><a href="energy.html#cb51-61"></a><span class="co">#                 YEAR,</span></span>
+<span id="cb51-62"><a href="energy.html#cb51-62"></a><span class="co">#                 MONTH,</span></span>
+<span id="cb51-63"><a href="energy.html#cb51-63"></a><span class="co">#                 CUSTOMERCLASS,</span></span>
+<span id="cb51-64"><a href="energy.html#cb51-64"></a><span class="co">#                 TOTALKBTU,</span></span>
+<span id="cb51-65"><a href="energy.html#cb51-65"></a><span class="co">#                 TOTALTCO2E,</span></span>
+<span id="cb51-66"><a href="energy.html#cb51-66"></a><span class="co">#                 TOTALCUSTOMERS</span></span>
+<span id="cb51-67"><a href="energy.html#cb51-67"></a><span class="co">#               )</span></span>
+<span id="cb51-68"><a href="energy.html#cb51-68"></a><span class="co"># </span></span>
+<span id="cb51-69"><a href="energy.html#cb51-69"></a><span class="co">#           })</span></span>
+<span id="cb51-70"><a href="energy.html#cb51-70"></a><span class="co"># </span></span>
+<span id="cb51-71"><a href="energy.html#cb51-71"></a><span class="co">#       })</span></span>
+<span id="cb51-72"><a href="energy.html#cb51-72"></a><span class="co"># </span></span>
+<span id="cb51-73"><a href="energy.html#cb51-73"></a><span class="co">#   }) %&gt;%</span></span>
+<span id="cb51-74"><a href="energy.html#cb51-74"></a><span class="co">#   mutate(</span></span>
+<span id="cb51-75"><a href="energy.html#cb51-75"></a><span class="co">#     KBTUPERCUST = TOTALKBTU/TOTALCUSTOMERS,</span></span>
+<span id="cb51-76"><a href="energy.html#cb51-76"></a><span class="co">#     TCO2EPERCUST = TOTALTCO2E/TOTALCUSTOMERS</span></span>
+<span id="cb51-77"><a href="energy.html#cb51-77"></a><span class="co">#   )</span></span>
+<span id="cb51-78"><a href="energy.html#cb51-78"></a><span class="co"># </span></span>
+<span id="cb51-79"><a href="energy.html#cb51-79"></a><span class="co"># save(pge_data, file= &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/stockton_pge.Rdata&quot;)</span></span>
+<span id="cb51-80"><a href="energy.html#cb51-80"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/stockton_pge.Rdata&quot;</span>)</span>
+<span id="cb51-81"><a href="energy.html#cb51-81"></a></span>
+<span id="cb51-82"><a href="energy.html#cb51-82"></a>summary_TCO2E_average &lt;-<span class="st"> </span></span>
+<span id="cb51-83"><a href="energy.html#cb51-83"></a><span class="st">  </span>pge_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-84"><a href="energy.html#cb51-84"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>CUSTOMERCLASS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EI&quot;</span>,<span class="st">&quot;EA&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb51-85"><a href="energy.html#cb51-85"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb51-86"><a href="energy.html#cb51-86"></a>    <span class="dt">ENERGYTYPE =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb51-87"><a href="energy.html#cb51-87"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-88"><a href="energy.html#cb51-88"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ENERGYTYPE, YEAR) <span class="op">%&gt;%</span></span>
+<span id="cb51-89"><a href="energy.html#cb51-89"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
+<span id="cb51-90"><a href="energy.html#cb51-90"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb51-91"><a href="energy.html#cb51-91"></a>    <span class="dt">TOTALTCO2E =</span> <span class="kw">sum</span>(TOTALTCO2E, <span class="dt">na.rm=</span>T), </span>
+<span id="cb51-92"><a href="energy.html#cb51-92"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb51-93"><a href="energy.html#cb51-93"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-94"><a href="energy.html#cb51-94"></a><span class="st">  </span><span class="kw">group_by</span>(ENERGYTYPE, YEAR) <span class="op">%&gt;%</span></span>
+<span id="cb51-95"><a href="energy.html#cb51-95"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb51-96"><a href="energy.html#cb51-96"></a>    <span class="kw">vars</span>(TOTALKBTU,TOTALTCO2E,TOTALCUSTOMERS),</span>
+<span id="cb51-97"><a href="energy.html#cb51-97"></a>    sum,</span>
+<span id="cb51-98"><a href="energy.html#cb51-98"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb51-99"><a href="energy.html#cb51-99"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-100"><a href="energy.html#cb51-100"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb51-101"><a href="energy.html#cb51-101"></a></span>
+<span id="cb51-102"><a href="energy.html#cb51-102"></a>summary_TCO2E_average_table &lt;-</span>
+<span id="cb51-103"><a href="energy.html#cb51-103"></a><span class="st">  </span>summary_TCO2E_average <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-104"><a href="energy.html#cb51-104"></a><span class="st">  </span><span class="kw">arrange</span>(YEAR) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-105"><a href="energy.html#cb51-105"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb51-106"><a href="energy.html#cb51-106"></a>    <span class="dt">Year =</span> YEAR,</span>
+<span id="cb51-107"><a href="energy.html#cb51-107"></a>    <span class="st">`</span><span class="dt">Energy Type</span><span class="st">`</span> =<span class="st"> </span></span>
+<span id="cb51-108"><a href="energy.html#cb51-108"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb51-109"><a href="energy.html#cb51-109"></a>        ENERGYTYPE <span class="op">==</span><span class="st"> &quot;E&quot;</span>,</span>
+<span id="cb51-110"><a href="energy.html#cb51-110"></a>        <span class="st">&quot;Electricity&quot;</span>,</span>
+<span id="cb51-111"><a href="energy.html#cb51-111"></a>        <span class="st">&quot;Gas&quot;</span></span>
+<span id="cb51-112"><a href="energy.html#cb51-112"></a>      ),</span>
+<span id="cb51-113"><a href="energy.html#cb51-113"></a>    <span class="st">`</span><span class="dt">Total Annual Customers</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(TOTALCUSTOMERS,<span class="op">-</span><span class="dv">3</span>), <span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb51-114"><a href="energy.html#cb51-114"></a>    <span class="st">`</span><span class="dt">Total GBTU</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(TOTALKBTU<span class="op">/</span><span class="dv">1000000</span>,<span class="op">-</span><span class="dv">2</span>), <span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb51-115"><a href="energy.html#cb51-115"></a>    <span class="st">`</span><span class="dt">Total tCO2e</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(TOTALTCO2E,<span class="op">-</span><span class="dv">3</span>), <span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb51-116"><a href="energy.html#cb51-116"></a>  )</span>
+<span id="cb51-117"><a href="energy.html#cb51-117"></a></span>
+<span id="cb51-118"><a href="energy.html#cb51-118"></a><span class="kw">kable</span>(</span>
+<span id="cb51-119"><a href="energy.html#cb51-119"></a>  summary_TCO2E_average_table,</span>
+<span id="cb51-120"><a href="energy.html#cb51-120"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb51-121"><a href="energy.html#cb51-121"></a>  <span class="dt">caption =</span> <span class="st">&#39;Stockton annual residential and commercial energy usage, 2013 to 2018. Data from PG&amp;E.&#39;</span></span>
+<span id="cb51-122"><a href="energy.html#cb51-122"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-123"><a href="energy.html#cb51-123"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb51-124"><a href="energy.html#cb51-124"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:summary-TCO2E-average-table">Table 2.20: </span>Stockton annual residential and commercial energy usage, 2013 to 2018. Data from PG&amp;E.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:left;">
+Energy Type
+</th>
+<th style="text-align:left;">
+Total Annual Customers
+</th>
+<th style="text-align:left;">
+Total GBTU
+</th>
+<th style="text-align:left;">
+Total tCO2e
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:left;">
+Electricity
+</td>
+<td style="text-align:left;">
+59,000
+</td>
+<td style="text-align:left;">
+5,300
+</td>
+<td style="text-align:left;">
+300,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:left;">
+Gas
+</td>
+<td style="text-align:left;">
+55,000
+</td>
+<td style="text-align:left;">
+6,100
+</td>
+<td style="text-align:left;">
+323,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:left;">
+Electricity
+</td>
+<td style="text-align:left;">
+60,000
+</td>
+<td style="text-align:left;">
+5,600
+</td>
+<td style="text-align:left;">
+322,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:left;">
+Gas
+</td>
+<td style="text-align:left;">
+56,000
+</td>
+<td style="text-align:left;">
+5,100
+</td>
+<td style="text-align:left;">
+271,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+Electricity
+</td>
+<td style="text-align:left;">
+61,000
+</td>
+<td style="text-align:left;">
+5,500
+</td>
+<td style="text-align:left;">
+297,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+Gas
+</td>
+<td style="text-align:left;">
+56,000
+</td>
+<td style="text-align:left;">
+5,400
+</td>
+<td style="text-align:left;">
+286,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+Electricity
+</td>
+<td style="text-align:left;">
+61,000
+</td>
+<td style="text-align:left;">
+5,500
+</td>
+<td style="text-align:left;">
+215,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+Gas
+</td>
+<td style="text-align:left;">
+57,000
+</td>
+<td style="text-align:left;">
+5,100
+</td>
+<td style="text-align:left;">
+273,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Electricity
+</td>
+<td style="text-align:left;">
+61,000
+</td>
+<td style="text-align:left;">
+5,600
+</td>
+<td style="text-align:left;">
+155,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Gas
+</td>
+<td style="text-align:left;">
+57,000
+</td>
+<td style="text-align:left;">
+5,500
+</td>
+<td style="text-align:left;">
+292,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+Electricity
+</td>
+<td style="text-align:left;">
+62,000
+</td>
+<td style="text-align:left;">
+5,300
+</td>
+<td style="text-align:left;">
+143,000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+Gas
+</td>
+<td style="text-align:left;">
+57,000
+</td>
+<td style="text-align:left;">
+5,600
+</td>
+<td style="text-align:left;">
+297,000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The graphs below illustrate that total energy usage (in kBTU) for electricity and gas has stayed roughly level across the last six years, but given that electricity has become cleaner through renewable power sources, the overall carbon footprint of electricity has decreased dramatically in comparison to gas.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="energy.html#cb52-1"></a><span class="kw">ggplot</span>(</span>
+<span id="cb52-2"><a href="energy.html#cb52-2"></a>  summary_TCO2E_average, </span>
+<span id="cb52-3"><a href="energy.html#cb52-3"></a>  <span class="kw">aes</span>(</span>
+<span id="cb52-4"><a href="energy.html#cb52-4"></a>    <span class="dt">x =</span> <span class="kw">as.factor</span>(YEAR), </span>
+<span id="cb52-5"><a href="energy.html#cb52-5"></a>    <span class="dt">y =</span> TOTALKBTU<span class="op">/</span><span class="dv">1000000</span></span>
+<span id="cb52-6"><a href="energy.html#cb52-6"></a>  )</span>
+<span id="cb52-7"><a href="energy.html#cb52-7"></a>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb52-8"><a href="energy.html#cb52-8"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> ENERGYTYPE), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb52-9"><a href="energy.html#cb52-9"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;GBTU&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Stockton Annual Energy Usage, 2013 to 2018&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb52-10"><a href="energy.html#cb52-10"></a><span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">name=</span><span class="st">&quot;Energy Type&quot;</span>,<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Electricity&quot;</span>,<span class="st">&quot;Gas&quot;</span>))</span></code></pre></div>
+<div class="figure"><span id="fig:summary-kBTU-average"></span>
+<img src="stockton_greeneconomy_files/figure-html/summary-kBTU-average-1.png" alt="Stockton annual residential and commercial energy usage, 2013 to 2018, in kBTU. Data from PG&amp;E." width="672" />
+<p class="caption">
+Figure 2.31: Stockton annual residential and commercial energy usage, 2013 to 2018, in kBTU. Data from PG&amp;E.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="energy.html#cb53-1"></a><span class="kw">ggplot</span>(</span>
+<span id="cb53-2"><a href="energy.html#cb53-2"></a>  summary_TCO2E_average, </span>
+<span id="cb53-3"><a href="energy.html#cb53-3"></a>  <span class="kw">aes</span>(</span>
+<span id="cb53-4"><a href="energy.html#cb53-4"></a>    <span class="dt">x =</span> <span class="kw">as.factor</span>(YEAR), </span>
+<span id="cb53-5"><a href="energy.html#cb53-5"></a>    <span class="dt">y =</span> TOTALTCO2E</span>
+<span id="cb53-6"><a href="energy.html#cb53-6"></a>  )</span>
+<span id="cb53-7"><a href="energy.html#cb53-7"></a>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb53-8"><a href="energy.html#cb53-8"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> ENERGYTYPE), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb53-9"><a href="energy.html#cb53-9"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;tCO2e&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Stockton Annual Energy Usage, 2013 to 2018&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb53-10"><a href="energy.html#cb53-10"></a><span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">name=</span><span class="st">&quot;Energy Type&quot;</span>,<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Electricity&quot;</span>,<span class="st">&quot;Gas&quot;</span>))</span></code></pre></div>
+<div class="figure"><span id="fig:summary-TCO2E-average"></span>
+<img src="stockton_greeneconomy_files/figure-html/summary-TCO2E-average-1.png" alt="Stockton annual residential and commercial energy usage, 2013 to 2018, in tCO2e. Data from PG&amp;E." width="672" />
+<p class="caption">
+Figure 2.32: Stockton annual residential and commercial energy usage, 2013 to 2018, in tCO2e. Data from PG&amp;E.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The following graph plots monthly tCO2e for electricity vs. gas. The peaks in gas usage occur in January, corresponding to heating load, and the peaks in electricity usage occur in July, corresponding to cooling load, and overall decreasing as previously noted. As we’ll explore in a later section, electrification of air and water heating in buildings may be a particularly effective strategy to shift the peak gas consumption to less carbon-intensive electricity loads.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="energy.html#cb54-1"></a>summary_TCO2E_monthly &lt;-<span class="st"> </span></span>
+<span id="cb54-2"><a href="energy.html#cb54-2"></a><span class="st">  </span>pge_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb54-3"><a href="energy.html#cb54-3"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>CUSTOMERCLASS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EI&quot;</span>,<span class="st">&quot;EA&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb54-4"><a href="energy.html#cb54-4"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb54-5"><a href="energy.html#cb54-5"></a>    <span class="dt">ENERGYTYPE =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb54-6"><a href="energy.html#cb54-6"></a>    <span class="dt">MONTH =</span> <span class="kw">paste0</span>(<span class="kw">as.character</span>(YEAR),<span class="kw">substr</span>(<span class="kw">as.character</span>(<span class="kw">round</span>(MONTH<span class="op">/</span><span class="dv">100</span>,<span class="dv">2</span>)),<span class="dv">2</span>,<span class="dv">4</span>))</span>
+<span id="cb54-7"><a href="energy.html#cb54-7"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb54-8"><a href="energy.html#cb54-8"></a><span class="st">  </span><span class="kw">group_by</span>(MONTH, ENERGYTYPE) <span class="op">%&gt;%</span></span>
+<span id="cb54-9"><a href="energy.html#cb54-9"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb54-10"><a href="energy.html#cb54-10"></a>    <span class="kw">vars</span>(TOTALKBTU,TOTALTCO2E,TOTALCUSTOMERS),</span>
+<span id="cb54-11"><a href="energy.html#cb54-11"></a>    sum,</span>
+<span id="cb54-12"><a href="energy.html#cb54-12"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb54-13"><a href="energy.html#cb54-13"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb54-14"><a href="energy.html#cb54-14"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb54-15"><a href="energy.html#cb54-15"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb54-16"><a href="energy.html#cb54-16"></a>    <span class="dt">MONTH =</span></span>
+<span id="cb54-17"><a href="energy.html#cb54-17"></a>      <span class="kw">as.Date</span>(</span>
+<span id="cb54-18"><a href="energy.html#cb54-18"></a>        <span class="kw">paste0</span>(</span>
+<span id="cb54-19"><a href="energy.html#cb54-19"></a>          <span class="kw">gsub</span>(</span>
+<span id="cb54-20"><a href="energy.html#cb54-20"></a>            <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.&quot;</span>,</span>
+<span id="cb54-21"><a href="energy.html#cb54-21"></a>            <span class="st">&quot;</span><span class="ch">\\</span><span class="st">/&quot;</span>,</span>
+<span id="cb54-22"><a href="energy.html#cb54-22"></a>            <span class="kw">ifelse</span>(</span>
+<span id="cb54-23"><a href="energy.html#cb54-23"></a>              <span class="kw">nchar</span>(MONTH) <span class="op">==</span><span class="st"> </span><span class="dv">6</span>,</span>
+<span id="cb54-24"><a href="energy.html#cb54-24"></a>              <span class="kw">paste0</span>(MONTH,<span class="st">&quot;0&quot;</span>),</span>
+<span id="cb54-25"><a href="energy.html#cb54-25"></a>              MONTH</span>
+<span id="cb54-26"><a href="energy.html#cb54-26"></a>            )</span>
+<span id="cb54-27"><a href="energy.html#cb54-27"></a>          ),</span>
+<span id="cb54-28"><a href="energy.html#cb54-28"></a>          <span class="st">&quot;/01&quot;</span></span>
+<span id="cb54-29"><a href="energy.html#cb54-29"></a>        )</span>
+<span id="cb54-30"><a href="energy.html#cb54-30"></a>      )</span>
+<span id="cb54-31"><a href="energy.html#cb54-31"></a>  )</span>
+<span id="cb54-32"><a href="energy.html#cb54-32"></a></span>
+<span id="cb54-33"><a href="energy.html#cb54-33"></a><span class="kw">ggplot</span>(</span>
+<span id="cb54-34"><a href="energy.html#cb54-34"></a>  summary_TCO2E_monthly, </span>
+<span id="cb54-35"><a href="energy.html#cb54-35"></a>  <span class="kw">aes</span>(</span>
+<span id="cb54-36"><a href="energy.html#cb54-36"></a>    <span class="dt">x =</span> MONTH, </span>
+<span id="cb54-37"><a href="energy.html#cb54-37"></a>  )</span>
+<span id="cb54-38"><a href="energy.html#cb54-38"></a>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb54-39"><a href="energy.html#cb54-39"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb54-40"><a href="energy.html#cb54-40"></a>    <span class="kw">aes</span>(</span>
+<span id="cb54-41"><a href="energy.html#cb54-41"></a>      <span class="dt">y =</span> TOTALTCO2E,</span>
+<span id="cb54-42"><a href="energy.html#cb54-42"></a>      <span class="dt">color =</span> ENERGYTYPE</span>
+<span id="cb54-43"><a href="energy.html#cb54-43"></a>    )</span>
+<span id="cb54-44"><a href="energy.html#cb54-44"></a>  ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb54-45"><a href="energy.html#cb54-45"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;tCO2e&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Stockton Monthly Energy Usage, 2013 to 2018&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb54-46"><a href="energy.html#cb54-46"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(</span>
+<span id="cb54-47"><a href="energy.html#cb54-47"></a>    <span class="dt">name=</span> <span class="st">&quot;Energy Type&quot;</span>,</span>
+<span id="cb54-48"><a href="energy.html#cb54-48"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;red&quot;</span>),</span>
+<span id="cb54-49"><a href="energy.html#cb54-49"></a>    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Electricity&quot;</span>,<span class="st">&quot;Gas&quot;</span>)</span>
+<span id="cb54-50"><a href="energy.html#cb54-50"></a>  ) <span class="op">+</span></span>
+<span id="cb54-51"><a href="energy.html#cb54-51"></a><span class="st">  </span><span class="kw">scale_x_date</span>(</span>
+<span id="cb54-52"><a href="energy.html#cb54-52"></a>    <span class="dt">name =</span> <span class="st">&#39;Year&#39;</span>, </span>
+<span id="cb54-53"><a href="energy.html#cb54-53"></a>    <span class="dt">date_breaks =</span> <span class="st">&#39;1 year&#39;</span>,</span>
+<span id="cb54-54"><a href="energy.html#cb54-54"></a>    <span class="dt">date_labels =</span> <span class="st">&#39;%Y&#39;</span></span>
+<span id="cb54-55"><a href="energy.html#cb54-55"></a>  )</span></code></pre></div>
+<div class="figure"><span id="fig:summary-TCO2E-monthly"></span>
+<img src="stockton_greeneconomy_files/figure-html/summary-TCO2E-monthly-1.png" alt="Stockton monthly residential and commercial energy usage, 2013 to 2018, in tCO2e. Data from PG&amp;E." width="672" />
+<p class="caption">
+Figure 2.33: Stockton monthly residential and commercial energy usage, 2013 to 2018, in tCO2e. Data from PG&amp;E.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Note that heating and cooling loads, which appear to contribute to significant seasonal variation within years, is also heavily dependent on the specific weather in any given year, typically measured in heating degree days (HDDs) and cooling degree days (CDDs). A more accurate comparison of annual energy consumption would control for change in HDDs and CDDs year-to-year; a more accurate forecasting of energy consumption into the future would also factor in climate model predictions of future HDDs and CDDs.</p>
+<p>We used the <a href="https://cal-adapt.org/tools/degree-days">Cal-Adapt Degree Day tool</a> to collect HDDs and CDDs for Stockton from 2010 to 2018, and on to 2040, using the average simulation (CanESM2) under the Representative Concentration Pathway (RCP) 4.5 scenario (in which global GHG emissions peak around 2040, then decline). The graph below shows the data from Cal-Adapt, as well as linear trendlines, with a clear overall upwards trend for CDDs (meaning that temperatures are rising and more cooling power is needed), and a clear overall downwards trend for HDDs.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="energy.html#cb55-1"></a>hdd &lt;-<span class="st"> </span></span>
+<span id="cb55-2"><a href="energy.html#cb55-2"></a><span class="st">  </span><span class="kw">read_csv</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/hdd.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-3"><a href="energy.html#cb55-3"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb55-4"><a href="energy.html#cb55-4"></a>    <span class="dt">YEAR =</span> year,</span>
+<span id="cb55-5"><a href="energy.html#cb55-5"></a>    <span class="dt">hdd =</span> degree_days</span>
+<span id="cb55-6"><a href="energy.html#cb55-6"></a>  )</span>
+<span id="cb55-7"><a href="energy.html#cb55-7"></a>cdd &lt;-<span class="st"> </span></span>
+<span id="cb55-8"><a href="energy.html#cb55-8"></a><span class="st">  </span><span class="kw">read_csv</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/cdd.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-9"><a href="energy.html#cb55-9"></a><span class="st">  </span><span class="kw">filter</span>(model <span class="op">==</span><span class="st"> &quot;CanESM2&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-10"><a href="energy.html#cb55-10"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb55-11"><a href="energy.html#cb55-11"></a>    <span class="dt">YEAR =</span> year,</span>
+<span id="cb55-12"><a href="energy.html#cb55-12"></a>    <span class="dt">cdd =</span> degree_days</span>
+<span id="cb55-13"><a href="energy.html#cb55-13"></a>  )</span>
+<span id="cb55-14"><a href="energy.html#cb55-14"></a></span>
+<span id="cb55-15"><a href="energy.html#cb55-15"></a>hdd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-16"><a href="energy.html#cb55-16"></a><span class="st">  </span><span class="kw">filter</span>(YEAR <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2010</span> <span class="op">&amp;</span><span class="st"> </span>YEAR <span class="op">&lt;=</span><span class="dv">2040</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-17"><a href="energy.html#cb55-17"></a><span class="st">  </span><span class="kw">left_join</span>(cdd, <span class="dt">by =</span> <span class="st">&quot;YEAR&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-18"><a href="energy.html#cb55-18"></a><span class="st">  </span><span class="kw">ggplot</span>(</span>
+<span id="cb55-19"><a href="energy.html#cb55-19"></a>    <span class="kw">aes</span>(</span>
+<span id="cb55-20"><a href="energy.html#cb55-20"></a>      <span class="dt">x =</span> YEAR</span>
+<span id="cb55-21"><a href="energy.html#cb55-21"></a>    )</span>
+<span id="cb55-22"><a href="energy.html#cb55-22"></a>  ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb55-23"><a href="energy.html#cb55-23"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb55-24"><a href="energy.html#cb55-24"></a>    <span class="kw">aes</span>(</span>
+<span id="cb55-25"><a href="energy.html#cb55-25"></a>      <span class="dt">y =</span> hdd,</span>
+<span id="cb55-26"><a href="energy.html#cb55-26"></a>      <span class="dt">colour =</span> <span class="st">&quot;Heating&quot;</span>,</span>
+<span id="cb55-27"><a href="energy.html#cb55-27"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Cal-Adapt&quot;</span></span>
+<span id="cb55-28"><a href="energy.html#cb55-28"></a>    )</span>
+<span id="cb55-29"><a href="energy.html#cb55-29"></a>  ) <span class="op">+</span></span>
+<span id="cb55-30"><a href="energy.html#cb55-30"></a><span class="st">  </span><span class="kw">geom_smooth</span>(</span>
+<span id="cb55-31"><a href="energy.html#cb55-31"></a>    <span class="kw">aes</span>(</span>
+<span id="cb55-32"><a href="energy.html#cb55-32"></a>      <span class="dt">y =</span> hdd,</span>
+<span id="cb55-33"><a href="energy.html#cb55-33"></a>      <span class="dt">colour =</span> <span class="st">&quot;Heating&quot;</span>,</span>
+<span id="cb55-34"><a href="energy.html#cb55-34"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Trendline&quot;</span></span>
+<span id="cb55-35"><a href="energy.html#cb55-35"></a>    ),</span>
+<span id="cb55-36"><a href="energy.html#cb55-36"></a>    <span class="dt">method =</span> lm,</span>
+<span id="cb55-37"><a href="energy.html#cb55-37"></a>    <span class="dt">se =</span> <span class="ot">FALSE</span></span>
+<span id="cb55-38"><a href="energy.html#cb55-38"></a>  ) <span class="op">+</span></span>
+<span id="cb55-39"><a href="energy.html#cb55-39"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb55-40"><a href="energy.html#cb55-40"></a>    <span class="kw">aes</span>(</span>
+<span id="cb55-41"><a href="energy.html#cb55-41"></a>      <span class="dt">y =</span> cdd,</span>
+<span id="cb55-42"><a href="energy.html#cb55-42"></a>      <span class="dt">colour =</span> <span class="st">&quot;Cooling&quot;</span>,</span>
+<span id="cb55-43"><a href="energy.html#cb55-43"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Cal-Adapt&quot;</span></span>
+<span id="cb55-44"><a href="energy.html#cb55-44"></a>    )</span>
+<span id="cb55-45"><a href="energy.html#cb55-45"></a>  ) <span class="op">+</span></span>
+<span id="cb55-46"><a href="energy.html#cb55-46"></a><span class="st">  </span><span class="kw">geom_smooth</span>(</span>
+<span id="cb55-47"><a href="energy.html#cb55-47"></a>    <span class="kw">aes</span>(</span>
+<span id="cb55-48"><a href="energy.html#cb55-48"></a>      <span class="dt">y =</span> cdd,</span>
+<span id="cb55-49"><a href="energy.html#cb55-49"></a>      <span class="dt">colour =</span> <span class="st">&quot;Cooling&quot;</span>,</span>
+<span id="cb55-50"><a href="energy.html#cb55-50"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Trendline&quot;</span></span>
+<span id="cb55-51"><a href="energy.html#cb55-51"></a>    ),</span>
+<span id="cb55-52"><a href="energy.html#cb55-52"></a>    <span class="dt">method =</span> lm,</span>
+<span id="cb55-53"><a href="energy.html#cb55-53"></a>    <span class="dt">se =</span> <span class="ot">FALSE</span></span>
+<span id="cb55-54"><a href="energy.html#cb55-54"></a>  ) <span class="op">+</span></span>
+<span id="cb55-55"><a href="energy.html#cb55-55"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept =</span> <span class="dv">2018</span>), <span class="dt">color =</span> <span class="st">&quot;dark grey&quot;</span>) <span class="op">+</span></span>
+<span id="cb55-56"><a href="energy.html#cb55-56"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>,<span class="dt">label=</span> <span class="st">&quot;Historical</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;dark grey&quot;</span>, <span class="dt">x=</span><span class="dv">2018</span>, <span class="dt">y=</span><span class="dv">2600</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb55-57"><a href="energy.html#cb55-57"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>,<span class="dt">label=</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Forecast&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;dark grey&quot;</span>, <span class="dt">x=</span><span class="dv">2018</span>, <span class="dt">y=</span><span class="dv">2600</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb55-58"><a href="energy.html#cb55-58"></a><span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb55-59"><a href="energy.html#cb55-59"></a><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>,<span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span></span>
+<span id="cb55-60"><a href="energy.html#cb55-60"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Stockton Heating and Cooling Degree Days&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Degree Days&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:hdd-cdd"></span>
+<img src="stockton_greeneconomy_files/figure-html/hdd-cdd-1.png" alt="Stockton heating and cooling degree days under RCP 4.5 scenario, 2010 to 2040. Data from Cal-Adapt." width="672" />
+<p class="caption">
+Figure 2.34: Stockton heating and cooling degree days under RCP 4.5 scenario, 2010 to 2040. Data from Cal-Adapt.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The following table shows historical 2013-2018 annual energy usage per capita (residents for residential energy, jobs for commercial energy) per degree day (HDDs for gas, CDDs for electricity), and the graph that follows shows these four energy use factors with downward trends. This may be through a combination of changing building energy efficiency as well as changing building utilization (e.g. more or less space per occupant), though we don’t have the data to be able to separate these two factors.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="energy.html#cb56-1"></a>summary_TCO2E_norm &lt;-<span class="st"> </span></span>
+<span id="cb56-2"><a href="energy.html#cb56-2"></a><span class="st">  </span>pge_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-3"><a href="energy.html#cb56-3"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>CUSTOMERCLASS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EI&quot;</span>,<span class="st">&quot;EA&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb56-4"><a href="energy.html#cb56-4"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS, YEAR) <span class="op">%&gt;%</span></span>
+<span id="cb56-5"><a href="energy.html#cb56-5"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
+<span id="cb56-6"><a href="energy.html#cb56-6"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb56-7"><a href="energy.html#cb56-7"></a>    <span class="dt">TOTALTCO2E =</span> <span class="kw">sum</span>(TOTALTCO2E, <span class="dt">na.rm=</span>T), </span>
+<span id="cb56-8"><a href="energy.html#cb56-8"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb56-9"><a href="energy.html#cb56-9"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-10"><a href="energy.html#cb56-10"></a><span class="st">  </span><span class="kw">group_by</span>(CUSTOMERCLASS, YEAR) <span class="op">%&gt;%</span></span>
+<span id="cb56-11"><a href="energy.html#cb56-11"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb56-12"><a href="energy.html#cb56-12"></a>    <span class="kw">vars</span>(TOTALKBTU,TOTALTCO2E,TOTALCUSTOMERS),</span>
+<span id="cb56-13"><a href="energy.html#cb56-13"></a>    sum,</span>
+<span id="cb56-14"><a href="energy.html#cb56-14"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb56-15"><a href="energy.html#cb56-15"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-16"><a href="energy.html#cb56-16"></a><span class="st">  </span><span class="kw">left_join</span>(hdd, <span class="dt">by =</span> <span class="st">&quot;YEAR&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-17"><a href="energy.html#cb56-17"></a><span class="st">  </span><span class="kw">left_join</span>(cdd, <span class="dt">by =</span> <span class="st">&quot;YEAR&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-18"><a href="energy.html#cb56-18"></a><span class="st">  </span><span class="kw">left_join</span>(pop_stockton, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;YEAR&quot;</span> =<span class="st"> &quot;year&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-19"><a href="energy.html#cb56-19"></a><span class="st">  </span><span class="kw">left_join</span>(jobs_stockton, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;YEAR&quot;</span> =<span class="st"> &quot;year&quot;</span>))</span>
+<span id="cb56-20"><a href="energy.html#cb56-20"></a></span>
+<span id="cb56-21"><a href="energy.html#cb56-21"></a>summary_TCO2E_norm_ER &lt;-</span>
+<span id="cb56-22"><a href="energy.html#cb56-22"></a><span class="st">  </span>summary_TCO2E_norm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-23"><a href="energy.html#cb56-23"></a><span class="st">  </span><span class="kw">filter</span>(CUSTOMERCLASS <span class="op">==</span><span class="st"> &quot;ER&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-24"><a href="energy.html#cb56-24"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb56-25"><a href="energy.html#cb56-25"></a>    <span class="dt">KBTU_res_cdd =</span></span>
+<span id="cb56-26"><a href="energy.html#cb56-26"></a>      TOTALKBTU<span class="op">/</span>PopulationStockton<span class="op">/</span>cdd,</span>
+<span id="cb56-27"><a href="energy.html#cb56-27"></a>    <span class="dt">TCO2E_res_cdd =</span> </span>
+<span id="cb56-28"><a href="energy.html#cb56-28"></a>      TOTALTCO2E<span class="op">/</span>PopulationStockton<span class="op">/</span>cdd</span>
+<span id="cb56-29"><a href="energy.html#cb56-29"></a>  )</span>
+<span id="cb56-30"><a href="energy.html#cb56-30"></a></span>
+<span id="cb56-31"><a href="energy.html#cb56-31"></a>summary_TCO2E_norm_GR &lt;-</span>
+<span id="cb56-32"><a href="energy.html#cb56-32"></a><span class="st">  </span>summary_TCO2E_norm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-33"><a href="energy.html#cb56-33"></a><span class="st">  </span><span class="kw">filter</span>(CUSTOMERCLASS <span class="op">==</span><span class="st"> &quot;GR&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-34"><a href="energy.html#cb56-34"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb56-35"><a href="energy.html#cb56-35"></a>    <span class="dt">KBTU_res_hdd =</span></span>
+<span id="cb56-36"><a href="energy.html#cb56-36"></a>      TOTALKBTU<span class="op">/</span>PopulationStockton<span class="op">/</span>hdd,</span>
+<span id="cb56-37"><a href="energy.html#cb56-37"></a>    <span class="dt">TCO2E_res_hdd =</span> </span>
+<span id="cb56-38"><a href="energy.html#cb56-38"></a>      TOTALTCO2E<span class="op">/</span>PopulationStockton<span class="op">/</span>hdd</span>
+<span id="cb56-39"><a href="energy.html#cb56-39"></a>  )</span>
+<span id="cb56-40"><a href="energy.html#cb56-40"></a></span>
+<span id="cb56-41"><a href="energy.html#cb56-41"></a>summary_TCO2E_norm_EC &lt;-</span>
+<span id="cb56-42"><a href="energy.html#cb56-42"></a><span class="st">  </span>summary_TCO2E_norm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-43"><a href="energy.html#cb56-43"></a><span class="st">  </span><span class="kw">filter</span>(CUSTOMERCLASS <span class="op">==</span><span class="st"> &quot;EC&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-44"><a href="energy.html#cb56-44"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb56-45"><a href="energy.html#cb56-45"></a>    <span class="dt">KBTU_job_cdd =</span></span>
+<span id="cb56-46"><a href="energy.html#cb56-46"></a>      TOTALKBTU<span class="op">/</span>Jobs<span class="op">/</span>cdd,</span>
+<span id="cb56-47"><a href="energy.html#cb56-47"></a>    <span class="dt">TCO2E_job_cdd =</span> </span>
+<span id="cb56-48"><a href="energy.html#cb56-48"></a>      TOTALTCO2E<span class="op">/</span>Jobs<span class="op">/</span>cdd</span>
+<span id="cb56-49"><a href="energy.html#cb56-49"></a>  )</span>
+<span id="cb56-50"><a href="energy.html#cb56-50"></a></span>
+<span id="cb56-51"><a href="energy.html#cb56-51"></a>summary_TCO2E_norm_GC &lt;-</span>
+<span id="cb56-52"><a href="energy.html#cb56-52"></a><span class="st">  </span>summary_TCO2E_norm <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-53"><a href="energy.html#cb56-53"></a><span class="st">  </span><span class="kw">filter</span>(CUSTOMERCLASS <span class="op">==</span><span class="st"> &quot;GC&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-54"><a href="energy.html#cb56-54"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb56-55"><a href="energy.html#cb56-55"></a>    <span class="dt">KBTU_job_hdd =</span></span>
+<span id="cb56-56"><a href="energy.html#cb56-56"></a>      TOTALKBTU<span class="op">/</span>Jobs<span class="op">/</span>hdd,</span>
+<span id="cb56-57"><a href="energy.html#cb56-57"></a>    <span class="dt">TCO2E_job_hdd =</span> </span>
+<span id="cb56-58"><a href="energy.html#cb56-58"></a>      TOTALTCO2E<span class="op">/</span>Jobs<span class="op">/</span>hdd</span>
+<span id="cb56-59"><a href="energy.html#cb56-59"></a>  )</span>
+<span id="cb56-60"><a href="energy.html#cb56-60"></a></span>
+<span id="cb56-61"><a href="energy.html#cb56-61"></a>summary_TCO2E_norm_all &lt;-</span>
+<span id="cb56-62"><a href="energy.html#cb56-62"></a><span class="st">  </span>summary_TCO2E_norm_ER <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-63"><a href="energy.html#cb56-63"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-64"><a href="energy.html#cb56-64"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb56-65"><a href="energy.html#cb56-65"></a>    <span class="dt">Year =</span> YEAR,</span>
+<span id="cb56-66"><a href="energy.html#cb56-66"></a>    <span class="st">`</span><span class="dt">Heating Degree Days</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(hdd,<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb56-67"><a href="energy.html#cb56-67"></a>    <span class="st">`</span><span class="dt">Cooling Degree Days</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(cdd,<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb56-68"><a href="energy.html#cb56-68"></a>    <span class="dt">Residents =</span> <span class="kw">prettyNum</span>(<span class="kw">round</span>(PopulationStockton,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb56-69"><a href="energy.html#cb56-69"></a>    <span class="dt">Jobs =</span> <span class="kw">prettyNum</span>(<span class="kw">round</span>(Jobs,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb56-70"><a href="energy.html#cb56-70"></a>    <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(KBTU_res_cdd,<span class="dv">1</span>)</span>
+<span id="cb56-71"><a href="energy.html#cb56-71"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-72"><a href="energy.html#cb56-72"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb56-73"><a href="energy.html#cb56-73"></a>    <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(summary_TCO2E_norm_GR<span class="op">$</span>KBTU_res_hdd,<span class="dv">1</span>),</span>
+<span id="cb56-74"><a href="energy.html#cb56-74"></a>    <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(summary_TCO2E_norm_EC<span class="op">$</span>KBTU_job_cdd,<span class="dv">1</span>),</span>
+<span id="cb56-75"><a href="energy.html#cb56-75"></a>    <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(summary_TCO2E_norm_GC<span class="op">$</span>KBTU_job_hdd,<span class="dv">1</span>)</span>
+<span id="cb56-76"><a href="energy.html#cb56-76"></a>  )</span>
+<span id="cb56-77"><a href="energy.html#cb56-77"></a>  </span>
+<span id="cb56-78"><a href="energy.html#cb56-78"></a><span class="kw">kable</span>(</span>
+<span id="cb56-79"><a href="energy.html#cb56-79"></a>  summary_TCO2E_norm_all,</span>
+<span id="cb56-80"><a href="energy.html#cb56-80"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb56-81"><a href="energy.html#cb56-81"></a>  <span class="dt">caption =</span> <span class="st">&#39;Stockton annual energy use per capita per degree-day, 2013 to 2018.&#39;</span></span>
+<span id="cb56-82"><a href="energy.html#cb56-82"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-83"><a href="energy.html#cb56-83"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb56-84"><a href="energy.html#cb56-84"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:summary-TCO2E-norm-all">Table 2.21: </span>Stockton annual energy use per capita per degree-day, 2013 to 2018.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:left;">
+Heating Degree Days
+</th>
+<th style="text-align:left;">
+Cooling Degree Days
+</th>
+<th style="text-align:left;">
+Residents
+</th>
+<th style="text-align:left;">
+Jobs
+</th>
+<th style="text-align:right;">
+Residential Electricity, kBTU/resident/CDD
+</th>
+<th style="text-align:right;">
+Residential Gas, kBTU/resident/HDD
+</th>
+<th style="text-align:right;">
+Commercial Electricity, kBTU/job/CDD
+</th>
+<th style="text-align:right;">
+Commercial Gas, kBTU/job/HDD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:left;">
+2,100
+</td>
+<td style="text-align:left;">
+2,000
+</td>
+<td style="text-align:left;">
+298,000
+</td>
+<td style="text-align:left;">
+106,000
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+7.7
+</td>
+<td style="text-align:right;">
+11.5
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:left;">
+2,200
+</td>
+<td style="text-align:left;">
+1,800
+</td>
+<td style="text-align:left;">
+302,000
+</td>
+<td style="text-align:left;">
+107,000
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+5.9
+</td>
+<td style="text-align:right;">
+14.1
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+2,100
+</td>
+<td style="text-align:left;">
+2,000
+</td>
+<td style="text-align:left;">
+306,000
+</td>
+<td style="text-align:left;">
+114,000
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+<td style="text-align:right;">
+12.1
+</td>
+<td style="text-align:right;">
+4.9
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:left;">
+1,700
+</td>
+<td style="text-align:left;">
+1,700
+</td>
+<td style="text-align:left;">
+307,000
+</td>
+<td style="text-align:left;">
+116,000
+</td>
+<td style="text-align:right;">
+5.3
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+13.9
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+2,200
+</td>
+<td style="text-align:left;">
+1,800
+</td>
+<td style="text-align:left;">
+310,000
+</td>
+<td style="text-align:left;">
+117,000
+</td>
+<td style="text-align:right;">
+5.2
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:right;">
+12.6
+</td>
+<td style="text-align:right;">
+4.3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:left;">
+2,300
+</td>
+<td style="text-align:left;">
+2,100
+</td>
+<td style="text-align:left;">
+311,000
+</td>
+<td style="text-align:left;">
+118,000
+</td>
+<td style="text-align:right;">
+4.1
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+10.5
+</td>
+<td style="text-align:right;">
+4.4
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="energy.html#cb57-1"></a>summary_TCO2E_norm_all <span class="op">%&gt;%</span></span>
+<span id="cb57-2"><a href="energy.html#cb57-2"></a><span class="st">  </span><span class="kw">ggplot</span>(</span>
+<span id="cb57-3"><a href="energy.html#cb57-3"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-4"><a href="energy.html#cb57-4"></a>      <span class="dt">x =</span> Year</span>
+<span id="cb57-5"><a href="energy.html#cb57-5"></a>    )</span>
+<span id="cb57-6"><a href="energy.html#cb57-6"></a>  ) <span class="op">+</span></span>
+<span id="cb57-7"><a href="energy.html#cb57-7"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb57-8"><a href="energy.html#cb57-8"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-9"><a href="energy.html#cb57-9"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span>,</span>
+<span id="cb57-10"><a href="energy.html#cb57-10"></a>      <span class="dt">colour =</span> <span class="st">&quot;Residential Electricity</span><span class="ch">\n</span><span class="st">(kBTU/resident/CDD)&quot;</span>,</span>
+<span id="cb57-11"><a href="energy.html#cb57-11"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Historical&quot;</span></span>
+<span id="cb57-12"><a href="energy.html#cb57-12"></a>    )</span>
+<span id="cb57-13"><a href="energy.html#cb57-13"></a>  ) <span class="op">+</span></span>
+<span id="cb57-14"><a href="energy.html#cb57-14"></a><span class="st">  </span><span class="kw">geom_smooth</span>(</span>
+<span id="cb57-15"><a href="energy.html#cb57-15"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-16"><a href="energy.html#cb57-16"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Residential Electricity, kBTU/resident/CDD</span><span class="st">`</span>,</span>
+<span id="cb57-17"><a href="energy.html#cb57-17"></a>      <span class="dt">colour =</span> <span class="st">&quot;Residential Electricity</span><span class="ch">\n</span><span class="st">(kBTU/resident/CDD)&quot;</span>,</span>
+<span id="cb57-18"><a href="energy.html#cb57-18"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Trendline&quot;</span></span>
+<span id="cb57-19"><a href="energy.html#cb57-19"></a>    ),</span>
+<span id="cb57-20"><a href="energy.html#cb57-20"></a>    <span class="dt">method =</span> lm,</span>
+<span id="cb57-21"><a href="energy.html#cb57-21"></a>    <span class="dt">se =</span> <span class="ot">FALSE</span></span>
+<span id="cb57-22"><a href="energy.html#cb57-22"></a>  )<span class="op">+</span></span>
+<span id="cb57-23"><a href="energy.html#cb57-23"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb57-24"><a href="energy.html#cb57-24"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-25"><a href="energy.html#cb57-25"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span>,</span>
+<span id="cb57-26"><a href="energy.html#cb57-26"></a>      <span class="dt">colour =</span> <span class="st">&quot;Residential Gas</span><span class="ch">\n</span><span class="st">(kBTU/resident/HDD)&quot;</span>,</span>
+<span id="cb57-27"><a href="energy.html#cb57-27"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Historical&quot;</span></span>
+<span id="cb57-28"><a href="energy.html#cb57-28"></a>    )</span>
+<span id="cb57-29"><a href="energy.html#cb57-29"></a>  ) <span class="op">+</span></span>
+<span id="cb57-30"><a href="energy.html#cb57-30"></a><span class="st">  </span><span class="kw">geom_smooth</span>(</span>
+<span id="cb57-31"><a href="energy.html#cb57-31"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-32"><a href="energy.html#cb57-32"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Residential Gas, kBTU/resident/HDD</span><span class="st">`</span>,</span>
+<span id="cb57-33"><a href="energy.html#cb57-33"></a>      <span class="dt">colour =</span> <span class="st">&quot;Residential Gas</span><span class="ch">\n</span><span class="st">(kBTU/resident/HDD)&quot;</span>,</span>
+<span id="cb57-34"><a href="energy.html#cb57-34"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Trendline&quot;</span></span>
+<span id="cb57-35"><a href="energy.html#cb57-35"></a>    ),</span>
+<span id="cb57-36"><a href="energy.html#cb57-36"></a>    <span class="dt">method =</span> lm,</span>
+<span id="cb57-37"><a href="energy.html#cb57-37"></a>    <span class="dt">se =</span> <span class="ot">FALSE</span></span>
+<span id="cb57-38"><a href="energy.html#cb57-38"></a>  ) <span class="op">+</span></span>
+<span id="cb57-39"><a href="energy.html#cb57-39"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb57-40"><a href="energy.html#cb57-40"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-41"><a href="energy.html#cb57-41"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span>,</span>
+<span id="cb57-42"><a href="energy.html#cb57-42"></a>      <span class="dt">colour =</span> <span class="st">&quot;Commercial Electricity</span><span class="ch">\n</span><span class="st">(kBTU/job/CDD)&quot;</span>,</span>
+<span id="cb57-43"><a href="energy.html#cb57-43"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Historical&quot;</span></span>
+<span id="cb57-44"><a href="energy.html#cb57-44"></a>    )</span>
+<span id="cb57-45"><a href="energy.html#cb57-45"></a>  ) <span class="op">+</span></span>
+<span id="cb57-46"><a href="energy.html#cb57-46"></a><span class="st">  </span><span class="kw">geom_smooth</span>(</span>
+<span id="cb57-47"><a href="energy.html#cb57-47"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-48"><a href="energy.html#cb57-48"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Commercial Electricity, kBTU/job/CDD</span><span class="st">`</span>,</span>
+<span id="cb57-49"><a href="energy.html#cb57-49"></a>      <span class="dt">colour =</span> <span class="st">&quot;Commercial Electricity</span><span class="ch">\n</span><span class="st">(kBTU/job/CDD)&quot;</span>,</span>
+<span id="cb57-50"><a href="energy.html#cb57-50"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Trendline&quot;</span></span>
+<span id="cb57-51"><a href="energy.html#cb57-51"></a>    ),</span>
+<span id="cb57-52"><a href="energy.html#cb57-52"></a>    <span class="dt">method =</span> lm,</span>
+<span id="cb57-53"><a href="energy.html#cb57-53"></a>    <span class="dt">se =</span> <span class="ot">FALSE</span></span>
+<span id="cb57-54"><a href="energy.html#cb57-54"></a>  ) <span class="op">+</span></span>
+<span id="cb57-55"><a href="energy.html#cb57-55"></a><span class="st">  </span><span class="kw">geom_line</span>(</span>
+<span id="cb57-56"><a href="energy.html#cb57-56"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-57"><a href="energy.html#cb57-57"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span>,</span>
+<span id="cb57-58"><a href="energy.html#cb57-58"></a>      <span class="dt">colour =</span> <span class="st">&quot;Commercial Gas</span><span class="ch">\n</span><span class="st">(kBTU/job/HDD)&quot;</span>,</span>
+<span id="cb57-59"><a href="energy.html#cb57-59"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Historical&quot;</span></span>
+<span id="cb57-60"><a href="energy.html#cb57-60"></a>    )</span>
+<span id="cb57-61"><a href="energy.html#cb57-61"></a>  ) <span class="op">+</span></span>
+<span id="cb57-62"><a href="energy.html#cb57-62"></a><span class="st">  </span><span class="kw">geom_smooth</span>(</span>
+<span id="cb57-63"><a href="energy.html#cb57-63"></a>    <span class="kw">aes</span>(</span>
+<span id="cb57-64"><a href="energy.html#cb57-64"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Commercial Gas, kBTU/job/HDD</span><span class="st">`</span>,</span>
+<span id="cb57-65"><a href="energy.html#cb57-65"></a>      <span class="dt">colour =</span> <span class="st">&quot;Commercial Gas</span><span class="ch">\n</span><span class="st">(kBTU/job/HDD)&quot;</span>,</span>
+<span id="cb57-66"><a href="energy.html#cb57-66"></a>      <span class="dt">linetype =</span> <span class="st">&quot;Trendline&quot;</span></span>
+<span id="cb57-67"><a href="energy.html#cb57-67"></a>    ),</span>
+<span id="cb57-68"><a href="energy.html#cb57-68"></a>    <span class="dt">method =</span> lm,</span>
+<span id="cb57-69"><a href="energy.html#cb57-69"></a>    <span class="dt">se =</span> <span class="ot">FALSE</span></span>
+<span id="cb57-70"><a href="energy.html#cb57-70"></a>  ) <span class="op">+</span></span>
+<span id="cb57-71"><a href="energy.html#cb57-71"></a><span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;green&quot;</span>)) <span class="op">+</span></span>
+<span id="cb57-72"><a href="energy.html#cb57-72"></a><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>,<span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span></span>
+<span id="cb57-73"><a href="energy.html#cb57-73"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Stockton Energy Use per Capita per Degree-Day&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;kBTU/cap/degree-day&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;Energy Factor&quot;</span>, <span class="dt">linetype =</span> <span class="st">&quot;Data Type&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:summary-TCO2E-norm-all-graph"></span>
+<img src="stockton_greeneconomy_files/figure-html/summary-TCO2E-norm-all-graph-1.png" alt="Stockton annual energy use per capita per degree-day, 2013 to 2018." width="672" />
+<p class="caption">
+Figure 2.35: Stockton annual energy use per capita per degree-day, 2013 to 2018.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>A full forecast of energy usage will also depend on predicted changes in resident and job populations, which will lead to more buildings and more energy used in buildings, predicted changes in building energy efficiency and utilization, predicted changes in weather, and many other factors that are outside the scope of this analysis. One last available dataset to incorporate into our understanding of energy use relates to buildings.</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="vehicle-emissions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="buildings.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false,
+"info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

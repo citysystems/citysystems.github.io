@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.4 Origin-Destination Commute Analysis | Green Economy Analysis: Opportunities for Stockton</title>
+  <meta name="description" content="2.4 Origin-Destination Commute Analysis | Green Economy Analysis: Opportunities for Stockton" />
+  <meta name="generator" content="bookdown 0.17.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.4 Origin-Destination Commute Analysis | Green Economy Analysis: Opportunities for Stockton" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.4 Origin-Destination Commute Analysis | Green Economy Analysis: Opportunities for Stockton" />
+  
+  
+  
+
+<meta name="author" content="City Systems" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ghg-inventory.html"/>
+<link rel="next" href="commute-vehicle-miles-traveled.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.js');
+  rCodeBlocks.each(function() {
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="approach.html"><a href="approach.html"><i class="fa fa-check"></i><b>1.1</b> Approach</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="baseline-assessment.html"><a href="baseline-assessment.html"><i class="fa fa-check"></i><b>2</b> Baseline Assessment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html"><i class="fa fa-check"></i><b>2.1</b> Population and Jobs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="population-and-jobs.html"><a href="population-and-jobs.html#county-level-analysis"><i class="fa fa-check"></i><b>2.1.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.1.2" data-path="population-and-jobs.html"><a href="population-and-jobs.html#city-level-analysis"><i class="fa fa-check"></i><b>2.1.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="green-jobs.html"><a href="green-jobs.html"><i class="fa fa-check"></i><b>2.2</b> Green Jobs</a></li>
+<li class="chapter" data-level="2.3" data-path="ghg-inventory.html"><a href="ghg-inventory.html"><i class="fa fa-check"></i><b>2.3</b> 2005-2016 GHG Inventory</a></li>
+<li class="chapter" data-level="2.4" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html"><i class="fa fa-check"></i><b>2.4</b> Origin-Destination Commute Analysis</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#county-level-analysis-1"><i class="fa fa-check"></i><b>2.4.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.4.2" data-path="origin-destination-commute-analysis.html"><a href="origin-destination-commute-analysis.html#city-level-analysis-1"><i class="fa fa-check"></i><b>2.4.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.5</b> Commute Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#county-level-analysis-2"><i class="fa fa-check"></i><b>2.5.1</b> County-level Analysis</a></li>
+<li class="chapter" data-level="2.5.2" data-path="commute-vehicle-miles-traveled.html"><a href="commute-vehicle-miles-traveled.html#city-level-analysis-2"><i class="fa fa-check"></i><b>2.5.2</b> City-level Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="non-commute-vehicle-miles-traveled.html"><a href="non-commute-vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>2.6</b> Non-Commute Vehicle Miles Traveled</a></li>
+<li class="chapter" data-level="2.7" data-path="vehicle-emissions.html"><a href="vehicle-emissions.html"><i class="fa fa-check"></i><b>2.7</b> Vehicle Emissions</a></li>
+<li class="chapter" data-level="2.8" data-path="energy.html"><a href="energy.html"><i class="fa fa-check"></i><b>2.8</b> Energy</a></li>
+<li class="chapter" data-level="2.9" data-path="buildings.html"><a href="buildings.html"><i class="fa fa-check"></i><b>2.9</b> Buildings</a></li>
+<li class="chapter" data-level="2.10" data-path="ghg-forecast.html"><a href="ghg-forecast.html"><i class="fa fa-check"></i><b>2.10</b> GHG Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="overview-of-green-economy-strategies.html"><a href="overview-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>3</b> Overview of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="building-utilization.html"><a href="building-utilization.html"><i class="fa fa-check"></i><b>3.1</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="building-utilization.html"><a href="building-utilization.html#revise-zoning-codes-in-medium-to-large-cities-to-facilitate-upzoning"><i class="fa fa-check"></i><b>3.1.1</b> Revise zoning codes in medium to large cities to facilitate upzoning</a></li>
+<li class="chapter" data-level="3.1.2" data-path="building-utilization.html"><a href="building-utilization.html#eliminate-minimum-parking"><i class="fa fa-check"></i><b>3.1.2</b> Eliminate minimum parking</a></li>
+<li class="chapter" data-level="3.1.3" data-path="building-utilization.html"><a href="building-utilization.html#encourage-accessory-dwelling-units"><i class="fa fa-check"></i><b>3.1.3</b> Encourage accessory dwelling units</a></li>
+<li class="chapter" data-level="3.1.4" data-path="building-utilization.html"><a href="building-utilization.html#encourage-micro-units"><i class="fa fa-check"></i><b>3.1.4</b> Encourage micro-units</a></li>
+<li class="chapter" data-level="3.1.5" data-path="building-utilization.html"><a href="building-utilization.html#provide-a-density-bonus-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.5</b> Provide a density bonus for affordable housing</a></li>
+<li class="chapter" data-level="3.1.6" data-path="building-utilization.html"><a href="building-utilization.html#develop-a-shared-equity-program-for-high-density-housing"><i class="fa fa-check"></i><b>3.1.6</b> Develop a shared equity program for high-density housing</a></li>
+<li class="chapter" data-level="3.1.7" data-path="building-utilization.html"><a href="building-utilization.html#match-homeowners-with-vacant-spaces-with-individuals-looking-for-affordable-housing"><i class="fa fa-check"></i><b>3.1.7</b> Match homeowners with vacant spaces with individuals looking for affordable housing</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="building-energy.html"><a href="building-energy.html"><i class="fa fa-check"></i><b>3.2</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="building-energy.html"><a href="building-energy.html#promote-solar-development-in-opportunity-zones"><i class="fa fa-check"></i><b>3.2.1</b> Promote solar development in Opportunity Zones</a></li>
+<li class="chapter" data-level="3.2.2" data-path="building-energy.html"><a href="building-energy.html#promote-a-solar-renewable-energy-certificate-program"><i class="fa fa-check"></i><b>3.2.2</b> Promote a Solar Renewable Energy Certificate program</a></li>
+<li class="chapter" data-level="3.2.3" data-path="building-energy.html"><a href="building-energy.html#set-energy-savings-standards-on-all-public-buildings-and-provide-financial-and-technical-assistance-for-commercial-private-sector-energy-savings"><i class="fa fa-check"></i><b>3.2.3</b> Set energy savings standards on all public buildings and provide financial and technical assistance for commercial private sector energy savings</a></li>
+<li class="chapter" data-level="3.2.4" data-path="building-energy.html"><a href="building-energy.html#create-a-fund-to-implement-energy-savings-projects"><i class="fa fa-check"></i><b>3.2.4</b> Create a fund to implement energy savings projects</a></li>
+<li class="chapter" data-level="3.2.5" data-path="building-energy.html"><a href="building-energy.html#enable-property-assessed-clean-energy-pace-financing"><i class="fa fa-check"></i><b>3.2.5</b> Enable property-assessed clean energy (PACE) financing</a></li>
+<li class="chapter" data-level="3.2.6" data-path="building-energy.html"><a href="building-energy.html#provide-consumer-oriented-programs-to-incentivize-energy-efficiency-retrofits-and-appliance-improvements"><i class="fa fa-check"></i><b>3.2.6</b> Provide consumer-oriented programs to incentivize energy efficiency retrofits and appliance improvements</a></li>
+<li class="chapter" data-level="3.2.7" data-path="building-energy.html"><a href="building-energy.html#provide-incentives-for-households-to-install-on-site-batteries-particularly-for-vulnerable-customers"><i class="fa fa-check"></i><b>3.2.7</b> Provide incentives for households to install on-site batteries, particularly for vulnerable customers</a></li>
+<li class="chapter" data-level="3.2.8" data-path="building-energy.html"><a href="building-energy.html#implement-reach-codes-which-go-beyond-state-minimum-requirements-for-energy-use-in-building-design-and-construction"><i class="fa fa-check"></i><b>3.2.8</b> Implement “reach” codes which go beyond state minimum requirements for energy use in building design and construction</a></li>
+<li class="chapter" data-level="3.2.9" data-path="building-energy.html"><a href="building-energy.html#use-waste-to-produce-electricity"><i class="fa fa-check"></i><b>3.2.9</b> Use waste to produce electricity</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="employment-growth.html"><a href="employment-growth.html"><i class="fa fa-check"></i><b>3.3</b> Employment Growth</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="employment-growth.html"><a href="employment-growth.html#provide-training-and-coaching-for-low-income-workers-rather-than-unemployed-workers"><i class="fa fa-check"></i><b>3.3.1</b> Provide training and coaching for low-income workers, rather than unemployed workers</a></li>
+<li class="chapter" data-level="3.3.2" data-path="employment-growth.html"><a href="employment-growth.html#provide-green-oriented-job-training-and-education-pathways"><i class="fa fa-check"></i><b>3.3.2</b> Provide green-oriented job training and education pathways</a></li>
+<li class="chapter" data-level="3.3.3" data-path="employment-growth.html"><a href="employment-growth.html#create-a-scholarship-fund-for-students-wishing-to-pursue-eco-conscious-careers"><i class="fa fa-check"></i><b>3.3.3</b> Create a scholarship fund for students wishing to pursue eco-conscious careers</a></li>
+<li class="chapter" data-level="3.3.4" data-path="employment-growth.html"><a href="employment-growth.html#offer-continued-training-and-support-post-employment"><i class="fa fa-check"></i><b>3.3.4</b> Offer continued training and support post-employment</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="local-jobs.html"><a href="local-jobs.html#offer-job-creation-tax-credit"><i class="fa fa-check"></i><b>3.4.1</b> Offer job creation tax credit</a></li>
+<li class="chapter" data-level="3.4.2" data-path="local-jobs.html"><a href="local-jobs.html#encourage-mortgage-refinancing"><i class="fa fa-check"></i><b>3.4.2</b> Encourage mortgage refinancing</a></li>
+<li class="chapter" data-level="3.4.3" data-path="local-jobs.html"><a href="local-jobs.html#develop-public-employment-program"><i class="fa fa-check"></i><b>3.4.3</b> Develop public employment program</a></li>
+<li class="chapter" data-level="3.4.4" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-advanced-industries"><i class="fa fa-check"></i><b>3.4.4</b> Provide tax credits to investors in advanced industries</a></li>
+<li class="chapter" data-level="3.4.5" data-path="local-jobs.html"><a href="local-jobs.html#provide-tax-credits-to-investors-in-community-development-corporations"><i class="fa fa-check"></i><b>3.4.5</b> Provide tax credits to investors in community development corporations</a></li>
+<li class="chapter" data-level="3.4.6" data-path="local-jobs.html"><a href="local-jobs.html#pursue-public-private-partnerships-for-commercial-development"><i class="fa fa-check"></i><b>3.4.6</b> Pursue public-private partnerships for commercial development</a></li>
+<li class="chapter" data-level="3.4.7" data-path="local-jobs.html"><a href="local-jobs.html#fund-economic-development-using-tax-base-sharing"><i class="fa fa-check"></i><b>3.4.7</b> Fund economic development using tax-base sharing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="local-jobs.html"><a href="local-jobs.html#pay-remote-workers-to-move-to-new-location"><i class="fa fa-check"></i><b>3.4.8</b> Pay remote workers to move to new location</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html"><i class="fa fa-check"></i><b>3.5</b> Vehicle Miles Traveled</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#create-local-transportation-demand-management-ordinances"><i class="fa fa-check"></i><b>3.5.1</b> Create local transportation demand management ordinances</a></li>
+<li class="chapter" data-level="3.5.2" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#redesign-bus-network-to-prioritize-ridership-over-coverage"><i class="fa fa-check"></i><b>3.5.2</b> Redesign bus network to prioritize ridership over coverage</a></li>
+<li class="chapter" data-level="3.5.3" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#use-brt-corridors-to-reduce-travel-times-on-public-transit"><i class="fa fa-check"></i><b>3.5.3</b> Use BRT corridors to reduce travel times on public transit</a></li>
+<li class="chapter" data-level="3.5.4" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#promote-the-use-of-e-scooters-and-dockless-bicycles-to-reduce-reliance-on-private-cars"><i class="fa fa-check"></i><b>3.5.4</b> Promote the use of e-scooters and dockless bicycles to reduce reliance on private cars</a></li>
+<li class="chapter" data-level="3.5.5" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#rezone-areas-around-transit-stations-and-commercial-corridors-to-allow-for-high-density-residential-development"><i class="fa fa-check"></i><b>3.5.5</b> Rezone areas around transit stations and commercial corridors to allow for high-density residential development</a></li>
+<li class="chapter" data-level="3.5.6" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#offset-negative-externalities-of-traffic-through-tolls"><i class="fa fa-check"></i><b>3.5.6</b> Offset negative externalities of traffic through tolls</a></li>
+<li class="chapter" data-level="3.5.7" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#charge-for-parking"><i class="fa fa-check"></i><b>3.5.7</b> Charge for parking</a></li>
+<li class="chapter" data-level="3.5.8" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#give-carpoolers-priority-parking-at-transit-stops"><i class="fa fa-check"></i><b>3.5.8</b> Give carpoolers priority parking at transit stops</a></li>
+<li class="chapter" data-level="3.5.9" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#ban-personal-vehicles-from-certain-areas"><i class="fa fa-check"></i><b>3.5.9</b> Ban personal vehicles from certain areas</a></li>
+<li class="chapter" data-level="3.5.10" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#encourage-carsharing-strategies"><i class="fa fa-check"></i><b>3.5.10</b> Encourage carsharing strategies</a></li>
+<li class="chapter" data-level="3.5.11" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#provide-free-public-transit"><i class="fa fa-check"></i><b>3.5.11</b> Provide free public transit</a></li>
+<li class="chapter" data-level="3.5.12" data-path="vehicle-miles-traveled.html"><a href="vehicle-miles-traveled.html#subsidize-first-milelast-mile-transportation-services"><i class="fa fa-check"></i><b>3.5.12</b> Subsidize first-mile/last-mile transportation services</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html"><i class="fa fa-check"></i><b>3.6</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-for-pollutant-remediation-and-reduction-initiatives"><i class="fa fa-check"></i><b>3.6.1</b> Provide grants for pollutant remediation and reduction initiatives</a></li>
+<li class="chapter" data-level="3.6.2" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-commercial-rebates-for-commercial-building-owners-to-install-ev-charging-stations"><i class="fa fa-check"></i><b>3.6.2</b> Provide commercial rebates for commercial building owners to install EV charging stations</a></li>
+<li class="chapter" data-level="3.6.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.6.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
+<li class="chapter" data-level="3.6.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.6.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
+<li class="chapter" data-level="3.6.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.6.5</b> Reduce vehicle speed limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="resilience.html"><a href="resilience.html"><i class="fa fa-check"></i><b>3.7</b> Resilience</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="resilience.html"><a href="resilience.html#promote-cool-surfaces-to-reduce-heat-island-effect"><i class="fa fa-check"></i><b>3.7.1</b> Promote cool surfaces to reduce heat island effect</a></li>
+<li class="chapter" data-level="3.7.2" data-path="resilience.html"><a href="resilience.html#promote-permeable-pavement-to-increase-groundwater-absorption"><i class="fa fa-check"></i><b>3.7.2</b> Promote permeable pavement to increase groundwater absorption</a></li>
+<li class="chapter" data-level="3.7.3" data-path="resilience.html"><a href="resilience.html#reclaim-urban-streams-and-rivers-to-increase-groundwater-absorption-and-filtration"><i class="fa fa-check"></i><b>3.7.3</b> Reclaim urban streams and rivers to increase groundwater absorption and filtration</a></li>
+<li class="chapter" data-level="3.7.4" data-path="resilience.html"><a href="resilience.html#use-green-infrastructure-to-improve-stormwater-management"><i class="fa fa-check"></i><b>3.7.4</b> Use green infrastructure to improve stormwater management</a></li>
+<li class="chapter" data-level="3.7.5" data-path="resilience.html"><a href="resilience.html#promote-urban-gardens-as-a-substitute-for-displaced-ecosystem-services"><i class="fa fa-check"></i><b>3.7.5</b> Promote urban gardens as a substitute for displaced ecosystem services</a></li>
+<li class="chapter" data-level="3.7.6" data-path="resilience.html"><a href="resilience.html#offer-rebates-for-flood-mitigation-projects"><i class="fa fa-check"></i><b>3.7.6</b> Offer rebates for flood mitigation projects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="resource-management.html"><a href="resource-management.html"><i class="fa fa-check"></i><b>3.8</b> Resource Management</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="resource-management.html"><a href="resource-management.html#develop-carbon-capture-storage-facilities"><i class="fa fa-check"></i><b>3.8.1</b> Develop carbon capture &amp; storage facilities</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="analysis-of-green-economy-strategies.html"><a href="analysis-of-green-economy-strategies.html"><i class="fa fa-check"></i><b>4</b> Analysis of Green Economy Strategies</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="methodology.html"><a href="methodology.html"><i class="fa fa-check"></i><b>4.1</b> Methodology</a></li>
+<li class="chapter" data-level="4.2" data-path="building-utilization-1.html"><a href="building-utilization-1.html"><i class="fa fa-check"></i><b>4.2</b> Building Utilization</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="building-utilization-1.html"><a href="building-utilization-1.html#strategy-accessory-dwelling-units"><i class="fa fa-check"></i><b>4.2.1</b> Strategy: Accessory Dwelling Units</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="building-energy-1.html"><a href="building-energy-1.html"><i class="fa fa-check"></i><b>4.3</b> Building Energy</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="building-energy-1.html"><a href="building-energy-1.html#strategy-electrification"><i class="fa fa-check"></i><b>4.3.1</b> Strategy: Electrification</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html"><i class="fa fa-check"></i><b>4.4</b> Vehicle Emissions</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="vehicle-emissions-2.html"><a href="vehicle-emissions-2.html#strategy-electric-vehicle-program"><i class="fa fa-check"></i><b>4.4.1</b> Strategy: Electric Vehicle Program</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+<li class="chapter" data-level="6" data-path="appendix-a-index-of-case-studies-by-place.html"><a href="appendix-a-index-of-case-studies-by-place.html"><i class="fa fa-check"></i><b>6</b> Appendix A: Index of Case Studies by Place</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Green Economy Analysis: Opportunities for Stockton</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="origin-destination-commute-analysis" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Origin-Destination Commute Analysis</h2>
+<p>As seen in the previous section, transportation is the largest single contributor of GHG emissions in Stockton, <a href="https://ww2.arb.ca.gov/ghg-inventory-data">as is true for all of California</a>. Within this sector, passenger vehicle emissions are by far the largest portion, and these are relatively easy to relate to their direct proxy, vehicle miles traveled (VMT), and normalize by drivers to understand current driving behavior. Specifically, commutes (driving to work) are the largest share of passenger vehicle emissions (other driving to/from amenities can be analyzed separately), and we can access data as recent as 2017 to understand commute patterns of Stockton residents to different job destinations inside and outside of SJC. What we find is that VMT is significant, and significantly locked in to the nature of job opportunity in faraway locations like the Bay Area. This means that VMT reduction is a crucial component in any overall green economy strategy, and it can be tackled directly through transportation strategies like public transit and EV deployment, but also indirectly by attracting high-quality jobs to Stockton, which on average will shift workers from faraway jobs to local jobs, thereby reducing VMTs. A comprehensive origin-destination commute analysis, as performed below, helps us quantify total VMTs attributable to commuting as well as model the specific impacts of different direct or indirect VMT reduction strategies.</p>
+<p>In this section, we first examine the distribution of job locations for SJC in comparison to neighboring counties, as well as Stockton in particular. The following section will then analyze vehicle miles traveled for these commute trips.</p>
+<div id="county-level-analysis-1" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> County-level Analysis</h3>
+<p>Our key dataset is from <a href="https://lehd.ces.census.gov/data/">Longitudinal Employer-Household Dynamics Origin-Destination Employment Statistics</a> (LODES), which can be downloaded by state and is available up to 2017.</p>
+<p>Some reported workplaces in LODES are as far away as Los Angeles County and are likely data errors (e.g. the company headquarters is in Los Angeles but the actual workplace is much closer, or the employee works from home). These workplaces are left in the datasets shown in this section, but are removed later when calculating VMTs.</p>
+<p>The LODES dataset also disaggregates jobs by three age groups:</p>
+<ul>
+<li>Number of jobs of workers age 29 or younger</li>
+<li>Number of jobs for workers age 30 to 54</li>
+<li>Number of jobs for workers age 55 or older</li>
+</ul>
+<p>It also disaggregates jobs by three wage tiers:</p>
+<ul>
+<li>Number of jobs with earnings $1250/month or less</li>
+<li>Number of jobs with earnings $1251/month to $3333/month</li>
+<li>Number of jobs with earnings greater than $3333/month</li>
+</ul>
+<p>It also disaggregates jobs by three broad sectors:</p>
+<ul>
+<li>Number of jobs in Goods Producing industry sectors</li>
+<li>Number of jobs in Trade, Transportation, and Utilities industry sectors</li>
+<li>Number of jobs in All Other Services industry sectors</li>
+</ul>
+<p>The following table shows the counts of jobs in these subcategories that are held by SJC residents traveling to a workplace in SJC or its top 14 contiguous neighboring counties. The percent jobs shown are percentages of SJC employed residents; so of all SJC employed residents, 48% work within SJC.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="origin-destination-commute-analysis.html#cb20-1"></a><span class="co"># for(year in 2002:2017){</span></span>
+<span id="cb20-2"><a href="origin-destination-commute-analysis.html#cb20-2"></a><span class="co"># </span></span>
+<span id="cb20-3"><a href="origin-destination-commute-analysis.html#cb20-3"></a><span class="co">#   ca_lodes &lt;-</span></span>
+<span id="cb20-4"><a href="origin-destination-commute-analysis.html#cb20-4"></a><span class="co">#     grab_lodes(</span></span>
+<span id="cb20-5"><a href="origin-destination-commute-analysis.html#cb20-5"></a><span class="co">#       state = &quot;ca&quot;,</span></span>
+<span id="cb20-6"><a href="origin-destination-commute-analysis.html#cb20-6"></a><span class="co">#       year = year,</span></span>
+<span id="cb20-7"><a href="origin-destination-commute-analysis.html#cb20-7"></a><span class="co">#       lodes_type = &quot;od&quot;,</span></span>
+<span id="cb20-8"><a href="origin-destination-commute-analysis.html#cb20-8"></a><span class="co">#       job_type = &quot;JT01&quot;, #Primary Jobs</span></span>
+<span id="cb20-9"><a href="origin-destination-commute-analysis.html#cb20-9"></a><span class="co">#       segment = &quot;S000&quot;,</span></span>
+<span id="cb20-10"><a href="origin-destination-commute-analysis.html#cb20-10"></a><span class="co">#       state_part = &quot;main&quot;,</span></span>
+<span id="cb20-11"><a href="origin-destination-commute-analysis.html#cb20-11"></a><span class="co">#       agg_geo = &quot;tract&quot;</span></span>
+<span id="cb20-12"><a href="origin-destination-commute-analysis.html#cb20-12"></a><span class="co">#     )</span></span>
+<span id="cb20-13"><a href="origin-destination-commute-analysis.html#cb20-13"></a><span class="co"># </span></span>
+<span id="cb20-14"><a href="origin-destination-commute-analysis.html#cb20-14"></a><span class="co">#   for(county in county_neighbors$COUNTYFP){</span></span>
+<span id="cb20-15"><a href="origin-destination-commute-analysis.html#cb20-15"></a><span class="co">#     county_tracts &lt;-</span></span>
+<span id="cb20-16"><a href="origin-destination-commute-analysis.html#cb20-16"></a><span class="co">#       ca_tracts %&gt;%</span></span>
+<span id="cb20-17"><a href="origin-destination-commute-analysis.html#cb20-17"></a><span class="co">#       filter(COUNTYFP == county)</span></span>
+<span id="cb20-18"><a href="origin-destination-commute-analysis.html#cb20-18"></a><span class="co"># </span></span>
+<span id="cb20-19"><a href="origin-destination-commute-analysis.html#cb20-19"></a><span class="co">#     county_lodes_h &lt;-</span></span>
+<span id="cb20-20"><a href="origin-destination-commute-analysis.html#cb20-20"></a><span class="co">#       ca_lodes[which(ca_lodes$h_tract %in% county_tracts$GEOID),]</span></span>
+<span id="cb20-21"><a href="origin-destination-commute-analysis.html#cb20-21"></a><span class="co"># </span></span>
+<span id="cb20-22"><a href="origin-destination-commute-analysis.html#cb20-22"></a><span class="co">#     save(county_lodes_h, file = paste0(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/county_lodes_&quot;,county,&quot;_&quot;,year,&quot;_tract_noroute.Rdata&quot;))</span></span>
+<span id="cb20-23"><a href="origin-destination-commute-analysis.html#cb20-23"></a><span class="co"># </span></span>
+<span id="cb20-24"><a href="origin-destination-commute-analysis.html#cb20-24"></a><span class="co">#   }</span></span>
+<span id="cb20-25"><a href="origin-destination-commute-analysis.html#cb20-25"></a><span class="co"># }</span></span>
+<span id="cb20-26"><a href="origin-destination-commute-analysis.html#cb20-26"></a></span>
+<span id="cb20-27"><a href="origin-destination-commute-analysis.html#cb20-27"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/county_lodes_077_2017_tract_noroute.Rdata&quot;</span>)</span>
+<span id="cb20-28"><a href="origin-destination-commute-analysis.html#cb20-28"></a></span>
+<span id="cb20-29"><a href="origin-destination-commute-analysis.html#cb20-29"></a>sjc_lodes_w_counties &lt;-<span class="st"> </span></span>
+<span id="cb20-30"><a href="origin-destination-commute-analysis.html#cb20-30"></a><span class="st">  </span>county_lodes_h <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-31"><a href="origin-destination-commute-analysis.html#cb20-31"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb20-32"><a href="origin-destination-commute-analysis.html#cb20-32"></a>    <span class="dt">COUNTY =</span> <span class="kw">substr</span>(w_tract,<span class="dv">3</span>,<span class="dv">5</span>)</span>
+<span id="cb20-33"><a href="origin-destination-commute-analysis.html#cb20-33"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-34"><a href="origin-destination-commute-analysis.html#cb20-34"></a><span class="st">  </span><span class="kw">group_by</span>(COUNTY) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-35"><a href="origin-destination-commute-analysis.html#cb20-35"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb20-36"><a href="origin-destination-commute-analysis.html#cb20-36"></a>    <span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>,<span class="st">&quot;SA01&quot;</span>,<span class="st">&quot;SA02&quot;</span>,<span class="st">&quot;SA03&quot;</span>,<span class="st">&quot;SE01&quot;</span>,<span class="st">&quot;SE02&quot;</span>,<span class="st">&quot;SE03&quot;</span>,<span class="st">&quot;SI01&quot;</span>,<span class="st">&quot;SI02&quot;</span>,<span class="st">&quot;SI03&quot;</span>), </span>
+<span id="cb20-37"><a href="origin-destination-commute-analysis.html#cb20-37"></a>    sum,</span>
+<span id="cb20-38"><a href="origin-destination-commute-analysis.html#cb20-38"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb20-39"><a href="origin-destination-commute-analysis.html#cb20-39"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-40"><a href="origin-destination-commute-analysis.html#cb20-40"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb20-41"><a href="origin-destination-commute-analysis.html#cb20-41"></a>    <span class="dt">County =</span> COUNTY,</span>
+<span id="cb20-42"><a href="origin-destination-commute-analysis.html#cb20-42"></a>    <span class="dt">Jobs =</span> S000,</span>
+<span id="cb20-43"><a href="origin-destination-commute-analysis.html#cb20-43"></a>    <span class="st">`</span><span class="dt">Percent Jobs</span><span class="st">`</span> =<span class="st"> </span>S000<span class="op">/</span><span class="kw">sum</span>(S000, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-44"><a href="origin-destination-commute-analysis.html#cb20-44"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span> =<span class="st"> </span>SA01<span class="op">/</span><span class="kw">sum</span>(SA01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-45"><a href="origin-destination-commute-analysis.html#cb20-45"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span> =<span class="st"> </span>SA02<span class="op">/</span><span class="kw">sum</span>(SA02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-46"><a href="origin-destination-commute-analysis.html#cb20-46"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span> =<span class="st"> </span>SA03<span class="op">/</span><span class="kw">sum</span>(SA03, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-47"><a href="origin-destination-commute-analysis.html#cb20-47"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>SE01<span class="op">/</span><span class="kw">sum</span>(SE01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-48"><a href="origin-destination-commute-analysis.html#cb20-48"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>SE02<span class="op">/</span><span class="kw">sum</span>(SE02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-49"><a href="origin-destination-commute-analysis.html#cb20-49"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>SE03<span class="op">/</span><span class="kw">sum</span>(SE03, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-50"><a href="origin-destination-commute-analysis.html#cb20-50"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI01<span class="op">/</span><span class="kw">sum</span>(SI01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-51"><a href="origin-destination-commute-analysis.html#cb20-51"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI02<span class="op">/</span><span class="kw">sum</span>(SI02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb20-52"><a href="origin-destination-commute-analysis.html#cb20-52"></a>    <span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI03<span class="op">/</span><span class="kw">sum</span>(SI03, <span class="dt">na.rm=</span>T)</span>
+<span id="cb20-53"><a href="origin-destination-commute-analysis.html#cb20-53"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-54"><a href="origin-destination-commute-analysis.html#cb20-54"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs))</span>
+<span id="cb20-55"><a href="origin-destination-commute-analysis.html#cb20-55"></a></span>
+<span id="cb20-56"><a href="origin-destination-commute-analysis.html#cb20-56"></a>sjc_lodes_w_top_counties &lt;-<span class="st"> </span></span>
+<span id="cb20-57"><a href="origin-destination-commute-analysis.html#cb20-57"></a><span class="st">  </span>sjc_lodes_w_counties[<span class="dv">1</span><span class="op">:</span><span class="dv">19</span>,] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-58"><a href="origin-destination-commute-analysis.html#cb20-58"></a><span class="st">  </span><span class="kw">left_join</span>(ca_counties <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-59"><a href="origin-destination-commute-analysis.html#cb20-59"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME), <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;County&quot;</span> =<span class="st"> &quot;COUNTYFP&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-60"><a href="origin-destination-commute-analysis.html#cb20-60"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>County) <span class="op">%&gt;%</span></span>
+<span id="cb20-61"><a href="origin-destination-commute-analysis.html#cb20-61"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(NAME,<span class="kw">everything</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-62"><a href="origin-destination-commute-analysis.html#cb20-62"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">County =</span> NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-63"><a href="origin-destination-commute-analysis.html#cb20-63"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-64"><a href="origin-destination-commute-analysis.html#cb20-64"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>County <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-65"><a href="origin-destination-commute-analysis.html#cb20-65"></a><span class="st">  </span><span class="kw">st_as_sf</span>()</span>
+<span id="cb20-66"><a href="origin-destination-commute-analysis.html#cb20-66"></a></span>
+<span id="cb20-67"><a href="origin-destination-commute-analysis.html#cb20-67"></a>sjc_lodes_w_top_counties_table &lt;-<span class="st"> </span></span>
+<span id="cb20-68"><a href="origin-destination-commute-analysis.html#cb20-68"></a><span class="st">  </span>sjc_lodes_w_top_counties <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-69"><a href="origin-destination-commute-analysis.html#cb20-69"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-70"><a href="origin-destination-commute-analysis.html#cb20-70"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb20-71"><a href="origin-destination-commute-analysis.html#cb20-71"></a>    <span class="st">`</span><span class="dt">County (where SJC residents work)</span><span class="st">`</span> =<span class="st"> </span>County,</span>
+<span id="cb20-72"><a href="origin-destination-commute-analysis.html#cb20-72"></a>    <span class="st">`</span><span class="dt">Jobs (held by SJC residents)</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(Jobs,<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb20-73"><a href="origin-destination-commute-analysis.html#cb20-73"></a>    <span class="st">`</span><span class="dt">Percent jobs (held by SJC residents)</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent Jobs</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-74"><a href="origin-destination-commute-analysis.html#cb20-74"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-75"><a href="origin-destination-commute-analysis.html#cb20-75"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-76"><a href="origin-destination-commute-analysis.html#cb20-76"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-77"><a href="origin-destination-commute-analysis.html#cb20-77"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-78"><a href="origin-destination-commute-analysis.html#cb20-78"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-79"><a href="origin-destination-commute-analysis.html#cb20-79"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-80"><a href="origin-destination-commute-analysis.html#cb20-80"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-81"><a href="origin-destination-commute-analysis.html#cb20-81"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb20-82"><a href="origin-destination-commute-analysis.html#cb20-82"></a>    <span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>)</span>
+<span id="cb20-83"><a href="origin-destination-commute-analysis.html#cb20-83"></a>  )</span>
+<span id="cb20-84"><a href="origin-destination-commute-analysis.html#cb20-84"></a></span>
+<span id="cb20-85"><a href="origin-destination-commute-analysis.html#cb20-85"></a><span class="kw">kable</span>(</span>
+<span id="cb20-86"><a href="origin-destination-commute-analysis.html#cb20-86"></a>  sjc_lodes_w_top_counties_table, </span>
+<span id="cb20-87"><a href="origin-destination-commute-analysis.html#cb20-87"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb20-88"><a href="origin-destination-commute-analysis.html#cb20-88"></a>  <span class="dt">caption =</span> <span class="st">&#39;Top 15 counties where SJC residents work, including SJC. Los Angeles, San Bernardino, Orange, and San Diego Counties were removed. Data from LODES, 2017.&#39;</span></span>
+<span id="cb20-89"><a href="origin-destination-commute-analysis.html#cb20-89"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-90"><a href="origin-destination-commute-analysis.html#cb20-90"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb20-91"><a href="origin-destination-commute-analysis.html#cb20-91"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:sjc-lodes-w-top-counties-table">Table 2.13: </span>Top 15 counties where SJC residents work, including SJC. Los Angeles, San Bernardino, Orange, and San Diego Counties were removed. Data from LODES, 2017.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+County (where SJC residents work)
+</th>
+<th style="text-align:left;">
+Jobs (held by SJC residents)
+</th>
+<th style="text-align:left;">
+Percent jobs (held by SJC residents)
+</th>
+<th style="text-align:left;">
+Percent of jobs for workers age 29 or younger
+</th>
+<th style="text-align:left;">
+Percent of jobs for workers age 30 to 54
+</th>
+<th style="text-align:left;">
+Percent of jobs for workers age 55 or older
+</th>
+<th style="text-align:left;">
+Percent of jobs with earnings $1250/month or less
+</th>
+<th style="text-align:left;">
+Percent of jobs with earnings $1251/month to $3333/month
+</th>
+<th style="text-align:left;">
+Percent of jobs with earnings greater than $3333/month
+</th>
+<th style="text-align:left;">
+Percent of jobs in Goods Producing industry sectors
+</th>
+<th style="text-align:left;">
+Percent of jobs in Trade, Transportation, and Utilities industry sectors
+</th>
+<th style="text-align:left;">
+Percent of jobs in All Other Services industry sectors
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+San Joaquin
+</td>
+<td style="text-align:left;">
+127,100
+</td>
+<td style="text-align:left;">
+48%
+</td>
+<td style="text-align:left;">
+47%
+</td>
+<td style="text-align:left;">
+47%
+</td>
+<td style="text-align:left;">
+53%
+</td>
+<td style="text-align:left;">
+54%
+</td>
+<td style="text-align:left;">
+53%
+</td>
+<td style="text-align:left;">
+42%
+</td>
+<td style="text-align:left;">
+47%
+</td>
+<td style="text-align:left;">
+46%
+</td>
+<td style="text-align:left;">
+50%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alameda
+</td>
+<td style="text-align:left;">
+30,600
+</td>
+<td style="text-align:left;">
+12%
+</td>
+<td style="text-align:left;">
+10%
+</td>
+<td style="text-align:left;">
+13%
+</td>
+<td style="text-align:left;">
+10%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+15%
+</td>
+<td style="text-align:left;">
+15%
+</td>
+<td style="text-align:left;">
+11%
+</td>
+<td style="text-align:left;">
+11%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sacramento
+</td>
+<td style="text-align:left;">
+17,100
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Santa Clara
+</td>
+<td style="text-align:left;">
+16,100
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stanislaus
+</td>
+<td style="text-align:left;">
+15,300
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Contra Costa
+</td>
+<td style="text-align:left;">
+10,300
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Francisco
+</td>
+<td style="text-align:left;">
+5,900
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Mateo
+</td>
+<td style="text-align:left;">
+4,800
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Solano
+</td>
+<td style="text-align:left;">
+3,400
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fresno
+</td>
+<td style="text-align:left;">
+2,700
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Placer
+</td>
+<td style="text-align:left;">
+2,500
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yolo
+</td>
+<td style="text-align:left;">
+1,700
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sonoma
+</td>
+<td style="text-align:left;">
+1,500
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monterey
+</td>
+<td style="text-align:left;">
+1,300
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merced
+</td>
+<td style="text-align:left;">
+1,200
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The following table compares SJC with neighboring counties in terms of the percentage of jobs held by its residents that are “local”, meaning within the same county. This figure mirrors Figure 2.3, which showed J/ER ratio for the same counties, all stagnating or in decline. The figure below provides one contribution, which is declining local jobs for local residents, not just for SJC but for its neighboring counties.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="origin-destination-commute-analysis.html#cb21-1"></a>county_localjobs &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb21-2"><a href="origin-destination-commute-analysis.html#cb21-2"></a></span>
+<span id="cb21-3"><a href="origin-destination-commute-analysis.html#cb21-3"></a><span class="cf">for</span>(year <span class="cf">in</span> <span class="dv">2002</span><span class="op">:</span><span class="dv">2017</span>){</span>
+<span id="cb21-4"><a href="origin-destination-commute-analysis.html#cb21-4"></a>  <span class="cf">for</span>(county <span class="cf">in</span> county_neighbors<span class="op">$</span>COUNTYFP){</span>
+<span id="cb21-5"><a href="origin-destination-commute-analysis.html#cb21-5"></a>    <span class="kw">load</span>(<span class="kw">paste0</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/county_lodes_&quot;</span>,county,<span class="st">&quot;_&quot;</span>,year,<span class="st">&quot;_tract_noroute.Rdata&quot;</span>))</span>
+<span id="cb21-6"><a href="origin-destination-commute-analysis.html#cb21-6"></a>    </span>
+<span id="cb21-7"><a href="origin-destination-commute-analysis.html#cb21-7"></a>    county_lodes_w_counties &lt;-<span class="st"> </span></span>
+<span id="cb21-8"><a href="origin-destination-commute-analysis.html#cb21-8"></a><span class="st">      </span>county_lodes_h <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-9"><a href="origin-destination-commute-analysis.html#cb21-9"></a><span class="st">      </span><span class="kw">mutate</span>(</span>
+<span id="cb21-10"><a href="origin-destination-commute-analysis.html#cb21-10"></a>        <span class="dt">COUNTY =</span> <span class="kw">substr</span>(w_tract,<span class="dv">3</span>,<span class="dv">5</span>)</span>
+<span id="cb21-11"><a href="origin-destination-commute-analysis.html#cb21-11"></a>      ) <span class="op">%&gt;%</span></span>
+<span id="cb21-12"><a href="origin-destination-commute-analysis.html#cb21-12"></a><span class="st">      </span><span class="kw">group_by</span>(COUNTY) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-13"><a href="origin-destination-commute-analysis.html#cb21-13"></a><span class="st">      </span><span class="kw">summarise_at</span>(</span>
+<span id="cb21-14"><a href="origin-destination-commute-analysis.html#cb21-14"></a>        <span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>,<span class="st">&quot;SA01&quot;</span>,<span class="st">&quot;SA02&quot;</span>,<span class="st">&quot;SA03&quot;</span>,<span class="st">&quot;SE01&quot;</span>,<span class="st">&quot;SE02&quot;</span>,<span class="st">&quot;SE03&quot;</span>,<span class="st">&quot;SI01&quot;</span>,<span class="st">&quot;SI02&quot;</span>,<span class="st">&quot;SI03&quot;</span>), </span>
+<span id="cb21-15"><a href="origin-destination-commute-analysis.html#cb21-15"></a>        sum,</span>
+<span id="cb21-16"><a href="origin-destination-commute-analysis.html#cb21-16"></a>        <span class="dt">na.rm=</span>T</span>
+<span id="cb21-17"><a href="origin-destination-commute-analysis.html#cb21-17"></a>      ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-18"><a href="origin-destination-commute-analysis.html#cb21-18"></a><span class="st">      </span><span class="kw">transmute</span>(</span>
+<span id="cb21-19"><a href="origin-destination-commute-analysis.html#cb21-19"></a>        <span class="dt">Year =</span> year,</span>
+<span id="cb21-20"><a href="origin-destination-commute-analysis.html#cb21-20"></a>        <span class="dt">County =</span> COUNTY,</span>
+<span id="cb21-21"><a href="origin-destination-commute-analysis.html#cb21-21"></a>        <span class="dt">Jobs =</span> S000,</span>
+<span id="cb21-22"><a href="origin-destination-commute-analysis.html#cb21-22"></a>        <span class="st">`</span><span class="dt">Percent Jobs</span><span class="st">`</span> =<span class="st"> </span>S000<span class="op">/</span><span class="kw">sum</span>(S000, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-23"><a href="origin-destination-commute-analysis.html#cb21-23"></a>        <span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span> =<span class="st"> </span>SA01<span class="op">/</span><span class="kw">sum</span>(SA01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-24"><a href="origin-destination-commute-analysis.html#cb21-24"></a>        <span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span> =<span class="st"> </span>SA02<span class="op">/</span><span class="kw">sum</span>(SA02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-25"><a href="origin-destination-commute-analysis.html#cb21-25"></a>        <span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span> =<span class="st"> </span>SA03<span class="op">/</span><span class="kw">sum</span>(SA03, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-26"><a href="origin-destination-commute-analysis.html#cb21-26"></a>        <span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>SE01<span class="op">/</span><span class="kw">sum</span>(SE01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-27"><a href="origin-destination-commute-analysis.html#cb21-27"></a>        <span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>SE02<span class="op">/</span><span class="kw">sum</span>(SE02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-28"><a href="origin-destination-commute-analysis.html#cb21-28"></a>        <span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>SE03<span class="op">/</span><span class="kw">sum</span>(SE03, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-29"><a href="origin-destination-commute-analysis.html#cb21-29"></a>        <span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI01<span class="op">/</span><span class="kw">sum</span>(SI01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-30"><a href="origin-destination-commute-analysis.html#cb21-30"></a>        <span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI02<span class="op">/</span><span class="kw">sum</span>(SI02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb21-31"><a href="origin-destination-commute-analysis.html#cb21-31"></a>        <span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI03<span class="op">/</span><span class="kw">sum</span>(SI03, <span class="dt">na.rm=</span>T)</span>
+<span id="cb21-32"><a href="origin-destination-commute-analysis.html#cb21-32"></a>      ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-33"><a href="origin-destination-commute-analysis.html#cb21-33"></a><span class="st">      </span><span class="kw">filter</span>(County <span class="op">==</span><span class="st"> </span>county) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-34"><a href="origin-destination-commute-analysis.html#cb21-34"></a><span class="st">      </span><span class="kw">mutate</span>(<span class="dt">County =</span> county_neighbors[<span class="kw">which</span>(county_neighbors<span class="op">$</span>COUNTYFP <span class="op">==</span><span class="st"> </span>county),]<span class="op">$</span>NAME)</span>
+<span id="cb21-35"><a href="origin-destination-commute-analysis.html#cb21-35"></a>    </span>
+<span id="cb21-36"><a href="origin-destination-commute-analysis.html#cb21-36"></a>    county_localjobs &lt;-</span>
+<span id="cb21-37"><a href="origin-destination-commute-analysis.html#cb21-37"></a><span class="st">      </span>county_localjobs <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-38"><a href="origin-destination-commute-analysis.html#cb21-38"></a><span class="st">      </span><span class="kw">rbind</span>(</span>
+<span id="cb21-39"><a href="origin-destination-commute-analysis.html#cb21-39"></a>        county_lodes_w_counties</span>
+<span id="cb21-40"><a href="origin-destination-commute-analysis.html#cb21-40"></a>      )</span>
+<span id="cb21-41"><a href="origin-destination-commute-analysis.html#cb21-41"></a>  }</span>
+<span id="cb21-42"><a href="origin-destination-commute-analysis.html#cb21-42"></a>}</span>
+<span id="cb21-43"><a href="origin-destination-commute-analysis.html#cb21-43"></a></span>
+<span id="cb21-44"><a href="origin-destination-commute-analysis.html#cb21-44"></a>county_localjobs <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-45"><a href="origin-destination-commute-analysis.html#cb21-45"></a><span class="st">  </span><span class="kw">filter</span>(County <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;San Joaquin&quot;</span>,<span class="st">&quot;Alameda&quot;</span>,<span class="st">&quot;Fresno&quot;</span>,<span class="st">&quot;Stanislaus&quot;</span>,<span class="st">&quot;Sacramento&quot;</span>,<span class="st">&quot;Contra Costa&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb21-46"><a href="origin-destination-commute-analysis.html#cb21-46"></a><span class="st">  </span><span class="kw">ggplot</span>(</span>
+<span id="cb21-47"><a href="origin-destination-commute-analysis.html#cb21-47"></a>    <span class="kw">aes</span>(</span>
+<span id="cb21-48"><a href="origin-destination-commute-analysis.html#cb21-48"></a>      <span class="dt">x =</span> Year,</span>
+<span id="cb21-49"><a href="origin-destination-commute-analysis.html#cb21-49"></a>      <span class="dt">y =</span> <span class="st">`</span><span class="dt">Percent Jobs</span><span class="st">`</span>,</span>
+<span id="cb21-50"><a href="origin-destination-commute-analysis.html#cb21-50"></a>      <span class="dt">colour =</span> County</span>
+<span id="cb21-51"><a href="origin-destination-commute-analysis.html#cb21-51"></a>    )</span>
+<span id="cb21-52"><a href="origin-destination-commute-analysis.html#cb21-52"></a>  ) <span class="op">+</span></span>
+<span id="cb21-53"><a href="origin-destination-commute-analysis.html#cb21-53"></a><span class="st">  </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="figure"><span id="fig:county-localjobs"></span>
+<img src="stockton_greeneconomy_files/figure-html/county-localjobs-1.png" alt="Percent of county residents who work within their home county, 2002 to 2017. Data from LODES." width="672" />
+<p class="caption">
+Figure 2.8: Percent of county residents who work within their home county, 2002 to 2017. Data from LODES.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+<div id="city-level-analysis-1" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> City-level Analysis</h3>
+<p>The following table shows the counts of jobs in these subcategories for the top 15 contiguous neighboring counties to Stockton, including SJC. Note that the jobs being counted are those held by Stockton residents who are traveling to a workplace in the listed regions. 41% of Stockton employed residents work within Stockton. These jobs could be considered valuable for avoiding the “brain drain” of local talent to other places, as well as for creating the smallest transportation footprint.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="origin-destination-commute-analysis.html#cb22-1"></a><span class="co"># for(year in 2002:2017){</span></span>
+<span id="cb22-2"><a href="origin-destination-commute-analysis.html#cb22-2"></a><span class="co"># </span></span>
+<span id="cb22-3"><a href="origin-destination-commute-analysis.html#cb22-3"></a><span class="co">#   ca_lodes &lt;-</span></span>
+<span id="cb22-4"><a href="origin-destination-commute-analysis.html#cb22-4"></a><span class="co">#     grab_lodes(</span></span>
+<span id="cb22-5"><a href="origin-destination-commute-analysis.html#cb22-5"></a><span class="co">#       state = &quot;ca&quot;,</span></span>
+<span id="cb22-6"><a href="origin-destination-commute-analysis.html#cb22-6"></a><span class="co">#       year = year,</span></span>
+<span id="cb22-7"><a href="origin-destination-commute-analysis.html#cb22-7"></a><span class="co">#       lodes_type = &quot;od&quot;,</span></span>
+<span id="cb22-8"><a href="origin-destination-commute-analysis.html#cb22-8"></a><span class="co">#       job_type = &quot;JT01&quot;, #Primary Jobs</span></span>
+<span id="cb22-9"><a href="origin-destination-commute-analysis.html#cb22-9"></a><span class="co">#       segment = &quot;S000&quot;,</span></span>
+<span id="cb22-10"><a href="origin-destination-commute-analysis.html#cb22-10"></a><span class="co">#       state_part = &quot;main&quot;,</span></span>
+<span id="cb22-11"><a href="origin-destination-commute-analysis.html#cb22-11"></a><span class="co">#       agg_geo = &quot;bg&quot;</span></span>
+<span id="cb22-12"><a href="origin-destination-commute-analysis.html#cb22-12"></a><span class="co">#     )</span></span>
+<span id="cb22-13"><a href="origin-destination-commute-analysis.html#cb22-13"></a><span class="co"># </span></span>
+<span id="cb22-14"><a href="origin-destination-commute-analysis.html#cb22-14"></a><span class="co">#     stockton_lodes_h &lt;-</span></span>
+<span id="cb22-15"><a href="origin-destination-commute-analysis.html#cb22-15"></a><span class="co">#       ca_lodes[which(ca_lodes$h_bg %in% stockton_bgs_full$GEOID),]</span></span>
+<span id="cb22-16"><a href="origin-destination-commute-analysis.html#cb22-16"></a><span class="co"># </span></span>
+<span id="cb22-17"><a href="origin-destination-commute-analysis.html#cb22-17"></a><span class="co">#     save(stockton_lodes_h, file = paste0(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/stockton_lodes_&quot;,year,&quot;_tract_noroute.Rdata&quot;))</span></span>
+<span id="cb22-18"><a href="origin-destination-commute-analysis.html#cb22-18"></a><span class="co"># </span></span>
+<span id="cb22-19"><a href="origin-destination-commute-analysis.html#cb22-19"></a><span class="co"># }</span></span>
+<span id="cb22-20"><a href="origin-destination-commute-analysis.html#cb22-20"></a></span>
+<span id="cb22-21"><a href="origin-destination-commute-analysis.html#cb22-21"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/stockton_lodes_2017_tract_noroute.Rdata&quot;</span>)</span>
+<span id="cb22-22"><a href="origin-destination-commute-analysis.html#cb22-22"></a></span>
+<span id="cb22-23"><a href="origin-destination-commute-analysis.html#cb22-23"></a>stockton_lodes_w_counties &lt;-<span class="st"> </span></span>
+<span id="cb22-24"><a href="origin-destination-commute-analysis.html#cb22-24"></a><span class="st">  </span>stockton_lodes_h <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-25"><a href="origin-destination-commute-analysis.html#cb22-25"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb22-26"><a href="origin-destination-commute-analysis.html#cb22-26"></a>    <span class="dt">Workplace =</span> <span class="kw">ifelse</span>(</span>
+<span id="cb22-27"><a href="origin-destination-commute-analysis.html#cb22-27"></a>      w_bg <span class="op">%in%</span><span class="st"> </span>stockton_bgs_full<span class="op">$</span>GEOID,</span>
+<span id="cb22-28"><a href="origin-destination-commute-analysis.html#cb22-28"></a>      <span class="st">&quot;75000&quot;</span>,</span>
+<span id="cb22-29"><a href="origin-destination-commute-analysis.html#cb22-29"></a>      <span class="kw">substr</span>(w_bg,<span class="dv">3</span>,<span class="dv">5</span>)</span>
+<span id="cb22-30"><a href="origin-destination-commute-analysis.html#cb22-30"></a>    )</span>
+<span id="cb22-31"><a href="origin-destination-commute-analysis.html#cb22-31"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-32"><a href="origin-destination-commute-analysis.html#cb22-32"></a><span class="st">  </span><span class="kw">group_by</span>(Workplace) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-33"><a href="origin-destination-commute-analysis.html#cb22-33"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb22-34"><a href="origin-destination-commute-analysis.html#cb22-34"></a>    <span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>,<span class="st">&quot;SA01&quot;</span>,<span class="st">&quot;SA02&quot;</span>,<span class="st">&quot;SA03&quot;</span>,<span class="st">&quot;SE01&quot;</span>,<span class="st">&quot;SE02&quot;</span>,<span class="st">&quot;SE03&quot;</span>,<span class="st">&quot;SI01&quot;</span>,<span class="st">&quot;SI02&quot;</span>,<span class="st">&quot;SI03&quot;</span>), </span>
+<span id="cb22-35"><a href="origin-destination-commute-analysis.html#cb22-35"></a>    sum,</span>
+<span id="cb22-36"><a href="origin-destination-commute-analysis.html#cb22-36"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb22-37"><a href="origin-destination-commute-analysis.html#cb22-37"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-38"><a href="origin-destination-commute-analysis.html#cb22-38"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb22-39"><a href="origin-destination-commute-analysis.html#cb22-39"></a>    <span class="dt">Workplace =</span> Workplace,</span>
+<span id="cb22-40"><a href="origin-destination-commute-analysis.html#cb22-40"></a>    <span class="dt">Jobs =</span> S000,</span>
+<span id="cb22-41"><a href="origin-destination-commute-analysis.html#cb22-41"></a>    <span class="st">`</span><span class="dt">Percent Jobs</span><span class="st">`</span> =<span class="st"> </span>S000<span class="op">/</span><span class="kw">sum</span>(S000, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-42"><a href="origin-destination-commute-analysis.html#cb22-42"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span> =<span class="st"> </span>SA01<span class="op">/</span><span class="kw">sum</span>(SA01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-43"><a href="origin-destination-commute-analysis.html#cb22-43"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span> =<span class="st"> </span>SA02<span class="op">/</span><span class="kw">sum</span>(SA02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-44"><a href="origin-destination-commute-analysis.html#cb22-44"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span> =<span class="st"> </span>SA03<span class="op">/</span><span class="kw">sum</span>(SA03, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-45"><a href="origin-destination-commute-analysis.html#cb22-45"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>SE01<span class="op">/</span><span class="kw">sum</span>(SE01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-46"><a href="origin-destination-commute-analysis.html#cb22-46"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>SE02<span class="op">/</span><span class="kw">sum</span>(SE02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-47"><a href="origin-destination-commute-analysis.html#cb22-47"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>SE03<span class="op">/</span><span class="kw">sum</span>(SE03, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-48"><a href="origin-destination-commute-analysis.html#cb22-48"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI01<span class="op">/</span><span class="kw">sum</span>(SI01, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-49"><a href="origin-destination-commute-analysis.html#cb22-49"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI02<span class="op">/</span><span class="kw">sum</span>(SI02, <span class="dt">na.rm=</span>T),</span>
+<span id="cb22-50"><a href="origin-destination-commute-analysis.html#cb22-50"></a>    <span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span> =<span class="st"> </span>SI03<span class="op">/</span><span class="kw">sum</span>(SI03, <span class="dt">na.rm=</span>T)</span>
+<span id="cb22-51"><a href="origin-destination-commute-analysis.html#cb22-51"></a>  ) <span class="op">%&gt;%</span><span class="st">  </span></span>
+<span id="cb22-52"><a href="origin-destination-commute-analysis.html#cb22-52"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs))</span>
+<span id="cb22-53"><a href="origin-destination-commute-analysis.html#cb22-53"></a></span>
+<span id="cb22-54"><a href="origin-destination-commute-analysis.html#cb22-54"></a><span class="co">#merge county shapefile with stockton geometry</span></span>
+<span id="cb22-55"><a href="origin-destination-commute-analysis.html#cb22-55"></a>ca_counties_and_stockton &lt;-</span>
+<span id="cb22-56"><a href="origin-destination-commute-analysis.html#cb22-56"></a><span class="st">  </span>ca_counties <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-57"><a href="origin-destination-commute-analysis.html#cb22-57"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-58"><a href="origin-destination-commute-analysis.html#cb22-58"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb22-59"><a href="origin-destination-commute-analysis.html#cb22-59"></a>    stockton_boundary <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-60"><a href="origin-destination-commute-analysis.html#cb22-60"></a><span class="st">      </span><span class="kw">mutate</span>(</span>
+<span id="cb22-61"><a href="origin-destination-commute-analysis.html#cb22-61"></a>        <span class="dt">COUNTYFP =</span> PLACEFP</span>
+<span id="cb22-62"><a href="origin-destination-commute-analysis.html#cb22-62"></a>      ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-63"><a href="origin-destination-commute-analysis.html#cb22-63"></a><span class="st">      </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME)</span>
+<span id="cb22-64"><a href="origin-destination-commute-analysis.html#cb22-64"></a>  )</span>
+<span id="cb22-65"><a href="origin-destination-commute-analysis.html#cb22-65"></a></span>
+<span id="cb22-66"><a href="origin-destination-commute-analysis.html#cb22-66"></a>ca_counties_and_stockton[<span class="kw">which</span>(ca_counties_and_stockton<span class="op">$</span>COUNTYFP <span class="op">==</span><span class="st"> &quot;077&quot;</span>),] &lt;-</span>
+<span id="cb22-67"><a href="origin-destination-commute-analysis.html#cb22-67"></a><span class="st">  </span><span class="kw">st_difference</span>(</span>
+<span id="cb22-68"><a href="origin-destination-commute-analysis.html#cb22-68"></a>    ca_counties_and_stockton[<span class="kw">which</span>(ca_counties_and_stockton<span class="op">$</span>COUNTYFP <span class="op">==</span><span class="st"> &quot;077&quot;</span>),],</span>
+<span id="cb22-69"><a href="origin-destination-commute-analysis.html#cb22-69"></a>    ca_counties_and_stockton[<span class="kw">which</span>(ca_counties_and_stockton<span class="op">$</span>NAME <span class="op">==</span><span class="st"> &quot;Stockton&quot;</span>),]</span>
+<span id="cb22-70"><a href="origin-destination-commute-analysis.html#cb22-70"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-71"><a href="origin-destination-commute-analysis.html#cb22-71"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP,NAME)</span>
+<span id="cb22-72"><a href="origin-destination-commute-analysis.html#cb22-72"></a></span>
+<span id="cb22-73"><a href="origin-destination-commute-analysis.html#cb22-73"></a>ca_counties_and_stockton[<span class="kw">which</span>(ca_counties_and_stockton<span class="op">$</span>COUNTYFP <span class="op">==</span><span class="st"> &quot;077&quot;</span>),]<span class="op">$</span>NAME &lt;-</span>
+<span id="cb22-74"><a href="origin-destination-commute-analysis.html#cb22-74"></a><span class="st">  &quot;San Joaquin (not including Stockton)&quot;</span></span>
+<span id="cb22-75"><a href="origin-destination-commute-analysis.html#cb22-75"></a></span>
+<span id="cb22-76"><a href="origin-destination-commute-analysis.html#cb22-76"></a>stockton_lodes_w_top_counties &lt;-<span class="st"> </span></span>
+<span id="cb22-77"><a href="origin-destination-commute-analysis.html#cb22-77"></a><span class="st">  </span>stockton_lodes_w_counties[<span class="dv">1</span><span class="op">:</span><span class="dv">19</span>,] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-78"><a href="origin-destination-commute-analysis.html#cb22-78"></a><span class="st">  </span><span class="kw">left_join</span>(ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-79"><a href="origin-destination-commute-analysis.html#cb22-79"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME), <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;Workplace&quot;</span> =<span class="st"> &quot;COUNTYFP&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-80"><a href="origin-destination-commute-analysis.html#cb22-80"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>Workplace) <span class="op">%&gt;%</span></span>
+<span id="cb22-81"><a href="origin-destination-commute-analysis.html#cb22-81"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(NAME,<span class="kw">everything</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-82"><a href="origin-destination-commute-analysis.html#cb22-82"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">County =</span> NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-83"><a href="origin-destination-commute-analysis.html#cb22-83"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-84"><a href="origin-destination-commute-analysis.html#cb22-84"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>County <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-85"><a href="origin-destination-commute-analysis.html#cb22-85"></a><span class="st">  </span><span class="kw">st_as_sf</span>()</span>
+<span id="cb22-86"><a href="origin-destination-commute-analysis.html#cb22-86"></a></span>
+<span id="cb22-87"><a href="origin-destination-commute-analysis.html#cb22-87"></a>stockton_lodes_w_top_counties_table &lt;-<span class="st"> </span></span>
+<span id="cb22-88"><a href="origin-destination-commute-analysis.html#cb22-88"></a><span class="st">  </span>stockton_lodes_w_top_counties <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-89"><a href="origin-destination-commute-analysis.html#cb22-89"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-90"><a href="origin-destination-commute-analysis.html#cb22-90"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb22-91"><a href="origin-destination-commute-analysis.html#cb22-91"></a>    <span class="st">`</span><span class="dt">Workplace (where Stockton residents work)</span><span class="st">`</span> =<span class="st"> </span>County,</span>
+<span id="cb22-92"><a href="origin-destination-commute-analysis.html#cb22-92"></a>    <span class="st">`</span><span class="dt">Jobs (held by Stockton residents)</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(Jobs,<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb22-93"><a href="origin-destination-commute-analysis.html#cb22-93"></a>    <span class="st">`</span><span class="dt">Percent jobs (held by Stockton residents)</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent Jobs</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-94"><a href="origin-destination-commute-analysis.html#cb22-94"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs for workers age 29 or younger</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-95"><a href="origin-destination-commute-analysis.html#cb22-95"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs for workers age 30 to 54</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-96"><a href="origin-destination-commute-analysis.html#cb22-96"></a>    <span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs for workers age 55 or older</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-97"><a href="origin-destination-commute-analysis.html#cb22-97"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs with earnings $1250/month or less</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-98"><a href="origin-destination-commute-analysis.html#cb22-98"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs with earnings $1251/month to $3333/month</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-99"><a href="origin-destination-commute-analysis.html#cb22-99"></a>    <span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs with earnings greater than $3333/month</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-100"><a href="origin-destination-commute-analysis.html#cb22-100"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs in Goods Producing industry sectors</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-101"><a href="origin-destination-commute-analysis.html#cb22-101"></a>    <span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs in Trade, Transportation, and Utilities industry sectors</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>),</span>
+<span id="cb22-102"><a href="origin-destination-commute-analysis.html#cb22-102"></a>    <span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(<span class="st">`</span><span class="dt">Percent of jobs in All Other Services industry sectors</span><span class="st">`</span><span class="op">*</span><span class="dv">100</span>),<span class="st">&quot;%&quot;</span>)</span>
+<span id="cb22-103"><a href="origin-destination-commute-analysis.html#cb22-103"></a>  )</span>
+<span id="cb22-104"><a href="origin-destination-commute-analysis.html#cb22-104"></a></span>
+<span id="cb22-105"><a href="origin-destination-commute-analysis.html#cb22-105"></a><span class="kw">kable</span>(</span>
+<span id="cb22-106"><a href="origin-destination-commute-analysis.html#cb22-106"></a>  stockton_lodes_w_top_counties_table, </span>
+<span id="cb22-107"><a href="origin-destination-commute-analysis.html#cb22-107"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb22-108"><a href="origin-destination-commute-analysis.html#cb22-108"></a>  <span class="co"># caption = &#39;Top 15 workplaces where Stockton residents work. Includes Stockton as a workplace destination separate from the rest of SJC. All other listed workplaces are counties. Los Angeles, San Bernardino, Orange, and San Diego Counties were removed. Data from LODES, 2017.&#39;</span></span>
+<span id="cb22-109"><a href="origin-destination-commute-analysis.html#cb22-109"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-110"><a href="origin-destination-commute-analysis.html#cb22-110"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb22-111"><a href="origin-destination-commute-analysis.html#cb22-111"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Workplace (where Stockton residents work)
+</th>
+<th style="text-align:left;">
+Jobs (held by Stockton residents)
+</th>
+<th style="text-align:left;">
+Percent jobs (held by Stockton residents)
+</th>
+<th style="text-align:left;">
+Percent of jobs for workers age 29 or younger
+</th>
+<th style="text-align:left;">
+Percent of jobs for workers age 30 to 54
+</th>
+<th style="text-align:left;">
+Percent of jobs for workers age 55 or older
+</th>
+<th style="text-align:left;">
+Percent of jobs with earnings $1250/month or less
+</th>
+<th style="text-align:left;">
+Percent of jobs with earnings $1251/month to $3333/month
+</th>
+<th style="text-align:left;">
+Percent of jobs with earnings greater than $3333/month
+</th>
+<th style="text-align:left;">
+Percent of jobs in Goods Producing industry sectors
+</th>
+<th style="text-align:left;">
+Percent of jobs in Trade, Transportation, and Utilities industry sectors
+</th>
+<th style="text-align:left;">
+Percent of jobs in All Other Services industry sectors
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Stockton
+</td>
+<td style="text-align:left;">
+53,000
+</td>
+<td style="text-align:left;">
+41%
+</td>
+<td style="text-align:left;">
+37%
+</td>
+<td style="text-align:left;">
+41%
+</td>
+<td style="text-align:left;">
+47%
+</td>
+<td style="text-align:left;">
+46%
+</td>
+<td style="text-align:left;">
+41%
+</td>
+<td style="text-align:left;">
+38%
+</td>
+<td style="text-align:left;">
+30%
+</td>
+<td style="text-align:left;">
+33%
+</td>
+<td style="text-align:left;">
+48%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Joaquin (not including Stockton)
+</td>
+<td style="text-align:left;">
+18,600
+</td>
+<td style="text-align:left;">
+14%
+</td>
+<td style="text-align:left;">
+15%
+</td>
+<td style="text-align:left;">
+14%
+</td>
+<td style="text-align:left;">
+14%
+</td>
+<td style="text-align:left;">
+13%
+</td>
+<td style="text-align:left;">
+17%
+</td>
+<td style="text-align:left;">
+12%
+</td>
+<td style="text-align:left;">
+23%
+</td>
+<td style="text-align:left;">
+18%
+</td>
+<td style="text-align:left;">
+10%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Alameda
+</td>
+<td style="text-align:left;">
+9,400
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+9%
+</td>
+<td style="text-align:left;">
+10%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sacramento
+</td>
+<td style="text-align:left;">
+9,300
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+6%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+7%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+<td style="text-align:left;">
+8%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Santa Clara
+</td>
+<td style="text-align:left;">
+5,900
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+5%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Stanislaus
+</td>
+<td style="text-align:left;">
+4,700
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Contra Costa
+</td>
+<td style="text-align:left;">
+4,500
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Francisco
+</td>
+<td style="text-align:left;">
+3,200
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+4%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+3%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Mateo
+</td>
+<td style="text-align:left;">
+2,400
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Solano
+</td>
+<td style="text-align:left;">
+1,700
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fresno
+</td>
+<td style="text-align:left;">
+1,400
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+2%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Placer
+</td>
+<td style="text-align:left;">
+1,200
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yolo
+</td>
+<td style="text-align:left;">
+900
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sonoma
+</td>
+<td style="text-align:left;">
+800
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monterey
+</td>
+<td style="text-align:left;">
+700
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+1%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The following maps help to visualize the specific distribution of Stockton residents’ jobs in the categories of age, earnings, and industry sector.</p>
+<p>37% of younger (under 29) Stockton employed residents work within Stockton, and another 15% work outside of Stockton but within SJC. Beyond that, there are higher concentrations of these younger workers in Sacramento and Alameda County compared to other neighboring counties.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="origin-destination-commute-analysis.html#cb23-1"></a><span class="co"># map &lt;- mapview(stockton_lodes_w_top_counties[-c(1,2),c(&quot;Percent of jobs for workers age 29 or younger&quot;)], zcol = &quot;Percent of jobs for workers age 29 or younger&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Percent of jobs&lt;/br&gt;for workers age&lt;/br&gt;29 or younger&#39;)</span></span>
+<span id="cb23-2"><a href="origin-destination-commute-analysis.html#cb23-2"></a><span class="co"># </span></span>
+<span id="cb23-3"><a href="origin-destination-commute-analysis.html#cb23-3"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-top-counties-youth.html&quot;)</span></span>
+<span id="cb23-4"><a href="origin-destination-commute-analysis.html#cb23-4"></a></span>
+<span id="cb23-5"><a href="origin-destination-commute-analysis.html#cb23-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-youth.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-top-counties-youth"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-youth.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.9: Top 13 counties where Stockton residents work, not including SJC - percent of overall jobs for Stockton workers age 29 or younger located in workplace. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>46% of lower-wage (less than $1,250/month) Stockton employed residents work within Stockton, and another 13% work outside of Stockton but within SJC. Beyond that, there is a higher concentration of these lower-wage workers in Sacramento County compared to other neighboring counties.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="origin-destination-commute-analysis.html#cb24-1"></a><span class="co"># map = mapview(stockton_lodes_w_top_counties[-c(1,2),c(&quot;Percent of jobs with earnings $1250/month or less&quot;)], zcol = &quot;Percent of jobs with earnings $1250/month or less&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Percent of jobs&lt;/br&gt;with earnings&lt;/br&gt;$1250/month or less&#39;)</span></span>
+<span id="cb24-2"><a href="origin-destination-commute-analysis.html#cb24-2"></a><span class="co"># </span></span>
+<span id="cb24-3"><a href="origin-destination-commute-analysis.html#cb24-3"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-top-counties-lowinc.html&quot;)</span></span>
+<span id="cb24-4"><a href="origin-destination-commute-analysis.html#cb24-4"></a></span>
+<span id="cb24-5"><a href="origin-destination-commute-analysis.html#cb24-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-lowinc.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-top-counties-lowinc"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-lowinc.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.10: Top 13 counties where Stockton residents work, not including SJC - percent of overall jobs for Stockton workers with earnings $1250/month or less located in workplace. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>38% of higher-wage (greater than $3,333/month) Stockton employed residents work within Stockton, and another 12% work outside of Stockton but within SJC. Note these percentages are lower than the percentages of lower-wage jobs that remain local. Beyond that, there is a higher concentration of these high-wage workers in Alameda County compared to other neighboring counties. Perhaps targeted marketing of businesses that are providing these higher-wage jobs in Alameda County to move to Stockton could be an effective investment.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="origin-destination-commute-analysis.html#cb25-1"></a><span class="co"># map = mapview(stockton_lodes_w_top_counties[-c(1,2),c(&quot;Percent of jobs with earnings greater than $3333/month&quot;)], zcol = &quot;Percent of jobs with earnings greater than $3333/month&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Percent of jobs&lt;/br&gt;with earnings&lt;/br&gt;greater than&lt;/br&gt;$3333/month&#39;)</span></span>
+<span id="cb25-2"><a href="origin-destination-commute-analysis.html#cb25-2"></a><span class="co"># </span></span>
+<span id="cb25-3"><a href="origin-destination-commute-analysis.html#cb25-3"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-top-counties-highinc.html&quot;)</span></span>
+<span id="cb25-4"><a href="origin-destination-commute-analysis.html#cb25-4"></a></span>
+<span id="cb25-5"><a href="origin-destination-commute-analysis.html#cb25-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-highinc.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-top-counties-highinc"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-highinc.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.11: Top 13 counties where Stockton residents work, not including SJC - percent of overall jobs for Stockton residents with earnings greater than $3333/month located in workplace. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>30% of Stockton employed residents in Goods Producing industry sectors work within Stockton, and another 23% (a notably high percentage) work outside of Stockton but within SJC. Beyond that, there is a higher concentration of these high-wage workers in Alameda County compared to other neighboring counties.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="origin-destination-commute-analysis.html#cb26-1"></a><span class="co"># map = mapview(stockton_lodes_w_top_counties[-c(1,2),c(&quot;Percent of jobs in Goods Producing industry sectors&quot;)], zcol = &quot;Percent of jobs in Goods Producing industry sectors&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Percent of jobs&lt;/br&gt;in Goods Producing&lt;/br&gt;industry sectors&#39;)</span></span>
+<span id="cb26-2"><a href="origin-destination-commute-analysis.html#cb26-2"></a><span class="co"># </span></span>
+<span id="cb26-3"><a href="origin-destination-commute-analysis.html#cb26-3"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-top-counties-goods.html&quot;)</span></span>
+<span id="cb26-4"><a href="origin-destination-commute-analysis.html#cb26-4"></a></span>
+<span id="cb26-5"><a href="origin-destination-commute-analysis.html#cb26-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-goods.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-top-counties-goods"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-goods.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.12: Top 13 counties where Stockton residents work, not including SJC - percent of jobs for Stockton residents in Goods Producing industry sectors located in workplace. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>33% of Stockton employed residents in Trade, Transportation, and Utilities industry sectors work within Stockton, and another 18% work outside of Stockton but within SJC. Beyond that, there are higher concentrations of these high-wage workers in Sacramento and Alameda County compared to other neighboring counties.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="origin-destination-commute-analysis.html#cb27-1"></a><span class="co"># # map = mapview(stockton_lodes_w_top_counties[-c(1,2),c(&quot;Percent of jobs in Trade, Transportation, and Utilities industry sectors&quot;)], zcol = &quot;Percent of jobs in Trade, Transportation, and Utilities industry sectors&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Percent of jobs&lt;/br&gt;in Trade, Transportation,&lt;/br&gt;and Utilities&lt;/br&gt;industry sectors&#39;)</span></span>
+<span id="cb27-2"><a href="origin-destination-commute-analysis.html#cb27-2"></a><span class="co"># </span></span>
+<span id="cb27-3"><a href="origin-destination-commute-analysis.html#cb27-3"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-top-counties-trade.html&quot;)</span></span>
+<span id="cb27-4"><a href="origin-destination-commute-analysis.html#cb27-4"></a></span>
+<span id="cb27-5"><a href="origin-destination-commute-analysis.html#cb27-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-trade.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-top-counties-trade"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-trade.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.13: Top 13 counties where Stockton residents work, not including SJC - percent of jobs for Stockton residents in Trade, Transportation, and Utilities industry sectors located in workplace. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>48% (a notably high percentage) of Stockton employed residents in All Other Services industry sectors work within Stockton, and another 10% work outside of Stockton but within SJC. Beyond that, there is a higher concentrations of these high-wage workers in Alameda County compared to other neighboring counties.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="origin-destination-commute-analysis.html#cb28-1"></a><span class="co"># map = mapview(stockton_lodes_w_top_counties[-c(1,2),c(&quot;Percent of jobs in All Other Services industry sectors&quot;)], zcol = &quot;Percent of jobs in All Other Services industry sectors&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Percent of jobs&lt;/br&gt;in All Other Services&lt;/br&gt;industry sectors&#39;)</span></span>
+<span id="cb28-2"><a href="origin-destination-commute-analysis.html#cb28-2"></a><span class="co"># </span></span>
+<span id="cb28-3"><a href="origin-destination-commute-analysis.html#cb28-3"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-top-counties-services.html&quot;)</span></span>
+<span id="cb28-4"><a href="origin-destination-commute-analysis.html#cb28-4"></a></span>
+<span id="cb28-5"><a href="origin-destination-commute-analysis.html#cb28-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-services.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-top-counties-services"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-top-counties-services.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.14: Top 13 counties where Stockton residents work, not including SJC - percent of jobs for Stockton residents in All Other Services industry sectors located in workplace. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>While LODES origin-destination data doesn’t provide job types at a granularity lower than the three broad industry sector categories in the previous three maps, one possible assumption to make is that the distribution of NAICS industry sectors in a destination block group, which is available through the separate Workplace Area Characteristics dataset from LODES, is the same distribution for specifically Stockton residents who work in that block group. Using this assumption, we created estimates of the locations of specific types of industries and wage levels for Stockton employed residents.</p>
+<p>The percentages in the table below should be interpreted as the % of overall jobs held by Stockton residents of that industry sector and wage tier that are based in San Joaquin County (the remainder being based in other counties). Particularly notable here are the low-percentage estimates of high-wage jobs in sectors generally related to the “knowledge economy”: Finance and Insurance (38%), Information (28%), and Professional, Scientific, and Technical Services (19%). Also notable is the low percentage of high-wage jobs in Construction (35%), which may include specialized building trades such as solar installation. These percentages are relative to an overall 64% of high-wage jobs being based in SJC, which suggests that the best jobs in these notable industries are significantly underrepresented in the local economy.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="origin-destination-commute-analysis.html#cb29-1"></a><span class="co"># ca_wac &lt;-</span></span>
+<span id="cb29-2"><a href="origin-destination-commute-analysis.html#cb29-2"></a><span class="co">#   2010:2017 %&gt;%</span></span>
+<span id="cb29-3"><a href="origin-destination-commute-analysis.html#cb29-3"></a><span class="co">#   map_dfr(function(year){</span></span>
+<span id="cb29-4"><a href="origin-destination-commute-analysis.html#cb29-4"></a><span class="co">#     ca_wac &lt;-</span></span>
+<span id="cb29-5"><a href="origin-destination-commute-analysis.html#cb29-5"></a><span class="co">#       grab_lodes(</span></span>
+<span id="cb29-6"><a href="origin-destination-commute-analysis.html#cb29-6"></a><span class="co">#         state = &quot;ca&quot;,</span></span>
+<span id="cb29-7"><a href="origin-destination-commute-analysis.html#cb29-7"></a><span class="co">#         year = year,</span></span>
+<span id="cb29-8"><a href="origin-destination-commute-analysis.html#cb29-8"></a><span class="co">#         lodes_type = &quot;wac&quot;,</span></span>
+<span id="cb29-9"><a href="origin-destination-commute-analysis.html#cb29-9"></a><span class="co">#         job_type = &quot;JT01&quot;,</span></span>
+<span id="cb29-10"><a href="origin-destination-commute-analysis.html#cb29-10"></a><span class="co">#         segment = &quot;S000&quot;,</span></span>
+<span id="cb29-11"><a href="origin-destination-commute-analysis.html#cb29-11"></a><span class="co">#         state_part = &quot;main&quot;,</span></span>
+<span id="cb29-12"><a href="origin-destination-commute-analysis.html#cb29-12"></a><span class="co">#         agg_geo = &quot;bg&quot;</span></span>
+<span id="cb29-13"><a href="origin-destination-commute-analysis.html#cb29-13"></a><span class="co">#       )</span></span>
+<span id="cb29-14"><a href="origin-destination-commute-analysis.html#cb29-14"></a><span class="co"># </span></span>
+<span id="cb29-15"><a href="origin-destination-commute-analysis.html#cb29-15"></a><span class="co">#     return(ca_wac)</span></span>
+<span id="cb29-16"><a href="origin-destination-commute-analysis.html#cb29-16"></a><span class="co">#   })</span></span>
+<span id="cb29-17"><a href="origin-destination-commute-analysis.html#cb29-17"></a><span class="co"># </span></span>
+<span id="cb29-18"><a href="origin-destination-commute-analysis.html#cb29-18"></a><span class="co"># save(ca_wac, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/ca_wac.Rdata&quot;)</span></span>
+<span id="cb29-19"><a href="origin-destination-commute-analysis.html#cb29-19"></a></span>
+<span id="cb29-20"><a href="origin-destination-commute-analysis.html#cb29-20"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/ca_wac.Rdata&quot;</span>)</span>
+<span id="cb29-21"><a href="origin-destination-commute-analysis.html#cb29-21"></a></span>
+<span id="cb29-22"><a href="origin-destination-commute-analysis.html#cb29-22"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/LODES/stockton_lodes_2017_tract_noroute.Rdata&quot;</span>)</span>
+<span id="cb29-23"><a href="origin-destination-commute-analysis.html#cb29-23"></a></span>
+<span id="cb29-24"><a href="origin-destination-commute-analysis.html#cb29-24"></a>stockton_lodes_h_join_wac &lt;-<span class="st"> </span></span>
+<span id="cb29-25"><a href="origin-destination-commute-analysis.html#cb29-25"></a><span class="st">  </span>stockton_lodes_h <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-26"><a href="origin-destination-commute-analysis.html#cb29-26"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(year,state)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-27"><a href="origin-destination-commute-analysis.html#cb29-27"></a><span class="st">  </span><span class="kw">left_join</span>(</span>
+<span id="cb29-28"><a href="origin-destination-commute-analysis.html#cb29-28"></a>    ca_wac <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-29"><a href="origin-destination-commute-analysis.html#cb29-29"></a><span class="st">      </span><span class="kw">filter</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2017</span>), </span>
+<span id="cb29-30"><a href="origin-destination-commute-analysis.html#cb29-30"></a>    <span class="dt">by =</span> <span class="st">&quot;w_bg&quot;</span></span>
+<span id="cb29-31"><a href="origin-destination-commute-analysis.html#cb29-31"></a>  )</span>
+<span id="cb29-32"><a href="origin-destination-commute-analysis.html#cb29-32"></a></span>
+<span id="cb29-33"><a href="origin-destination-commute-analysis.html#cb29-33"></a>stockton_lodes_h_join_wac_normalize &lt;-</span>
+<span id="cb29-34"><a href="origin-destination-commute-analysis.html#cb29-34"></a><span class="st">  </span>stockton_lodes_h_join_wac <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-35"><a href="origin-destination-commute-analysis.html#cb29-35"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-36"><a href="origin-destination-commute-analysis.html#cb29-36"></a>    <span class="dt">goodsproducing =</span> CNS01<span class="op">+</span>CNS02<span class="op">+</span>CNS04<span class="op">+</span>CNS05,</span>
+<span id="cb29-37"><a href="origin-destination-commute-analysis.html#cb29-37"></a>    <span class="dt">tradetransportutil =</span> CNS03<span class="op">+</span>CNS06<span class="op">+</span>CNS07<span class="op">+</span>CNS08,</span>
+<span id="cb29-38"><a href="origin-destination-commute-analysis.html#cb29-38"></a>    <span class="dt">services =</span> CNS09<span class="op">+</span>CNS10<span class="op">+</span>CNS11<span class="op">+</span>CNS12<span class="op">+</span>CNS13<span class="op">+</span>CNS14<span class="op">+</span>CNS15<span class="op">+</span>CNS16<span class="op">+</span>CNS17<span class="op">+</span>CNS18<span class="op">+</span>CNS19<span class="op">+</span>CNS20</span>
+<span id="cb29-39"><a href="origin-destination-commute-analysis.html#cb29-39"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-40"><a href="origin-destination-commute-analysis.html#cb29-40"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-41"><a href="origin-destination-commute-analysis.html#cb29-41"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(CNS01,CNS02,CNS04,CNS05),</span>
+<span id="cb29-42"><a href="origin-destination-commute-analysis.html#cb29-42"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span>SI01<span class="op">*</span>.<span class="op">/</span>goodsproducing)</span>
+<span id="cb29-43"><a href="origin-destination-commute-analysis.html#cb29-43"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-44"><a href="origin-destination-commute-analysis.html#cb29-44"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-45"><a href="origin-destination-commute-analysis.html#cb29-45"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(CNS03,CNS06,CNS07,CNS08),</span>
+<span id="cb29-46"><a href="origin-destination-commute-analysis.html#cb29-46"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span>SI02<span class="op">*</span>.<span class="op">/</span>tradetransportutil)</span>
+<span id="cb29-47"><a href="origin-destination-commute-analysis.html#cb29-47"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb29-48"><a href="origin-destination-commute-analysis.html#cb29-48"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-49"><a href="origin-destination-commute-analysis.html#cb29-49"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(CNS09<span class="op">:</span>CNS20),</span>
+<span id="cb29-50"><a href="origin-destination-commute-analysis.html#cb29-50"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span>SI03<span class="op">*</span>.<span class="op">/</span>services)</span>
+<span id="cb29-51"><a href="origin-destination-commute-analysis.html#cb29-51"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-52"><a href="origin-destination-commute-analysis.html#cb29-52"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(SA01<span class="op">:</span>SA03,C000<span class="op">:</span>CE03,CR01<span class="op">:</span>CFS05),SE01,SE02,SE03) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-53"><a href="origin-destination-commute-analysis.html#cb29-53"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">low=</span>SE01,<span class="dt">mid=</span>SE02,<span class="dt">high=</span>SE03) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-54"><a href="origin-destination-commute-analysis.html#cb29-54"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, low<span class="op">:</span>high) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-55"><a href="origin-destination-commute-analysis.html#cb29-55"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-56"><a href="origin-destination-commute-analysis.html#cb29-56"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(CNS01<span class="op">:</span>CNS20),</span>
+<span id="cb29-57"><a href="origin-destination-commute-analysis.html#cb29-57"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span>.<span class="op">/</span>S000<span class="op">*</span>value)</span>
+<span id="cb29-58"><a href="origin-destination-commute-analysis.html#cb29-58"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-59"><a href="origin-destination-commute-analysis.html#cb29-59"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type2&quot;</span>, value2, CNS01<span class="op">:</span>CNS20) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-60"><a href="origin-destination-commute-analysis.html#cb29-60"></a><span class="st">  </span><span class="kw">unite</span>(temp,type,type2) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-61"><a href="origin-destination-commute-analysis.html#cb29-61"></a><span class="st">  </span><span class="kw">spread</span>(temp,value2) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-62"><a href="origin-destination-commute-analysis.html#cb29-62"></a><span class="st">  </span><span class="kw">filter</span>(value <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-63"><a href="origin-destination-commute-analysis.html#cb29-63"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>value)</span>
+<span id="cb29-64"><a href="origin-destination-commute-analysis.html#cb29-64"></a></span>
+<span id="cb29-65"><a href="origin-destination-commute-analysis.html#cb29-65"></a>stockton_lodes_w_counties_detail&lt;-</span>
+<span id="cb29-66"><a href="origin-destination-commute-analysis.html#cb29-66"></a><span class="st">  </span>stockton_lodes_h_join_wac_normalize <span class="op">%&gt;%</span></span>
+<span id="cb29-67"><a href="origin-destination-commute-analysis.html#cb29-67"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-68"><a href="origin-destination-commute-analysis.html#cb29-68"></a>    <span class="dt">Workplace =</span> <span class="kw">ifelse</span>(</span>
+<span id="cb29-69"><a href="origin-destination-commute-analysis.html#cb29-69"></a>      w_bg <span class="op">%in%</span><span class="st"> </span>stockton_bgs_full<span class="op">$</span>GEOID,</span>
+<span id="cb29-70"><a href="origin-destination-commute-analysis.html#cb29-70"></a>      <span class="st">&quot;75000&quot;</span>,</span>
+<span id="cb29-71"><a href="origin-destination-commute-analysis.html#cb29-71"></a>      <span class="kw">substr</span>(w_bg,<span class="dv">3</span>,<span class="dv">5</span>)</span>
+<span id="cb29-72"><a href="origin-destination-commute-analysis.html#cb29-72"></a>    )</span>
+<span id="cb29-73"><a href="origin-destination-commute-analysis.html#cb29-73"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb29-74"><a href="origin-destination-commute-analysis.html#cb29-74"></a><span class="st">  </span><span class="kw">group_by</span>(Workplace) <span class="op">%&gt;%</span></span>
+<span id="cb29-75"><a href="origin-destination-commute-analysis.html#cb29-75"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb29-76"><a href="origin-destination-commute-analysis.html#cb29-76"></a>    <span class="kw">vars</span>(S000,SE01,SE02,SE03,high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb29-77"><a href="origin-destination-commute-analysis.html#cb29-77"></a>    sum, </span>
+<span id="cb29-78"><a href="origin-destination-commute-analysis.html#cb29-78"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb29-79"><a href="origin-destination-commute-analysis.html#cb29-79"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb29-80"><a href="origin-destination-commute-analysis.html#cb29-80"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-81"><a href="origin-destination-commute-analysis.html#cb29-81"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb29-82"><a href="origin-destination-commute-analysis.html#cb29-82"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">round</span>(.,<span class="dv">0</span>))</span>
+<span id="cb29-83"><a href="origin-destination-commute-analysis.html#cb29-83"></a>  )</span>
+<span id="cb29-84"><a href="origin-destination-commute-analysis.html#cb29-84"></a></span>
+<span id="cb29-85"><a href="origin-destination-commute-analysis.html#cb29-85"></a>stockton_lodes_w_sjc_detail &lt;-</span>
+<span id="cb29-86"><a href="origin-destination-commute-analysis.html#cb29-86"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb29-87"><a href="origin-destination-commute-analysis.html#cb29-87"></a>    stockton_lodes_w_counties_detail[<span class="kw">which</span>(stockton_lodes_w_counties_detail<span class="op">$</span>Workplace <span class="op">==</span><span class="st"> &quot;75000&quot;</span>),<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb29-88"><a href="origin-destination-commute-analysis.html#cb29-88"></a>    stockton_lodes_w_counties_detail[,<span class="op">-</span><span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-89"><a href="origin-destination-commute-analysis.html#cb29-89"></a><span class="st">    </span><span class="kw">colSums</span>()</span>
+<span id="cb29-90"><a href="origin-destination-commute-analysis.html#cb29-90"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-91"><a href="origin-destination-commute-analysis.html#cb29-91"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb29-92"><a href="origin-destination-commute-analysis.html#cb29-92"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-93"><a href="origin-destination-commute-analysis.html#cb29-93"></a><span class="st">  </span><span class="kw">rownames_to_column</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-94"><a href="origin-destination-commute-analysis.html#cb29-94"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-95"><a href="origin-destination-commute-analysis.html#cb29-95"></a>    <span class="dt">perc =</span> <span class="kw">round</span>(V1<span class="op">/</span>V2<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),</span>
+<span id="cb29-96"><a href="origin-destination-commute-analysis.html#cb29-96"></a>    <span class="dt">rowname =</span> </span>
+<span id="cb29-97"><a href="origin-destination-commute-analysis.html#cb29-97"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb29-98"><a href="origin-destination-commute-analysis.html#cb29-98"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE01&quot;</span> <span class="op">~</span><span class="st"> &quot;low_Total&quot;</span>,</span>
+<span id="cb29-99"><a href="origin-destination-commute-analysis.html#cb29-99"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE02&quot;</span> <span class="op">~</span><span class="st"> &quot;mid_Total&quot;</span>,</span>
+<span id="cb29-100"><a href="origin-destination-commute-analysis.html#cb29-100"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE03&quot;</span> <span class="op">~</span><span class="st"> &quot;high_Total&quot;</span>,</span>
+<span id="cb29-101"><a href="origin-destination-commute-analysis.html#cb29-101"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>rowname</span>
+<span id="cb29-102"><a href="origin-destination-commute-analysis.html#cb29-102"></a>      )</span>
+<span id="cb29-103"><a href="origin-destination-commute-analysis.html#cb29-103"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-104"><a href="origin-destination-commute-analysis.html#cb29-104"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>V1,<span class="op">-</span>V2) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-105"><a href="origin-destination-commute-analysis.html#cb29-105"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>rowname <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-106"><a href="origin-destination-commute-analysis.html#cb29-106"></a><span class="st">  </span><span class="kw">separate</span>(</span>
+<span id="cb29-107"><a href="origin-destination-commute-analysis.html#cb29-107"></a>    rowname,</span>
+<span id="cb29-108"><a href="origin-destination-commute-analysis.html#cb29-108"></a>    <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;wage&quot;</span>,<span class="st">&quot;industry&quot;</span>),</span>
+<span id="cb29-109"><a href="origin-destination-commute-analysis.html#cb29-109"></a>    <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span></span>
+<span id="cb29-110"><a href="origin-destination-commute-analysis.html#cb29-110"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-111"><a href="origin-destination-commute-analysis.html#cb29-111"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-112"><a href="origin-destination-commute-analysis.html#cb29-112"></a>    <span class="dt">industry =</span></span>
+<span id="cb29-113"><a href="origin-destination-commute-analysis.html#cb29-113"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb29-114"><a href="origin-destination-commute-analysis.html#cb29-114"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS01&quot;</span> <span class="op">~</span><span class="st"> &quot;Agriculture, Forestry, Fishing and Hunting&quot;</span>,</span>
+<span id="cb29-115"><a href="origin-destination-commute-analysis.html#cb29-115"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS02&quot;</span> <span class="op">~</span><span class="st"> &quot;Mining, Quarrying, and Oil and Gas Extraction&quot;</span>,</span>
+<span id="cb29-116"><a href="origin-destination-commute-analysis.html#cb29-116"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS03&quot;</span> <span class="op">~</span><span class="st"> &quot;Utilities&quot;</span>,</span>
+<span id="cb29-117"><a href="origin-destination-commute-analysis.html#cb29-117"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS04&quot;</span> <span class="op">~</span><span class="st"> &quot;Construction&quot;</span>,</span>
+<span id="cb29-118"><a href="origin-destination-commute-analysis.html#cb29-118"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS05&quot;</span> <span class="op">~</span><span class="st"> &quot;Manufacturing&quot;</span>,</span>
+<span id="cb29-119"><a href="origin-destination-commute-analysis.html#cb29-119"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS06&quot;</span> <span class="op">~</span><span class="st"> &quot;Wholesale Trade&quot;</span>,</span>
+<span id="cb29-120"><a href="origin-destination-commute-analysis.html#cb29-120"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS07&quot;</span> <span class="op">~</span><span class="st"> &quot;Retail Trade&quot;</span>,</span>
+<span id="cb29-121"><a href="origin-destination-commute-analysis.html#cb29-121"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS08&quot;</span> <span class="op">~</span><span class="st"> &quot;Transportation and Warehousing&quot;</span>,</span>
+<span id="cb29-122"><a href="origin-destination-commute-analysis.html#cb29-122"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS09&quot;</span> <span class="op">~</span><span class="st"> &quot;Information&quot;</span>,</span>
+<span id="cb29-123"><a href="origin-destination-commute-analysis.html#cb29-123"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS10&quot;</span> <span class="op">~</span><span class="st"> &quot;Finance and Insurance&quot;</span>,</span>
+<span id="cb29-124"><a href="origin-destination-commute-analysis.html#cb29-124"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS11&quot;</span> <span class="op">~</span><span class="st"> &quot;Real Estate and Rental and Leasing&quot;</span>,</span>
+<span id="cb29-125"><a href="origin-destination-commute-analysis.html#cb29-125"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS12&quot;</span> <span class="op">~</span><span class="st"> &quot;Professional, Scientific, and Technical Services&quot;</span>,</span>
+<span id="cb29-126"><a href="origin-destination-commute-analysis.html#cb29-126"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS13&quot;</span> <span class="op">~</span><span class="st"> &quot;Management of Companies and Enterprises&quot;</span>,</span>
+<span id="cb29-127"><a href="origin-destination-commute-analysis.html#cb29-127"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS14&quot;</span> <span class="op">~</span><span class="st"> &quot;Administrative and Support and Waste Management and Remediation Services&quot;</span>,</span>
+<span id="cb29-128"><a href="origin-destination-commute-analysis.html#cb29-128"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS15&quot;</span> <span class="op">~</span><span class="st"> &quot;Educational Services&quot;</span>,</span>
+<span id="cb29-129"><a href="origin-destination-commute-analysis.html#cb29-129"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS16&quot;</span> <span class="op">~</span><span class="st"> &quot;Health Care and Social Assistance&quot;</span>,</span>
+<span id="cb29-130"><a href="origin-destination-commute-analysis.html#cb29-130"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS17&quot;</span> <span class="op">~</span><span class="st"> &quot;Arts, Entertainment, and Recreation&quot;</span>,</span>
+<span id="cb29-131"><a href="origin-destination-commute-analysis.html#cb29-131"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS18&quot;</span> <span class="op">~</span><span class="st"> &quot;Accommodation and Food Services&quot;</span>,</span>
+<span id="cb29-132"><a href="origin-destination-commute-analysis.html#cb29-132"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS20&quot;</span> <span class="op">~</span><span class="st"> &quot;Public Administration&quot;</span>,</span>
+<span id="cb29-133"><a href="origin-destination-commute-analysis.html#cb29-133"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS19&quot;</span> <span class="op">~</span><span class="st"> &quot;Other Services&quot;</span>,</span>
+<span id="cb29-134"><a href="origin-destination-commute-analysis.html#cb29-134"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>industry</span>
+<span id="cb29-135"><a href="origin-destination-commute-analysis.html#cb29-135"></a>      )</span>
+<span id="cb29-136"><a href="origin-destination-commute-analysis.html#cb29-136"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-137"><a href="origin-destination-commute-analysis.html#cb29-137"></a><span class="st">  </span><span class="kw">spread</span>(wage,perc) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-138"><a href="origin-destination-commute-analysis.html#cb29-138"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb29-139"><a href="origin-destination-commute-analysis.html#cb29-139"></a>    <span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span> =<span class="st"> </span>industry,</span>
+<span id="cb29-140"><a href="origin-destination-commute-analysis.html#cb29-140"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>low,</span>
+<span id="cb29-141"><a href="origin-destination-commute-analysis.html#cb29-141"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>mid,</span>
+<span id="cb29-142"><a href="origin-destination-commute-analysis.html#cb29-142"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>high</span>
+<span id="cb29-143"><a href="origin-destination-commute-analysis.html#cb29-143"></a>  )</span>
+<span id="cb29-144"><a href="origin-destination-commute-analysis.html#cb29-144"></a></span>
+<span id="cb29-145"><a href="origin-destination-commute-analysis.html#cb29-145"></a>stockton_lodes_w_sjc_detail_table &lt;-</span>
+<span id="cb29-146"><a href="origin-destination-commute-analysis.html#cb29-146"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb29-147"><a href="origin-destination-commute-analysis.html#cb29-147"></a>    stockton_lodes_w_sjc_detail[<span class="kw">which</span>(stockton_lodes_w_sjc_detail<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">==</span><span class="st">&quot;Total&quot;</span>),],</span>
+<span id="cb29-148"><a href="origin-destination-commute-analysis.html#cb29-148"></a>    stockton_lodes_w_sjc_detail[<span class="kw">which</span>(stockton_lodes_w_sjc_detail<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">!=</span><span class="st">&quot;Total&quot;</span>),]</span>
+<span id="cb29-149"><a href="origin-destination-commute-analysis.html#cb29-149"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-150"><a href="origin-destination-commute-analysis.html#cb29-150"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-151"><a href="origin-destination-commute-analysis.html#cb29-151"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="op">-</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span>),</span>
+<span id="cb29-152"><a href="origin-destination-commute-analysis.html#cb29-152"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">paste0</span>(.,<span class="st">&quot;%&quot;</span>))</span>
+<span id="cb29-153"><a href="origin-destination-commute-analysis.html#cb29-153"></a>  )</span>
+<span id="cb29-154"><a href="origin-destination-commute-analysis.html#cb29-154"></a></span>
+<span id="cb29-155"><a href="origin-destination-commute-analysis.html#cb29-155"></a><span class="kw">kable</span>(</span>
+<span id="cb29-156"><a href="origin-destination-commute-analysis.html#cb29-156"></a>  stockton_lodes_w_sjc_detail_table, </span>
+<span id="cb29-157"><a href="origin-destination-commute-analysis.html#cb29-157"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb29-158"><a href="origin-destination-commute-analysis.html#cb29-158"></a>  <span class="dt">caption =</span> <span class="st">&#39;Percent of Stockton employed residents working in Stockton, by NAICS industry and wage tier. Data from LODES, 2017.&#39;</span></span>
+<span id="cb29-159"><a href="origin-destination-commute-analysis.html#cb29-159"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-160"><a href="origin-destination-commute-analysis.html#cb29-160"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb29-161"><a href="origin-destination-commute-analysis.html#cb29-161"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:stockton-lodes-w-sjc-detail-table">Table 2.14: </span>Percent of Stockton employed residents working in Stockton, by NAICS industry and wage tier. Data from LODES, 2017.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+NAICS Industry
+</th>
+<th style="text-align:left;">
+% Stockton Jobs in Stockton with earnings $1250/month or less
+</th>
+<th style="text-align:left;">
+% Stockton Jobs in Stockton with earnings $1251/month to $3333/month
+</th>
+<th style="text-align:left;">
+% Stockton Jobs in Stockton with earnings greater than $3333/month
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:left;">
+56%
+</td>
+<td style="text-align:left;">
+50%
+</td>
+<td style="text-align:left;">
+51%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Accommodation and Food Services
+</td>
+<td style="text-align:left;">
+49%
+</td>
+<td style="text-align:left;">
+42%
+</td>
+<td style="text-align:left;">
+37%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Administrative and Support and Waste Management and Remediation Services
+</td>
+<td style="text-align:left;">
+51%
+</td>
+<td style="text-align:left;">
+48%
+</td>
+<td style="text-align:left;">
+39%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Agriculture, Forestry, Fishing and Hunting
+</td>
+<td style="text-align:left;">
+39%
+</td>
+<td style="text-align:left;">
+25%
+</td>
+<td style="text-align:left;">
+27%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arts, Entertainment, and Recreation
+</td>
+<td style="text-align:left;">
+43%
+</td>
+<td style="text-align:left;">
+40%
+</td>
+<td style="text-align:left;">
+41%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Construction
+</td>
+<td style="text-align:left;">
+40%
+</td>
+<td style="text-align:left;">
+34%
+</td>
+<td style="text-align:left;">
+23%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educational Services
+</td>
+<td style="text-align:left;">
+64%
+</td>
+<td style="text-align:left;">
+60%
+</td>
+<td style="text-align:left;">
+58%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Finance and Insurance
+</td>
+<td style="text-align:left;">
+39%
+</td>
+<td style="text-align:left;">
+34%
+</td>
+<td style="text-align:left;">
+24%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Health Care and Social Assistance
+</td>
+<td style="text-align:left;">
+62%
+</td>
+<td style="text-align:left;">
+55%
+</td>
+<td style="text-align:left;">
+46%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Information
+</td>
+<td style="text-align:left;">
+31%
+</td>
+<td style="text-align:left;">
+33%
+</td>
+<td style="text-align:left;">
+26%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Management of Companies and Enterprises
+</td>
+<td style="text-align:left;">
+46%
+</td>
+<td style="text-align:left;">
+42%
+</td>
+<td style="text-align:left;">
+35%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manufacturing
+</td>
+<td style="text-align:left;">
+43%
+</td>
+<td style="text-align:left;">
+38%
+</td>
+<td style="text-align:left;">
+25%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mining, Quarrying, and Oil and Gas Extraction
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+<td style="text-align:left;">
+0%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other Services
+</td>
+<td style="text-align:left;">
+46%
+</td>
+<td style="text-align:left;">
+44%
+</td>
+<td style="text-align:left;">
+41%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Professional, Scientific, and Technical Services
+</td>
+<td style="text-align:left;">
+32%
+</td>
+<td style="text-align:left;">
+26%
+</td>
+<td style="text-align:left;">
+15%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Public Administration
+</td>
+<td style="text-align:left;">
+53%
+</td>
+<td style="text-align:left;">
+65%
+</td>
+<td style="text-align:left;">
+66%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Real Estate and Rental and Leasing
+</td>
+<td style="text-align:left;">
+48%
+</td>
+<td style="text-align:left;">
+41%
+</td>
+<td style="text-align:left;">
+37%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Retail Trade
+</td>
+<td style="text-align:left;">
+32%
+</td>
+<td style="text-align:left;">
+30%
+</td>
+<td style="text-align:left;">
+26%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transportation and Warehousing
+</td>
+<td style="text-align:left;">
+29%
+</td>
+<td style="text-align:left;">
+29%
+</td>
+<td style="text-align:left;">
+34%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Utilities
+</td>
+<td style="text-align:left;">
+44%
+</td>
+<td style="text-align:left;">
+54%
+</td>
+<td style="text-align:left;">
+56%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wholesale Trade
+</td>
+<td style="text-align:left;">
+35%
+</td>
+<td style="text-align:left;">
+40%
+</td>
+<td style="text-align:left;">
+37%
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The following maps highlight where some of these “underrepresented” jobs are distributed throughout the top counties where Stockton residents work.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="origin-destination-commute-analysis.html#cb30-1"></a>stockton_lodes_w_construction_high &lt;-</span>
+<span id="cb30-2"><a href="origin-destination-commute-analysis.html#cb30-2"></a><span class="st">  </span>ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-3"><a href="origin-destination-commute-analysis.html#cb30-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-4"><a href="origin-destination-commute-analysis.html#cb30-4"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-5"><a href="origin-destination-commute-analysis.html#cb30-5"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties_detail, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-6"><a href="origin-destination-commute-analysis.html#cb30-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>COUNTYFP) <span class="op">%&gt;%</span></span>
+<span id="cb30-7"><a href="origin-destination-commute-analysis.html#cb30-7"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>NAME <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stockton&quot;</span>,<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>,<span class="st">&quot;Riverside&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-8"><a href="origin-destination-commute-analysis.html#cb30-8"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-9"><a href="origin-destination-commute-analysis.html#cb30-9"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-10"><a href="origin-destination-commute-analysis.html#cb30-10"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb30-11"><a href="origin-destination-commute-analysis.html#cb30-11"></a>    <span class="dt">County =</span> NAME,</span>
+<span id="cb30-12"><a href="origin-destination-commute-analysis.html#cb30-12"></a>    <span class="st">`</span><span class="dt">Number of High-wage Construction jobs</span><span class="st">`</span> =<span class="st"> </span>high_CNS04</span>
+<span id="cb30-13"><a href="origin-destination-commute-analysis.html#cb30-13"></a>  )</span>
+<span id="cb30-14"><a href="origin-destination-commute-analysis.html#cb30-14"></a></span>
+<span id="cb30-15"><a href="origin-destination-commute-analysis.html#cb30-15"></a><span class="co"># map = mapview(stockton_lodes_w_construction_high[1:10,c(&quot;Number of High-wage Construction jobs&quot;)], zcol = &quot;Number of High-wage Construction jobs&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Number of&lt;/br&gt;High-wage&lt;/br&gt;Construction jobs&#39;)</span></span>
+<span id="cb30-16"><a href="origin-destination-commute-analysis.html#cb30-16"></a><span class="co"># </span></span>
+<span id="cb30-17"><a href="origin-destination-commute-analysis.html#cb30-17"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-construction-high.html&quot;)</span></span>
+<span id="cb30-18"><a href="origin-destination-commute-analysis.html#cb30-18"></a></span>
+<span id="cb30-19"><a href="origin-destination-commute-analysis.html#cb30-19"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-construction-high.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-construction-high"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-construction-high.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.15: Top 10 counties where Stockton residents work, not including jobs in Stockton - number of high-wage jobs in Construction. Amount in Stockton: 900. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="origin-destination-commute-analysis.html#cb31-1"></a>stockton_lodes_w_scientific_high &lt;-</span>
+<span id="cb31-2"><a href="origin-destination-commute-analysis.html#cb31-2"></a><span class="st">  </span>ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-3"><a href="origin-destination-commute-analysis.html#cb31-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-4"><a href="origin-destination-commute-analysis.html#cb31-4"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-5"><a href="origin-destination-commute-analysis.html#cb31-5"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties_detail, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-6"><a href="origin-destination-commute-analysis.html#cb31-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>COUNTYFP) <span class="op">%&gt;%</span></span>
+<span id="cb31-7"><a href="origin-destination-commute-analysis.html#cb31-7"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>NAME <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stockton&quot;</span>,<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>,<span class="st">&quot;Riverside&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-8"><a href="origin-destination-commute-analysis.html#cb31-8"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-9"><a href="origin-destination-commute-analysis.html#cb31-9"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-10"><a href="origin-destination-commute-analysis.html#cb31-10"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb31-11"><a href="origin-destination-commute-analysis.html#cb31-11"></a>    <span class="dt">County =</span> NAME,</span>
+<span id="cb31-12"><a href="origin-destination-commute-analysis.html#cb31-12"></a>    <span class="st">`</span><span class="dt">Number of Professional, Scientific, and Technical Services jobs</span><span class="st">`</span> =<span class="st"> </span>high_CNS12</span>
+<span id="cb31-13"><a href="origin-destination-commute-analysis.html#cb31-13"></a>  )</span>
+<span id="cb31-14"><a href="origin-destination-commute-analysis.html#cb31-14"></a></span>
+<span id="cb31-15"><a href="origin-destination-commute-analysis.html#cb31-15"></a><span class="co"># map = mapview(stockton_lodes_w_scientific_high[1:10,c(&quot;Number of Professional, Scientific, and Technical Services jobs&quot;)], zcol = &quot;Number of Professional, Scientific, and Technical Services jobs&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Number of&lt;/br&gt;Professional,&lt;/br&gt;Scientific,&lt;/br&gt;and Technical&lt;/br&gt;Services jobs&#39;)</span></span>
+<span id="cb31-16"><a href="origin-destination-commute-analysis.html#cb31-16"></a><span class="co"># </span></span>
+<span id="cb31-17"><a href="origin-destination-commute-analysis.html#cb31-17"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-scientific-high.html&quot;)</span></span>
+<span id="cb31-18"><a href="origin-destination-commute-analysis.html#cb31-18"></a></span>
+<span id="cb31-19"><a href="origin-destination-commute-analysis.html#cb31-19"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;http://web.stanford.edu/~douyang1/map-stockton-lodes-w-scientific-high.html&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:stockton-lodes-w-scientific-high"></span>
+<iframe src="http://web.stanford.edu/~douyang1/map-stockton-lodes-w-scientific-high.html" width="672" height="400px">
+</iframe>
+<p class="caption">
+Figure 2.16: Top 10 counties where Stockton residents work, not including jobs in Stockton - number of high-wage jobs in Professional, Scientific, and Technical Services. Amount in Stockton: 400. Data from LODES, 2017.
+</p>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>Note that for high-wage jobs in Professional, Scientific, and Technical Services, San Joaquin County isn’t even the top employer of Stockton residents.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ghg-inventory.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="commute-vehicle-miles-traveled.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false,
+"info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
