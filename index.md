@@ -1,3 +1,3 @@
-# City Systems
+# Projects
 
-[Stockton Green Economy Project](introduction)
+1. [Stockton Green Economy](introduction)
