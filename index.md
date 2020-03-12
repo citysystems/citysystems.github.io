@@ -10,4 +10,4 @@ City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.li
 ## Features
 
 - August 2019: City Systems was featured as one of 12 case studies in the Meeting of the Minds Behavior Change Article Series. Read the [article](https://meetingoftheminds.org/behavior-change-case-study-city-systems-affordable-housing-31162) or view the whole report: *[Behavior Change Tactics for Urban Challenges](https://meetingoftheminds.org/behavior-change-report)*
-- November 2018: City Systems' Derek Ouyang moderated a panel discussion with City of Stockton Mayor Michael Tubbs and Fuse Fellow Ann Rogan at the Meeting of the Minds Annual Summit. View the [video recording](https://youtu.be/SdZccmzOBEg).
+- November 2018: City Systems' Derek Ouyang moderated a panel discussion with City of Stockton Mayor Michael Tubbs and FUSE Fellow Ann Rogan at the Meeting of the Minds Annual Summit. View the [video recording](https://youtu.be/SdZccmzOBEg).
