@@ -1,4 +1,4 @@
-City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.linkedin.com/in/derekouyang/) and [Rob Best](https://www.linkedin.com/in/robbest13/) in 2017, currently focused on a handful of data-driven projects in partnership with cities, counties and community-based organizations in Northern California. If you are looking for more information or have a project in mind, contact Derek at derekouyang@gmail.com.
+City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.linkedin.com/in/derekouyang/) and [Rob Best](https://www.linkedin.com/in/robbest13/) in 2017, currently focused on a handful of data-driven projects in partnership with cities, counties, and community-based organizations in Northern California. If you are looking for more information or have a project in mind, contact Derek at derekouyang@gmail.com.
 
 ## Projects
 
