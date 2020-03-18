@@ -2244,7 +2244,7 @@ Figure 2.14: Top 13 counties where Stockton residents work, not including SJC - 
 </div>
 <p><span class="math inline">\(~\)</span></p>
 <p>While LODES origin-destination data doesn’t provide job types at a granularity lower than the three broad industry sector categories in the previous three maps, one possible assumption to make is that the distribution of NAICS industry sectors in a destination block group, which is available through the separate Workplace Area Characteristics dataset from LODES, is the same distribution for specifically Stockton residents who work in that block group. Using this assumption, we created estimates of the locations of specific types of industries and wage levels for Stockton employed residents.</p>
-<p>The percentages in the table below should be interpreted as the % of overall jobs held by Stockton residents of that industry sector and wage tier that are based in San Joaquin County (the remainder being based in other counties). Particularly notable here are the low-percentage estimates of high-wage jobs in sectors generally related to the “knowledge economy”: Finance and Insurance (38%), Information (28%), and Professional, Scientific, and Technical Services (19%). Also notable is the low percentage of high-wage jobs in Construction (35%), which may include specialized building trades such as solar installation. These percentages are relative to an overall 64% of high-wage jobs being based in SJC, which suggests that the best jobs in these notable industries are significantly underrepresented in the local economy.</p>
+<p>The following table summarizes the number of Stockton workers estimated in each NAICS industry, by wage level.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="origin-destination-commute-analysis.html#cb29-1"></a><span class="co"># ca_wac &lt;-</span></span>
 <span id="cb29-2"><a href="origin-destination-commute-analysis.html#cb29-2"></a><span class="co">#   2010:2017 %&gt;%</span></span>
 <span id="cb29-3"><a href="origin-destination-commute-analysis.html#cb29-3"></a><span class="co">#   map_dfr(function(year){</span></span>
@@ -2309,107 +2309,509 @@ Figure 2.14: Top 13 counties where Stockton residents work, not including SJC - 
 <span id="cb29-62"><a href="origin-destination-commute-analysis.html#cb29-62"></a><span class="st">  </span><span class="kw">filter</span>(value <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb29-63"><a href="origin-destination-commute-analysis.html#cb29-63"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>value)</span>
 <span id="cb29-64"><a href="origin-destination-commute-analysis.html#cb29-64"></a></span>
-<span id="cb29-65"><a href="origin-destination-commute-analysis.html#cb29-65"></a>stockton_lodes_w_counties_detail&lt;-</span>
-<span id="cb29-66"><a href="origin-destination-commute-analysis.html#cb29-66"></a><span class="st">  </span>stockton_lodes_h_join_wac_normalize <span class="op">%&gt;%</span></span>
-<span id="cb29-67"><a href="origin-destination-commute-analysis.html#cb29-67"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb29-68"><a href="origin-destination-commute-analysis.html#cb29-68"></a>    <span class="dt">Workplace =</span> <span class="kw">ifelse</span>(</span>
-<span id="cb29-69"><a href="origin-destination-commute-analysis.html#cb29-69"></a>      w_bg <span class="op">%in%</span><span class="st"> </span>stockton_bgs_full<span class="op">$</span>GEOID,</span>
-<span id="cb29-70"><a href="origin-destination-commute-analysis.html#cb29-70"></a>      <span class="st">&quot;75000&quot;</span>,</span>
-<span id="cb29-71"><a href="origin-destination-commute-analysis.html#cb29-71"></a>      <span class="kw">substr</span>(w_bg,<span class="dv">3</span>,<span class="dv">5</span>)</span>
-<span id="cb29-72"><a href="origin-destination-commute-analysis.html#cb29-72"></a>    )</span>
-<span id="cb29-73"><a href="origin-destination-commute-analysis.html#cb29-73"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb29-74"><a href="origin-destination-commute-analysis.html#cb29-74"></a><span class="st">  </span><span class="kw">group_by</span>(Workplace) <span class="op">%&gt;%</span></span>
-<span id="cb29-75"><a href="origin-destination-commute-analysis.html#cb29-75"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
-<span id="cb29-76"><a href="origin-destination-commute-analysis.html#cb29-76"></a>    <span class="kw">vars</span>(S000,SE01,SE02,SE03,high_CNS01<span class="op">:</span>mid_CNS20),</span>
-<span id="cb29-77"><a href="origin-destination-commute-analysis.html#cb29-77"></a>    sum, </span>
-<span id="cb29-78"><a href="origin-destination-commute-analysis.html#cb29-78"></a>    <span class="dt">na.rm=</span>T</span>
-<span id="cb29-79"><a href="origin-destination-commute-analysis.html#cb29-79"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb29-80"><a href="origin-destination-commute-analysis.html#cb29-80"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
-<span id="cb29-81"><a href="origin-destination-commute-analysis.html#cb29-81"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(high_CNS01<span class="op">:</span>mid_CNS20),</span>
-<span id="cb29-82"><a href="origin-destination-commute-analysis.html#cb29-82"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">round</span>(.,<span class="dv">0</span>))</span>
-<span id="cb29-83"><a href="origin-destination-commute-analysis.html#cb29-83"></a>  )</span>
-<span id="cb29-84"><a href="origin-destination-commute-analysis.html#cb29-84"></a></span>
-<span id="cb29-85"><a href="origin-destination-commute-analysis.html#cb29-85"></a>stockton_lodes_w_sjc_detail &lt;-</span>
-<span id="cb29-86"><a href="origin-destination-commute-analysis.html#cb29-86"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
-<span id="cb29-87"><a href="origin-destination-commute-analysis.html#cb29-87"></a>    stockton_lodes_w_counties_detail[<span class="kw">which</span>(stockton_lodes_w_counties_detail<span class="op">$</span>Workplace <span class="op">==</span><span class="st"> &quot;75000&quot;</span>),<span class="op">-</span><span class="dv">1</span>],</span>
-<span id="cb29-88"><a href="origin-destination-commute-analysis.html#cb29-88"></a>    stockton_lodes_w_counties_detail[,<span class="op">-</span><span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-89"><a href="origin-destination-commute-analysis.html#cb29-89"></a><span class="st">    </span><span class="kw">colSums</span>()</span>
-<span id="cb29-90"><a href="origin-destination-commute-analysis.html#cb29-90"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-91"><a href="origin-destination-commute-analysis.html#cb29-91"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
-<span id="cb29-92"><a href="origin-destination-commute-analysis.html#cb29-92"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-93"><a href="origin-destination-commute-analysis.html#cb29-93"></a><span class="st">  </span><span class="kw">rownames_to_column</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-94"><a href="origin-destination-commute-analysis.html#cb29-94"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb29-95"><a href="origin-destination-commute-analysis.html#cb29-95"></a>    <span class="dt">perc =</span> <span class="kw">round</span>(V1<span class="op">/</span>V2<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),</span>
-<span id="cb29-96"><a href="origin-destination-commute-analysis.html#cb29-96"></a>    <span class="dt">rowname =</span> </span>
-<span id="cb29-97"><a href="origin-destination-commute-analysis.html#cb29-97"></a>      <span class="kw">case_when</span>(</span>
-<span id="cb29-98"><a href="origin-destination-commute-analysis.html#cb29-98"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE01&quot;</span> <span class="op">~</span><span class="st"> &quot;low_Total&quot;</span>,</span>
-<span id="cb29-99"><a href="origin-destination-commute-analysis.html#cb29-99"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE02&quot;</span> <span class="op">~</span><span class="st"> &quot;mid_Total&quot;</span>,</span>
-<span id="cb29-100"><a href="origin-destination-commute-analysis.html#cb29-100"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE03&quot;</span> <span class="op">~</span><span class="st"> &quot;high_Total&quot;</span>,</span>
-<span id="cb29-101"><a href="origin-destination-commute-analysis.html#cb29-101"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>rowname</span>
-<span id="cb29-102"><a href="origin-destination-commute-analysis.html#cb29-102"></a>      )</span>
-<span id="cb29-103"><a href="origin-destination-commute-analysis.html#cb29-103"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-104"><a href="origin-destination-commute-analysis.html#cb29-104"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>V1,<span class="op">-</span>V2) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-105"><a href="origin-destination-commute-analysis.html#cb29-105"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>rowname <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-106"><a href="origin-destination-commute-analysis.html#cb29-106"></a><span class="st">  </span><span class="kw">separate</span>(</span>
-<span id="cb29-107"><a href="origin-destination-commute-analysis.html#cb29-107"></a>    rowname,</span>
-<span id="cb29-108"><a href="origin-destination-commute-analysis.html#cb29-108"></a>    <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;wage&quot;</span>,<span class="st">&quot;industry&quot;</span>),</span>
-<span id="cb29-109"><a href="origin-destination-commute-analysis.html#cb29-109"></a>    <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span></span>
-<span id="cb29-110"><a href="origin-destination-commute-analysis.html#cb29-110"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-111"><a href="origin-destination-commute-analysis.html#cb29-111"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb29-112"><a href="origin-destination-commute-analysis.html#cb29-112"></a>    <span class="dt">industry =</span></span>
-<span id="cb29-113"><a href="origin-destination-commute-analysis.html#cb29-113"></a>      <span class="kw">case_when</span>(</span>
-<span id="cb29-114"><a href="origin-destination-commute-analysis.html#cb29-114"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS01&quot;</span> <span class="op">~</span><span class="st"> &quot;Agriculture, Forestry, Fishing and Hunting&quot;</span>,</span>
-<span id="cb29-115"><a href="origin-destination-commute-analysis.html#cb29-115"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS02&quot;</span> <span class="op">~</span><span class="st"> &quot;Mining, Quarrying, and Oil and Gas Extraction&quot;</span>,</span>
-<span id="cb29-116"><a href="origin-destination-commute-analysis.html#cb29-116"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS03&quot;</span> <span class="op">~</span><span class="st"> &quot;Utilities&quot;</span>,</span>
-<span id="cb29-117"><a href="origin-destination-commute-analysis.html#cb29-117"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS04&quot;</span> <span class="op">~</span><span class="st"> &quot;Construction&quot;</span>,</span>
-<span id="cb29-118"><a href="origin-destination-commute-analysis.html#cb29-118"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS05&quot;</span> <span class="op">~</span><span class="st"> &quot;Manufacturing&quot;</span>,</span>
-<span id="cb29-119"><a href="origin-destination-commute-analysis.html#cb29-119"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS06&quot;</span> <span class="op">~</span><span class="st"> &quot;Wholesale Trade&quot;</span>,</span>
-<span id="cb29-120"><a href="origin-destination-commute-analysis.html#cb29-120"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS07&quot;</span> <span class="op">~</span><span class="st"> &quot;Retail Trade&quot;</span>,</span>
-<span id="cb29-121"><a href="origin-destination-commute-analysis.html#cb29-121"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS08&quot;</span> <span class="op">~</span><span class="st"> &quot;Transportation and Warehousing&quot;</span>,</span>
-<span id="cb29-122"><a href="origin-destination-commute-analysis.html#cb29-122"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS09&quot;</span> <span class="op">~</span><span class="st"> &quot;Information&quot;</span>,</span>
-<span id="cb29-123"><a href="origin-destination-commute-analysis.html#cb29-123"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS10&quot;</span> <span class="op">~</span><span class="st"> &quot;Finance and Insurance&quot;</span>,</span>
-<span id="cb29-124"><a href="origin-destination-commute-analysis.html#cb29-124"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS11&quot;</span> <span class="op">~</span><span class="st"> &quot;Real Estate and Rental and Leasing&quot;</span>,</span>
-<span id="cb29-125"><a href="origin-destination-commute-analysis.html#cb29-125"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS12&quot;</span> <span class="op">~</span><span class="st"> &quot;Professional, Scientific, and Technical Services&quot;</span>,</span>
-<span id="cb29-126"><a href="origin-destination-commute-analysis.html#cb29-126"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS13&quot;</span> <span class="op">~</span><span class="st"> &quot;Management of Companies and Enterprises&quot;</span>,</span>
-<span id="cb29-127"><a href="origin-destination-commute-analysis.html#cb29-127"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS14&quot;</span> <span class="op">~</span><span class="st"> &quot;Administrative and Support and Waste Management and Remediation Services&quot;</span>,</span>
-<span id="cb29-128"><a href="origin-destination-commute-analysis.html#cb29-128"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS15&quot;</span> <span class="op">~</span><span class="st"> &quot;Educational Services&quot;</span>,</span>
-<span id="cb29-129"><a href="origin-destination-commute-analysis.html#cb29-129"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS16&quot;</span> <span class="op">~</span><span class="st"> &quot;Health Care and Social Assistance&quot;</span>,</span>
-<span id="cb29-130"><a href="origin-destination-commute-analysis.html#cb29-130"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS17&quot;</span> <span class="op">~</span><span class="st"> &quot;Arts, Entertainment, and Recreation&quot;</span>,</span>
-<span id="cb29-131"><a href="origin-destination-commute-analysis.html#cb29-131"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS18&quot;</span> <span class="op">~</span><span class="st"> &quot;Accommodation and Food Services&quot;</span>,</span>
-<span id="cb29-132"><a href="origin-destination-commute-analysis.html#cb29-132"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS20&quot;</span> <span class="op">~</span><span class="st"> &quot;Public Administration&quot;</span>,</span>
-<span id="cb29-133"><a href="origin-destination-commute-analysis.html#cb29-133"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS19&quot;</span> <span class="op">~</span><span class="st"> &quot;Other Services&quot;</span>,</span>
-<span id="cb29-134"><a href="origin-destination-commute-analysis.html#cb29-134"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>industry</span>
-<span id="cb29-135"><a href="origin-destination-commute-analysis.html#cb29-135"></a>      )</span>
-<span id="cb29-136"><a href="origin-destination-commute-analysis.html#cb29-136"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-137"><a href="origin-destination-commute-analysis.html#cb29-137"></a><span class="st">  </span><span class="kw">spread</span>(wage,perc) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-138"><a href="origin-destination-commute-analysis.html#cb29-138"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
-<span id="cb29-139"><a href="origin-destination-commute-analysis.html#cb29-139"></a>    <span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span> =<span class="st"> </span>industry,</span>
-<span id="cb29-140"><a href="origin-destination-commute-analysis.html#cb29-140"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>low,</span>
-<span id="cb29-141"><a href="origin-destination-commute-analysis.html#cb29-141"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>mid,</span>
-<span id="cb29-142"><a href="origin-destination-commute-analysis.html#cb29-142"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>high</span>
-<span id="cb29-143"><a href="origin-destination-commute-analysis.html#cb29-143"></a>  )</span>
-<span id="cb29-144"><a href="origin-destination-commute-analysis.html#cb29-144"></a></span>
-<span id="cb29-145"><a href="origin-destination-commute-analysis.html#cb29-145"></a>stockton_lodes_w_sjc_detail_table &lt;-</span>
-<span id="cb29-146"><a href="origin-destination-commute-analysis.html#cb29-146"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
-<span id="cb29-147"><a href="origin-destination-commute-analysis.html#cb29-147"></a>    stockton_lodes_w_sjc_detail[<span class="kw">which</span>(stockton_lodes_w_sjc_detail<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">==</span><span class="st">&quot;Total&quot;</span>),],</span>
-<span id="cb29-148"><a href="origin-destination-commute-analysis.html#cb29-148"></a>    stockton_lodes_w_sjc_detail[<span class="kw">which</span>(stockton_lodes_w_sjc_detail<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">!=</span><span class="st">&quot;Total&quot;</span>),]</span>
-<span id="cb29-149"><a href="origin-destination-commute-analysis.html#cb29-149"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-150"><a href="origin-destination-commute-analysis.html#cb29-150"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
-<span id="cb29-151"><a href="origin-destination-commute-analysis.html#cb29-151"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="op">-</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span>),</span>
-<span id="cb29-152"><a href="origin-destination-commute-analysis.html#cb29-152"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">paste0</span>(.,<span class="st">&quot;%&quot;</span>))</span>
-<span id="cb29-153"><a href="origin-destination-commute-analysis.html#cb29-153"></a>  )</span>
-<span id="cb29-154"><a href="origin-destination-commute-analysis.html#cb29-154"></a></span>
-<span id="cb29-155"><a href="origin-destination-commute-analysis.html#cb29-155"></a><span class="kw">kable</span>(</span>
-<span id="cb29-156"><a href="origin-destination-commute-analysis.html#cb29-156"></a>  stockton_lodes_w_sjc_detail_table, </span>
-<span id="cb29-157"><a href="origin-destination-commute-analysis.html#cb29-157"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, </span>
-<span id="cb29-158"><a href="origin-destination-commute-analysis.html#cb29-158"></a>  <span class="dt">caption =</span> <span class="st">&#39;Percent of Stockton employed residents working in Stockton, by NAICS industry and wage tier. Data from LODES, 2017.&#39;</span></span>
-<span id="cb29-159"><a href="origin-destination-commute-analysis.html#cb29-159"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb29-160"><a href="origin-destination-commute-analysis.html#cb29-160"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
-<span id="cb29-161"><a href="origin-destination-commute-analysis.html#cb29-161"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<span id="cb29-65"><a href="origin-destination-commute-analysis.html#cb29-65"></a></span>
+<span id="cb29-66"><a href="origin-destination-commute-analysis.html#cb29-66"></a>stockton_naics_jobs &lt;-</span>
+<span id="cb29-67"><a href="origin-destination-commute-analysis.html#cb29-67"></a><span class="st">  </span>stockton_lodes_h_join_wac_normalize <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-68"><a href="origin-destination-commute-analysis.html#cb29-68"></a><span class="st">  </span><span class="kw">group_by</span>(w_bg) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-69"><a href="origin-destination-commute-analysis.html#cb29-69"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb29-70"><a href="origin-destination-commute-analysis.html#cb29-70"></a>    <span class="kw">vars</span>(S000,SE01,SE02,SE03,high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb29-71"><a href="origin-destination-commute-analysis.html#cb29-71"></a>    sum, </span>
+<span id="cb29-72"><a href="origin-destination-commute-analysis.html#cb29-72"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb29-73"><a href="origin-destination-commute-analysis.html#cb29-73"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-74"><a href="origin-destination-commute-analysis.html#cb29-74"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-75"><a href="origin-destination-commute-analysis.html#cb29-75"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb29-76"><a href="origin-destination-commute-analysis.html#cb29-76"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">round</span>(.,<span class="dv">0</span>))</span>
+<span id="cb29-77"><a href="origin-destination-commute-analysis.html#cb29-77"></a>  )</span>
+<span id="cb29-78"><a href="origin-destination-commute-analysis.html#cb29-78"></a></span>
+<span id="cb29-79"><a href="origin-destination-commute-analysis.html#cb29-79"></a>stockton_naics_jobs &lt;-</span>
+<span id="cb29-80"><a href="origin-destination-commute-analysis.html#cb29-80"></a><span class="st">  </span>stockton_lodes_h_join_wac_normalize <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-81"><a href="origin-destination-commute-analysis.html#cb29-81"></a><span class="st">  </span><span class="kw">group_by</span>(w_bg) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-82"><a href="origin-destination-commute-analysis.html#cb29-82"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb29-83"><a href="origin-destination-commute-analysis.html#cb29-83"></a>    <span class="kw">vars</span>(S000,SE01,SE02,SE03,high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb29-84"><a href="origin-destination-commute-analysis.html#cb29-84"></a>    sum, </span>
+<span id="cb29-85"><a href="origin-destination-commute-analysis.html#cb29-85"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb29-86"><a href="origin-destination-commute-analysis.html#cb29-86"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-87"><a href="origin-destination-commute-analysis.html#cb29-87"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-88"><a href="origin-destination-commute-analysis.html#cb29-88"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb29-89"><a href="origin-destination-commute-analysis.html#cb29-89"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">round</span>(.))</span>
+<span id="cb29-90"><a href="origin-destination-commute-analysis.html#cb29-90"></a>  )</span>
+<span id="cb29-91"><a href="origin-destination-commute-analysis.html#cb29-91"></a></span>
+<span id="cb29-92"><a href="origin-destination-commute-analysis.html#cb29-92"></a>stockton_naics_jobs_summary &lt;-</span>
+<span id="cb29-93"><a href="origin-destination-commute-analysis.html#cb29-93"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb29-94"><a href="origin-destination-commute-analysis.html#cb29-94"></a>    stockton_naics_jobs[,<span class="op">-</span><span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">colSums</span>()</span>
+<span id="cb29-95"><a href="origin-destination-commute-analysis.html#cb29-95"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-96"><a href="origin-destination-commute-analysis.html#cb29-96"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb29-97"><a href="origin-destination-commute-analysis.html#cb29-97"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-98"><a href="origin-destination-commute-analysis.html#cb29-98"></a><span class="st">  </span><span class="kw">rownames_to_column</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-99"><a href="origin-destination-commute-analysis.html#cb29-99"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-100"><a href="origin-destination-commute-analysis.html#cb29-100"></a>    <span class="dt">jobs =</span> V1,</span>
+<span id="cb29-101"><a href="origin-destination-commute-analysis.html#cb29-101"></a>    <span class="dt">rowname =</span> </span>
+<span id="cb29-102"><a href="origin-destination-commute-analysis.html#cb29-102"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb29-103"><a href="origin-destination-commute-analysis.html#cb29-103"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE01&quot;</span> <span class="op">~</span><span class="st"> &quot;low_Total&quot;</span>,</span>
+<span id="cb29-104"><a href="origin-destination-commute-analysis.html#cb29-104"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE02&quot;</span> <span class="op">~</span><span class="st"> &quot;mid_Total&quot;</span>,</span>
+<span id="cb29-105"><a href="origin-destination-commute-analysis.html#cb29-105"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE03&quot;</span> <span class="op">~</span><span class="st"> &quot;high_Total&quot;</span>,</span>
+<span id="cb29-106"><a href="origin-destination-commute-analysis.html#cb29-106"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>rowname</span>
+<span id="cb29-107"><a href="origin-destination-commute-analysis.html#cb29-107"></a>      )</span>
+<span id="cb29-108"><a href="origin-destination-commute-analysis.html#cb29-108"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-109"><a href="origin-destination-commute-analysis.html#cb29-109"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>V1) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-110"><a href="origin-destination-commute-analysis.html#cb29-110"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>rowname <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-111"><a href="origin-destination-commute-analysis.html#cb29-111"></a><span class="st">  </span><span class="kw">separate</span>(</span>
+<span id="cb29-112"><a href="origin-destination-commute-analysis.html#cb29-112"></a>    rowname,</span>
+<span id="cb29-113"><a href="origin-destination-commute-analysis.html#cb29-113"></a>    <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;wage&quot;</span>,<span class="st">&quot;industry&quot;</span>),</span>
+<span id="cb29-114"><a href="origin-destination-commute-analysis.html#cb29-114"></a>    <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span></span>
+<span id="cb29-115"><a href="origin-destination-commute-analysis.html#cb29-115"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-116"><a href="origin-destination-commute-analysis.html#cb29-116"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-117"><a href="origin-destination-commute-analysis.html#cb29-117"></a>    <span class="dt">industry =</span></span>
+<span id="cb29-118"><a href="origin-destination-commute-analysis.html#cb29-118"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb29-119"><a href="origin-destination-commute-analysis.html#cb29-119"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS01&quot;</span> <span class="op">~</span><span class="st"> &quot;Agriculture, Forestry, Fishing and Hunting&quot;</span>,</span>
+<span id="cb29-120"><a href="origin-destination-commute-analysis.html#cb29-120"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS02&quot;</span> <span class="op">~</span><span class="st"> &quot;Mining, Quarrying, and Oil and Gas Extraction&quot;</span>,</span>
+<span id="cb29-121"><a href="origin-destination-commute-analysis.html#cb29-121"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS03&quot;</span> <span class="op">~</span><span class="st"> &quot;Utilities&quot;</span>,</span>
+<span id="cb29-122"><a href="origin-destination-commute-analysis.html#cb29-122"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS04&quot;</span> <span class="op">~</span><span class="st"> &quot;Construction&quot;</span>,</span>
+<span id="cb29-123"><a href="origin-destination-commute-analysis.html#cb29-123"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS05&quot;</span> <span class="op">~</span><span class="st"> &quot;Manufacturing&quot;</span>,</span>
+<span id="cb29-124"><a href="origin-destination-commute-analysis.html#cb29-124"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS06&quot;</span> <span class="op">~</span><span class="st"> &quot;Wholesale Trade&quot;</span>,</span>
+<span id="cb29-125"><a href="origin-destination-commute-analysis.html#cb29-125"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS07&quot;</span> <span class="op">~</span><span class="st"> &quot;Retail Trade&quot;</span>,</span>
+<span id="cb29-126"><a href="origin-destination-commute-analysis.html#cb29-126"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS08&quot;</span> <span class="op">~</span><span class="st"> &quot;Transportation and Warehousing&quot;</span>,</span>
+<span id="cb29-127"><a href="origin-destination-commute-analysis.html#cb29-127"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS09&quot;</span> <span class="op">~</span><span class="st"> &quot;Information&quot;</span>,</span>
+<span id="cb29-128"><a href="origin-destination-commute-analysis.html#cb29-128"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS10&quot;</span> <span class="op">~</span><span class="st"> &quot;Finance and Insurance&quot;</span>,</span>
+<span id="cb29-129"><a href="origin-destination-commute-analysis.html#cb29-129"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS11&quot;</span> <span class="op">~</span><span class="st"> &quot;Real Estate and Rental and Leasing&quot;</span>,</span>
+<span id="cb29-130"><a href="origin-destination-commute-analysis.html#cb29-130"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS12&quot;</span> <span class="op">~</span><span class="st"> &quot;Professional, Scientific, and Technical Services&quot;</span>,</span>
+<span id="cb29-131"><a href="origin-destination-commute-analysis.html#cb29-131"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS13&quot;</span> <span class="op">~</span><span class="st"> &quot;Management of Companies and Enterprises&quot;</span>,</span>
+<span id="cb29-132"><a href="origin-destination-commute-analysis.html#cb29-132"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS14&quot;</span> <span class="op">~</span><span class="st"> &quot;Administrative and Support and Waste Management and Remediation Services&quot;</span>,</span>
+<span id="cb29-133"><a href="origin-destination-commute-analysis.html#cb29-133"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS15&quot;</span> <span class="op">~</span><span class="st"> &quot;Educational Services&quot;</span>,</span>
+<span id="cb29-134"><a href="origin-destination-commute-analysis.html#cb29-134"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS16&quot;</span> <span class="op">~</span><span class="st"> &quot;Health Care and Social Assistance&quot;</span>,</span>
+<span id="cb29-135"><a href="origin-destination-commute-analysis.html#cb29-135"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS17&quot;</span> <span class="op">~</span><span class="st"> &quot;Arts, Entertainment, and Recreation&quot;</span>,</span>
+<span id="cb29-136"><a href="origin-destination-commute-analysis.html#cb29-136"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS18&quot;</span> <span class="op">~</span><span class="st"> &quot;Accommodation and Food Services&quot;</span>,</span>
+<span id="cb29-137"><a href="origin-destination-commute-analysis.html#cb29-137"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS20&quot;</span> <span class="op">~</span><span class="st"> &quot;Public Administration&quot;</span>,</span>
+<span id="cb29-138"><a href="origin-destination-commute-analysis.html#cb29-138"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS19&quot;</span> <span class="op">~</span><span class="st"> &quot;Other Services&quot;</span>,</span>
+<span id="cb29-139"><a href="origin-destination-commute-analysis.html#cb29-139"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>industry</span>
+<span id="cb29-140"><a href="origin-destination-commute-analysis.html#cb29-140"></a>      )</span>
+<span id="cb29-141"><a href="origin-destination-commute-analysis.html#cb29-141"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-142"><a href="origin-destination-commute-analysis.html#cb29-142"></a><span class="st">  </span><span class="kw">spread</span>(wage,jobs) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-143"><a href="origin-destination-commute-analysis.html#cb29-143"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb29-144"><a href="origin-destination-commute-analysis.html#cb29-144"></a>    <span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span> =<span class="st"> </span>industry,</span>
+<span id="cb29-145"><a href="origin-destination-commute-analysis.html#cb29-145"></a>    <span class="st">`</span><span class="dt">Stockton Jobs with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>low,</span>
+<span id="cb29-146"><a href="origin-destination-commute-analysis.html#cb29-146"></a>    <span class="st">`</span><span class="dt">Stockton Jobs with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>mid,</span>
+<span id="cb29-147"><a href="origin-destination-commute-analysis.html#cb29-147"></a>    <span class="st">`</span><span class="dt">Stockton Jobs with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>high</span>
+<span id="cb29-148"><a href="origin-destination-commute-analysis.html#cb29-148"></a>  )</span>
+<span id="cb29-149"><a href="origin-destination-commute-analysis.html#cb29-149"></a></span>
+<span id="cb29-150"><a href="origin-destination-commute-analysis.html#cb29-150"></a>stockton_naics_jobs_summary_table &lt;-</span>
+<span id="cb29-151"><a href="origin-destination-commute-analysis.html#cb29-151"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb29-152"><a href="origin-destination-commute-analysis.html#cb29-152"></a>    stockton_naics_jobs_summary[<span class="kw">which</span>(stockton_naics_jobs_summary<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">==</span><span class="st">&quot;Total&quot;</span>),],</span>
+<span id="cb29-153"><a href="origin-destination-commute-analysis.html#cb29-153"></a>    stockton_naics_jobs_summary[<span class="kw">which</span>(stockton_naics_jobs_summary<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">!=</span><span class="st">&quot;Total&quot;</span>),]</span>
+<span id="cb29-154"><a href="origin-destination-commute-analysis.html#cb29-154"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-155"><a href="origin-destination-commute-analysis.html#cb29-155"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb29-156"><a href="origin-destination-commute-analysis.html#cb29-156"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="op">-</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span>),</span>
+<span id="cb29-157"><a href="origin-destination-commute-analysis.html#cb29-157"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(.<span class="op">/</span><span class="dv">10</span><span class="op">^</span>(<span class="kw">nchar</span>(.)<span class="op">-</span><span class="dv">2</span>))<span class="op">*</span><span class="dv">10</span><span class="op">^</span>(<span class="kw">nchar</span>(.)<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>))</span>
+<span id="cb29-158"><a href="origin-destination-commute-analysis.html#cb29-158"></a>  )</span>
+<span id="cb29-159"><a href="origin-destination-commute-analysis.html#cb29-159"></a></span>
+<span id="cb29-160"><a href="origin-destination-commute-analysis.html#cb29-160"></a><span class="kw">kable</span>(</span>
+<span id="cb29-161"><a href="origin-destination-commute-analysis.html#cb29-161"></a>  stockton_naics_jobs_summary_table, </span>
+<span id="cb29-162"><a href="origin-destination-commute-analysis.html#cb29-162"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb29-163"><a href="origin-destination-commute-analysis.html#cb29-163"></a>  <span class="dt">caption =</span> <span class="st">&#39;Number of Stockton employed residents, by NAICS industry and wage tier. Data from LODES, 2017.&#39;</span></span>
+<span id="cb29-164"><a href="origin-destination-commute-analysis.html#cb29-164"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-165"><a href="origin-destination-commute-analysis.html#cb29-165"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb29-166"><a href="origin-destination-commute-analysis.html#cb29-166"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:stockton-lodes-w-sjc-detail-table">Table 2.14: </span>Percent of Stockton employed residents working in Stockton, by NAICS industry and wage tier. Data from LODES, 2017.
+<span id="tab:stockton-naics-jobs-summary">Table 2.14: </span>Number of Stockton employed residents, by NAICS industry and wage tier. Data from LODES, 2017.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+NAICS Industry
+</th>
+<th style="text-align:left;">
+Stockton Jobs with earnings $1250/month or less
+</th>
+<th style="text-align:left;">
+Stockton Jobs with earnings $1251/month to $3333/month
+</th>
+<th style="text-align:left;">
+Stockton Jobs with earnings greater than $3333/month
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:left;">
+35,000
+</td>
+<td style="text-align:left;">
+74,000
+</td>
+<td style="text-align:left;">
+85,000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Accommodation and Food Services
+</td>
+<td style="text-align:left;">
+2,500
+</td>
+<td style="text-align:left;">
+3,900
+</td>
+<td style="text-align:left;">
+2,500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Administrative and Support and Waste Management and Remediation Services
+</td>
+<td style="text-align:left;">
+1,800
+</td>
+<td style="text-align:left;">
+3,500
+</td>
+<td style="text-align:left;">
+2,600
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Agriculture, Forestry, Fishing and Hunting
+</td>
+<td style="text-align:left;">
+1,300
+</td>
+<td style="text-align:left;">
+2,200
+</td>
+<td style="text-align:left;">
+1,400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arts, Entertainment, and Recreation
+</td>
+<td style="text-align:left;">
+350
+</td>
+<td style="text-align:left;">
+600
+</td>
+<td style="text-align:left;">
+500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Construction
+</td>
+<td style="text-align:left;">
+840
+</td>
+<td style="text-align:left;">
+2,500
+</td>
+<td style="text-align:left;">
+3,900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educational Services
+</td>
+<td style="text-align:left;">
+2,400
+</td>
+<td style="text-align:left;">
+4,000
+</td>
+<td style="text-align:left;">
+5,000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Finance and Insurance
+</td>
+<td style="text-align:left;">
+500
+</td>
+<td style="text-align:left;">
+1,100
+</td>
+<td style="text-align:left;">
+1,300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Health Care and Social Assistance
+</td>
+<td style="text-align:left;">
+3,400
+</td>
+<td style="text-align:left;">
+6,600
+</td>
+<td style="text-align:left;">
+8,200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Information
+</td>
+<td style="text-align:left;">
+270
+</td>
+<td style="text-align:left;">
+580
+</td>
+<td style="text-align:left;">
+940
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Management of Companies and Enterprises
+</td>
+<td style="text-align:left;">
+250
+</td>
+<td style="text-align:left;">
+530
+</td>
+<td style="text-align:left;">
+740
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manufacturing
+</td>
+<td style="text-align:left;">
+1,100
+</td>
+<td style="text-align:left;">
+3,900
+</td>
+<td style="text-align:left;">
+5,600
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mining, Quarrying, and Oil and Gas Extraction
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other Services
+</td>
+<td style="text-align:left;">
+740
+</td>
+<td style="text-align:left;">
+1,300
+</td>
+<td style="text-align:left;">
+1,100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Professional, Scientific, and Technical Services
+</td>
+<td style="text-align:left;">
+820
+</td>
+<td style="text-align:left;">
+1,700
+</td>
+<td style="text-align:left;">
+2,400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Public Administration
+</td>
+<td style="text-align:left;">
+650
+</td>
+<td style="text-align:left;">
+1,600
+</td>
+<td style="text-align:left;">
+5,000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Real Estate and Rental and Leasing
+</td>
+<td style="text-align:left;">
+240
+</td>
+<td style="text-align:left;">
+530
+</td>
+<td style="text-align:left;">
+480
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Retail Trade
+</td>
+<td style="text-align:left;">
+3,400
+</td>
+<td style="text-align:left;">
+6,800
+</td>
+<td style="text-align:left;">
+4,300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transportation and Warehousing
+</td>
+<td style="text-align:left;">
+1,000
+</td>
+<td style="text-align:left;">
+3,700
+</td>
+<td style="text-align:left;">
+3,500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Utilities
+</td>
+<td style="text-align:left;">
+70
+</td>
+<td style="text-align:left;">
+220
+</td>
+<td style="text-align:left;">
+760
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wholesale Trade
+</td>
+<td style="text-align:left;">
+740
+</td>
+<td style="text-align:left;">
+2,600
+</td>
+<td style="text-align:left;">
+3,400
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math inline">\(~\)</span></p>
+<p>The percentages in the table below should be interpreted as the % of overall jobs held by Stockton residents of that industry sector and wage tier that are based in Stockton (the remainder being based in other counties). Particularly notable here are the low-percentage estimates of high-wage jobs in sectors generally related to the “knowledge economy”: Finance and Insurance (27%), Information (28%), and Professional, Scientific, and Technical Services (16%). Also notable is the low percentage of high-wage jobs in Construction (24%), which may include specialized building trades such as solar installation. These percentages are relative to an overall 51% of high-wage jobs being based in Stockton, which suggests that the best jobs in these notable industries are significantly underrepresented in the local economy.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="origin-destination-commute-analysis.html#cb30-1"></a>stockton_naics_localjobs_summary &lt;-</span>
+<span id="cb30-2"><a href="origin-destination-commute-analysis.html#cb30-2"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb30-3"><a href="origin-destination-commute-analysis.html#cb30-3"></a>    stockton_naics_jobs[<span class="kw">which</span>(stockton_naics_jobs<span class="op">$</span>w_bg <span class="op">%in%</span><span class="st"> </span>stockton_bgs_full<span class="op">$</span>GEOID),<span class="op">-</span><span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">colSums</span>(),</span>
+<span id="cb30-4"><a href="origin-destination-commute-analysis.html#cb30-4"></a>    stockton_naics_jobs[,<span class="op">-</span><span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">colSums</span>()</span>
+<span id="cb30-5"><a href="origin-destination-commute-analysis.html#cb30-5"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-6"><a href="origin-destination-commute-analysis.html#cb30-6"></a><span class="st">  </span><span class="kw">t</span>() <span class="op">%&gt;%</span></span>
+<span id="cb30-7"><a href="origin-destination-commute-analysis.html#cb30-7"></a><span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-8"><a href="origin-destination-commute-analysis.html#cb30-8"></a><span class="st">  </span><span class="kw">rownames_to_column</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-9"><a href="origin-destination-commute-analysis.html#cb30-9"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb30-10"><a href="origin-destination-commute-analysis.html#cb30-10"></a>    <span class="dt">perc =</span> <span class="kw">round</span>(V1<span class="op">/</span>V2<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),</span>
+<span id="cb30-11"><a href="origin-destination-commute-analysis.html#cb30-11"></a>    <span class="dt">rowname =</span> </span>
+<span id="cb30-12"><a href="origin-destination-commute-analysis.html#cb30-12"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb30-13"><a href="origin-destination-commute-analysis.html#cb30-13"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE01&quot;</span> <span class="op">~</span><span class="st"> &quot;low_Total&quot;</span>,</span>
+<span id="cb30-14"><a href="origin-destination-commute-analysis.html#cb30-14"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE02&quot;</span> <span class="op">~</span><span class="st"> &quot;mid_Total&quot;</span>,</span>
+<span id="cb30-15"><a href="origin-destination-commute-analysis.html#cb30-15"></a>        rowname <span class="op">==</span><span class="st"> &quot;SE03&quot;</span> <span class="op">~</span><span class="st"> &quot;high_Total&quot;</span>,</span>
+<span id="cb30-16"><a href="origin-destination-commute-analysis.html#cb30-16"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>rowname</span>
+<span id="cb30-17"><a href="origin-destination-commute-analysis.html#cb30-17"></a>      )</span>
+<span id="cb30-18"><a href="origin-destination-commute-analysis.html#cb30-18"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-19"><a href="origin-destination-commute-analysis.html#cb30-19"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>V1,<span class="op">-</span>V2) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-20"><a href="origin-destination-commute-analysis.html#cb30-20"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>rowname <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;S000&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-21"><a href="origin-destination-commute-analysis.html#cb30-21"></a><span class="st">  </span><span class="kw">separate</span>(</span>
+<span id="cb30-22"><a href="origin-destination-commute-analysis.html#cb30-22"></a>    rowname,</span>
+<span id="cb30-23"><a href="origin-destination-commute-analysis.html#cb30-23"></a>    <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;wage&quot;</span>,<span class="st">&quot;industry&quot;</span>),</span>
+<span id="cb30-24"><a href="origin-destination-commute-analysis.html#cb30-24"></a>    <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span></span>
+<span id="cb30-25"><a href="origin-destination-commute-analysis.html#cb30-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-26"><a href="origin-destination-commute-analysis.html#cb30-26"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb30-27"><a href="origin-destination-commute-analysis.html#cb30-27"></a>    <span class="dt">industry =</span></span>
+<span id="cb30-28"><a href="origin-destination-commute-analysis.html#cb30-28"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb30-29"><a href="origin-destination-commute-analysis.html#cb30-29"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS01&quot;</span> <span class="op">~</span><span class="st"> &quot;Agriculture, Forestry, Fishing and Hunting&quot;</span>,</span>
+<span id="cb30-30"><a href="origin-destination-commute-analysis.html#cb30-30"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS02&quot;</span> <span class="op">~</span><span class="st"> &quot;Mining, Quarrying, and Oil and Gas Extraction&quot;</span>,</span>
+<span id="cb30-31"><a href="origin-destination-commute-analysis.html#cb30-31"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS03&quot;</span> <span class="op">~</span><span class="st"> &quot;Utilities&quot;</span>,</span>
+<span id="cb30-32"><a href="origin-destination-commute-analysis.html#cb30-32"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS04&quot;</span> <span class="op">~</span><span class="st"> &quot;Construction&quot;</span>,</span>
+<span id="cb30-33"><a href="origin-destination-commute-analysis.html#cb30-33"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS05&quot;</span> <span class="op">~</span><span class="st"> &quot;Manufacturing&quot;</span>,</span>
+<span id="cb30-34"><a href="origin-destination-commute-analysis.html#cb30-34"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS06&quot;</span> <span class="op">~</span><span class="st"> &quot;Wholesale Trade&quot;</span>,</span>
+<span id="cb30-35"><a href="origin-destination-commute-analysis.html#cb30-35"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS07&quot;</span> <span class="op">~</span><span class="st"> &quot;Retail Trade&quot;</span>,</span>
+<span id="cb30-36"><a href="origin-destination-commute-analysis.html#cb30-36"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS08&quot;</span> <span class="op">~</span><span class="st"> &quot;Transportation and Warehousing&quot;</span>,</span>
+<span id="cb30-37"><a href="origin-destination-commute-analysis.html#cb30-37"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS09&quot;</span> <span class="op">~</span><span class="st"> &quot;Information&quot;</span>,</span>
+<span id="cb30-38"><a href="origin-destination-commute-analysis.html#cb30-38"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS10&quot;</span> <span class="op">~</span><span class="st"> &quot;Finance and Insurance&quot;</span>,</span>
+<span id="cb30-39"><a href="origin-destination-commute-analysis.html#cb30-39"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS11&quot;</span> <span class="op">~</span><span class="st"> &quot;Real Estate and Rental and Leasing&quot;</span>,</span>
+<span id="cb30-40"><a href="origin-destination-commute-analysis.html#cb30-40"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS12&quot;</span> <span class="op">~</span><span class="st"> &quot;Professional, Scientific, and Technical Services&quot;</span>,</span>
+<span id="cb30-41"><a href="origin-destination-commute-analysis.html#cb30-41"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS13&quot;</span> <span class="op">~</span><span class="st"> &quot;Management of Companies and Enterprises&quot;</span>,</span>
+<span id="cb30-42"><a href="origin-destination-commute-analysis.html#cb30-42"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS14&quot;</span> <span class="op">~</span><span class="st"> &quot;Administrative and Support and Waste Management and Remediation Services&quot;</span>,</span>
+<span id="cb30-43"><a href="origin-destination-commute-analysis.html#cb30-43"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS15&quot;</span> <span class="op">~</span><span class="st"> &quot;Educational Services&quot;</span>,</span>
+<span id="cb30-44"><a href="origin-destination-commute-analysis.html#cb30-44"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS16&quot;</span> <span class="op">~</span><span class="st"> &quot;Health Care and Social Assistance&quot;</span>,</span>
+<span id="cb30-45"><a href="origin-destination-commute-analysis.html#cb30-45"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS17&quot;</span> <span class="op">~</span><span class="st"> &quot;Arts, Entertainment, and Recreation&quot;</span>,</span>
+<span id="cb30-46"><a href="origin-destination-commute-analysis.html#cb30-46"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS18&quot;</span> <span class="op">~</span><span class="st"> &quot;Accommodation and Food Services&quot;</span>,</span>
+<span id="cb30-47"><a href="origin-destination-commute-analysis.html#cb30-47"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS20&quot;</span> <span class="op">~</span><span class="st"> &quot;Public Administration&quot;</span>,</span>
+<span id="cb30-48"><a href="origin-destination-commute-analysis.html#cb30-48"></a>        industry <span class="op">==</span><span class="st"> &quot;CNS19&quot;</span> <span class="op">~</span><span class="st"> &quot;Other Services&quot;</span>,</span>
+<span id="cb30-49"><a href="origin-destination-commute-analysis.html#cb30-49"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> </span>industry</span>
+<span id="cb30-50"><a href="origin-destination-commute-analysis.html#cb30-50"></a>      )</span>
+<span id="cb30-51"><a href="origin-destination-commute-analysis.html#cb30-51"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-52"><a href="origin-destination-commute-analysis.html#cb30-52"></a><span class="st">  </span><span class="kw">spread</span>(wage,perc) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-53"><a href="origin-destination-commute-analysis.html#cb30-53"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb30-54"><a href="origin-destination-commute-analysis.html#cb30-54"></a>    <span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span> =<span class="st"> </span>industry,</span>
+<span id="cb30-55"><a href="origin-destination-commute-analysis.html#cb30-55"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings $1250/month or less</span><span class="st">`</span> =<span class="st"> </span>low,</span>
+<span id="cb30-56"><a href="origin-destination-commute-analysis.html#cb30-56"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings $1251/month to $3333/month</span><span class="st">`</span> =<span class="st"> </span>mid,</span>
+<span id="cb30-57"><a href="origin-destination-commute-analysis.html#cb30-57"></a>    <span class="st">`</span><span class="dt">% Stockton Jobs in Stockton with earnings greater than $3333/month</span><span class="st">`</span> =<span class="st"> </span>high</span>
+<span id="cb30-58"><a href="origin-destination-commute-analysis.html#cb30-58"></a>  )</span>
+<span id="cb30-59"><a href="origin-destination-commute-analysis.html#cb30-59"></a></span>
+<span id="cb30-60"><a href="origin-destination-commute-analysis.html#cb30-60"></a>stockton_naics_localjobs_summary_table &lt;-</span>
+<span id="cb30-61"><a href="origin-destination-commute-analysis.html#cb30-61"></a><span class="st">  </span><span class="kw">rbind</span>(</span>
+<span id="cb30-62"><a href="origin-destination-commute-analysis.html#cb30-62"></a>    stockton_naics_localjobs_summary[<span class="kw">which</span>(stockton_naics_localjobs_summary<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">==</span><span class="st">&quot;Total&quot;</span>),],</span>
+<span id="cb30-63"><a href="origin-destination-commute-analysis.html#cb30-63"></a>    stockton_naics_localjobs_summary[<span class="kw">which</span>(stockton_naics_localjobs_summary<span class="op">$</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span><span class="op">!=</span><span class="st">&quot;Total&quot;</span>),]</span>
+<span id="cb30-64"><a href="origin-destination-commute-analysis.html#cb30-64"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-65"><a href="origin-destination-commute-analysis.html#cb30-65"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb30-66"><a href="origin-destination-commute-analysis.html#cb30-66"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(<span class="op">-</span><span class="st">`</span><span class="dt">NAICS Industry</span><span class="st">`</span>),</span>
+<span id="cb30-67"><a href="origin-destination-commute-analysis.html#cb30-67"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">paste0</span>(.,<span class="st">&quot;%&quot;</span>))</span>
+<span id="cb30-68"><a href="origin-destination-commute-analysis.html#cb30-68"></a>  )</span>
+<span id="cb30-69"><a href="origin-destination-commute-analysis.html#cb30-69"></a></span>
+<span id="cb30-70"><a href="origin-destination-commute-analysis.html#cb30-70"></a><span class="kw">kable</span>(</span>
+<span id="cb30-71"><a href="origin-destination-commute-analysis.html#cb30-71"></a>  stockton_naics_localjobs_summary_table, </span>
+<span id="cb30-72"><a href="origin-destination-commute-analysis.html#cb30-72"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb30-73"><a href="origin-destination-commute-analysis.html#cb30-73"></a>  <span class="dt">caption =</span> <span class="st">&#39;Percent of Stockton employed residents working in Stockton, by NAICS industry and wage tier. Data from LODES, 2017.&#39;</span></span>
+<span id="cb30-74"><a href="origin-destination-commute-analysis.html#cb30-74"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-75"><a href="origin-destination-commute-analysis.html#cb30-75"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span></span>
+<span id="cb30-76"><a href="origin-destination-commute-analysis.html#cb30-76"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:stockton-naics-localjobs-summary">Table 2.15: </span>Percent of Stockton employed residents working in Stockton, by NAICS industry and wage tier. Data from LODES, 2017.
 </caption>
 <thead>
 <tr>
@@ -2447,13 +2849,13 @@ Total
 Accommodation and Food Services
 </td>
 <td style="text-align:left;">
-49%
+53%
 </td>
 <td style="text-align:left;">
-42%
+44%
 </td>
 <td style="text-align:left;">
-37%
+40%
 </td>
 </tr>
 <tr>
@@ -2461,13 +2863,13 @@ Accommodation and Food Services
 Administrative and Support and Waste Management and Remediation Services
 </td>
 <td style="text-align:left;">
+54%
+</td>
+<td style="text-align:left;">
 51%
 </td>
 <td style="text-align:left;">
-48%
-</td>
-<td style="text-align:left;">
-39%
+41%
 </td>
 </tr>
 <tr>
@@ -2489,13 +2891,13 @@ Agriculture, Forestry, Fishing and Hunting
 Arts, Entertainment, and Recreation
 </td>
 <td style="text-align:left;">
-43%
+51%
 </td>
 <td style="text-align:left;">
-40%
+45%
 </td>
 <td style="text-align:left;">
-41%
+47%
 </td>
 </tr>
 <tr>
@@ -2503,35 +2905,7 @@ Arts, Entertainment, and Recreation
 Construction
 </td>
 <td style="text-align:left;">
-40%
-</td>
-<td style="text-align:left;">
-34%
-</td>
-<td style="text-align:left;">
-23%
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Educational Services
-</td>
-<td style="text-align:left;">
-64%
-</td>
-<td style="text-align:left;">
-60%
-</td>
-<td style="text-align:left;">
-58%
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Finance and Insurance
-</td>
-<td style="text-align:left;">
-39%
+41%
 </td>
 <td style="text-align:left;">
 34%
@@ -2542,16 +2916,44 @@ Finance and Insurance
 </tr>
 <tr>
 <td style="text-align:left;">
-Health Care and Social Assistance
+Educational Services
+</td>
+<td style="text-align:left;">
+66%
 </td>
 <td style="text-align:left;">
 62%
 </td>
 <td style="text-align:left;">
-55%
+59%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Finance and Insurance
 </td>
 <td style="text-align:left;">
-46%
+47%
+</td>
+<td style="text-align:left;">
+38%
+</td>
+<td style="text-align:left;">
+27%
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Health Care and Social Assistance
+</td>
+<td style="text-align:left;">
+65%
+</td>
+<td style="text-align:left;">
+58%
+</td>
+<td style="text-align:left;">
+47%
 </td>
 </tr>
 <tr>
@@ -2559,13 +2961,13 @@ Health Care and Social Assistance
 Information
 </td>
 <td style="text-align:left;">
-31%
+38%
 </td>
 <td style="text-align:left;">
-33%
+38%
 </td>
 <td style="text-align:left;">
-26%
+28%
 </td>
 </tr>
 <tr>
@@ -2573,13 +2975,13 @@ Information
 Management of Companies and Enterprises
 </td>
 <td style="text-align:left;">
+54%
+</td>
+<td style="text-align:left;">
 46%
 </td>
 <td style="text-align:left;">
-42%
-</td>
-<td style="text-align:left;">
-35%
+37%
 </td>
 </tr>
 <tr>
@@ -2587,7 +2989,7 @@ Management of Companies and Enterprises
 Manufacturing
 </td>
 <td style="text-align:left;">
-43%
+44%
 </td>
 <td style="text-align:left;">
 38%
@@ -2615,13 +3017,13 @@ Mining, Quarrying, and Oil and Gas Extraction
 Other Services
 </td>
 <td style="text-align:left;">
-46%
+57%
 </td>
 <td style="text-align:left;">
-44%
+52%
 </td>
 <td style="text-align:left;">
-41%
+49%
 </td>
 </tr>
 <tr>
@@ -2629,13 +3031,13 @@ Other Services
 Professional, Scientific, and Technical Services
 </td>
 <td style="text-align:left;">
-32%
+39%
 </td>
 <td style="text-align:left;">
-26%
+30%
 </td>
 <td style="text-align:left;">
-15%
+16%
 </td>
 </tr>
 <tr>
@@ -2643,10 +3045,10 @@ Professional, Scientific, and Technical Services
 Public Administration
 </td>
 <td style="text-align:left;">
-53%
+55%
 </td>
 <td style="text-align:left;">
-65%
+66%
 </td>
 <td style="text-align:left;">
 66%
@@ -2657,13 +3059,13 @@ Public Administration
 Real Estate and Rental and Leasing
 </td>
 <td style="text-align:left;">
-48%
+69%
 </td>
 <td style="text-align:left;">
-41%
+52%
 </td>
 <td style="text-align:left;">
-37%
+47%
 </td>
 </tr>
 <tr>
@@ -2685,7 +3087,7 @@ Retail Trade
 Transportation and Warehousing
 </td>
 <td style="text-align:left;">
-29%
+30%
 </td>
 <td style="text-align:left;">
 29%
@@ -2699,13 +3101,13 @@ Transportation and Warehousing
 Utilities
 </td>
 <td style="text-align:left;">
-44%
+51%
 </td>
 <td style="text-align:left;">
-54%
+58%
 </td>
 <td style="text-align:left;">
-56%
+57%
 </td>
 </tr>
 <tr>
@@ -2713,13 +3115,13 @@ Utilities
 Wholesale Trade
 </td>
 <td style="text-align:left;">
-35%
-</td>
-<td style="text-align:left;">
-40%
-</td>
-<td style="text-align:left;">
 37%
+</td>
+<td style="text-align:left;">
+41%
+</td>
+<td style="text-align:left;">
+38%
 </td>
 </tr>
 </tbody>
@@ -2727,25 +3129,46 @@ Wholesale Trade
 </div>
 <p><span class="math inline">\(~\)</span></p>
 <p>The following maps highlight where some of these “underrepresented” jobs are distributed throughout the top counties where Stockton residents work.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="origin-destination-commute-analysis.html#cb30-1"></a>stockton_lodes_w_construction_high &lt;-</span>
-<span id="cb30-2"><a href="origin-destination-commute-analysis.html#cb30-2"></a><span class="st">  </span>ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-3"><a href="origin-destination-commute-analysis.html#cb30-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-4"><a href="origin-destination-commute-analysis.html#cb30-4"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-5"><a href="origin-destination-commute-analysis.html#cb30-5"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties_detail, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-6"><a href="origin-destination-commute-analysis.html#cb30-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>COUNTYFP) <span class="op">%&gt;%</span></span>
-<span id="cb30-7"><a href="origin-destination-commute-analysis.html#cb30-7"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>NAME <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stockton&quot;</span>,<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>,<span class="st">&quot;Riverside&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-8"><a href="origin-destination-commute-analysis.html#cb30-8"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-9"><a href="origin-destination-commute-analysis.html#cb30-9"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-10"><a href="origin-destination-commute-analysis.html#cb30-10"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
-<span id="cb30-11"><a href="origin-destination-commute-analysis.html#cb30-11"></a>    <span class="dt">County =</span> NAME,</span>
-<span id="cb30-12"><a href="origin-destination-commute-analysis.html#cb30-12"></a>    <span class="st">`</span><span class="dt">Number of High-wage Construction jobs</span><span class="st">`</span> =<span class="st"> </span>high_CNS04</span>
-<span id="cb30-13"><a href="origin-destination-commute-analysis.html#cb30-13"></a>  )</span>
-<span id="cb30-14"><a href="origin-destination-commute-analysis.html#cb30-14"></a></span>
-<span id="cb30-15"><a href="origin-destination-commute-analysis.html#cb30-15"></a><span class="co"># map = mapview(stockton_lodes_w_construction_high[1:10,c(&quot;Number of High-wage Construction jobs&quot;)], zcol = &quot;Number of High-wage Construction jobs&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Number of&lt;/br&gt;High-wage&lt;/br&gt;Construction jobs&#39;)</span></span>
-<span id="cb30-16"><a href="origin-destination-commute-analysis.html#cb30-16"></a><span class="co"># </span></span>
-<span id="cb30-17"><a href="origin-destination-commute-analysis.html#cb30-17"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-construction-high.html&quot;)</span></span>
-<span id="cb30-18"><a href="origin-destination-commute-analysis.html#cb30-18"></a></span>
-<span id="cb30-19"><a href="origin-destination-commute-analysis.html#cb30-19"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-stockton-lodes-w-construction-high.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="origin-destination-commute-analysis.html#cb31-1"></a>stockton_lodes_w_counties_detail &lt;-</span>
+<span id="cb31-2"><a href="origin-destination-commute-analysis.html#cb31-2"></a><span class="st">  </span>stockton_lodes_h_join_wac_normalize <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-3"><a href="origin-destination-commute-analysis.html#cb31-3"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb31-4"><a href="origin-destination-commute-analysis.html#cb31-4"></a>    <span class="dt">Workplace =</span></span>
+<span id="cb31-5"><a href="origin-destination-commute-analysis.html#cb31-5"></a>      <span class="kw">ifelse</span>(</span>
+<span id="cb31-6"><a href="origin-destination-commute-analysis.html#cb31-6"></a>        w_bg <span class="op">%in%</span><span class="st"> </span>stockton_bgs_full<span class="op">$</span>GEOID,</span>
+<span id="cb31-7"><a href="origin-destination-commute-analysis.html#cb31-7"></a>        <span class="st">&quot;75000&quot;</span>,</span>
+<span id="cb31-8"><a href="origin-destination-commute-analysis.html#cb31-8"></a>        <span class="kw">substr</span>(w_bg,<span class="dv">3</span>,<span class="dv">5</span>)</span>
+<span id="cb31-9"><a href="origin-destination-commute-analysis.html#cb31-9"></a>      )</span>
+<span id="cb31-10"><a href="origin-destination-commute-analysis.html#cb31-10"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-11"><a href="origin-destination-commute-analysis.html#cb31-11"></a><span class="st">  </span><span class="kw">group_by</span>(Workplace) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-12"><a href="origin-destination-commute-analysis.html#cb31-12"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb31-13"><a href="origin-destination-commute-analysis.html#cb31-13"></a>    <span class="kw">vars</span>(S000,SE01,SE02,SE03,high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb31-14"><a href="origin-destination-commute-analysis.html#cb31-14"></a>    sum, </span>
+<span id="cb31-15"><a href="origin-destination-commute-analysis.html#cb31-15"></a>    <span class="dt">na.rm=</span>T</span>
+<span id="cb31-16"><a href="origin-destination-commute-analysis.html#cb31-16"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-17"><a href="origin-destination-commute-analysis.html#cb31-17"></a><span class="st">  </span><span class="kw">mutate_at</span>(</span>
+<span id="cb31-18"><a href="origin-destination-commute-analysis.html#cb31-18"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(high_CNS01<span class="op">:</span>mid_CNS20),</span>
+<span id="cb31-19"><a href="origin-destination-commute-analysis.html#cb31-19"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="op">~</span><span class="st"> </span><span class="kw">round</span>(.))</span>
+<span id="cb31-20"><a href="origin-destination-commute-analysis.html#cb31-20"></a>  )</span>
+<span id="cb31-21"><a href="origin-destination-commute-analysis.html#cb31-21"></a></span>
+<span id="cb31-22"><a href="origin-destination-commute-analysis.html#cb31-22"></a>stockton_lodes_w_construction_high &lt;-</span>
+<span id="cb31-23"><a href="origin-destination-commute-analysis.html#cb31-23"></a><span class="st">  </span>ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-24"><a href="origin-destination-commute-analysis.html#cb31-24"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-25"><a href="origin-destination-commute-analysis.html#cb31-25"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-26"><a href="origin-destination-commute-analysis.html#cb31-26"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties_detail, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-27"><a href="origin-destination-commute-analysis.html#cb31-27"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>COUNTYFP) <span class="op">%&gt;%</span></span>
+<span id="cb31-28"><a href="origin-destination-commute-analysis.html#cb31-28"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>NAME <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stockton&quot;</span>,<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>,<span class="st">&quot;Riverside&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-29"><a href="origin-destination-commute-analysis.html#cb31-29"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-30"><a href="origin-destination-commute-analysis.html#cb31-30"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-31"><a href="origin-destination-commute-analysis.html#cb31-31"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb31-32"><a href="origin-destination-commute-analysis.html#cb31-32"></a>    <span class="dt">County =</span> NAME,</span>
+<span id="cb31-33"><a href="origin-destination-commute-analysis.html#cb31-33"></a>    <span class="st">`</span><span class="dt">Number of High-wage Construction jobs</span><span class="st">`</span> =<span class="st"> </span>high_CNS04</span>
+<span id="cb31-34"><a href="origin-destination-commute-analysis.html#cb31-34"></a>  )</span>
+<span id="cb31-35"><a href="origin-destination-commute-analysis.html#cb31-35"></a></span>
+<span id="cb31-36"><a href="origin-destination-commute-analysis.html#cb31-36"></a><span class="co"># map = mapview(stockton_lodes_w_construction_high[1:10,c(&quot;Number of High-wage Construction jobs&quot;)], zcol = &quot;Number of High-wage Construction jobs&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Number of&lt;/br&gt;High-wage&lt;/br&gt;Construction jobs&#39;)</span></span>
+<span id="cb31-37"><a href="origin-destination-commute-analysis.html#cb31-37"></a><span class="co"># </span></span>
+<span id="cb31-38"><a href="origin-destination-commute-analysis.html#cb31-38"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-construction-high.html&quot;)</span></span>
+<span id="cb31-39"><a href="origin-destination-commute-analysis.html#cb31-39"></a></span>
+<span id="cb31-40"><a href="origin-destination-commute-analysis.html#cb31-40"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-stockton-lodes-w-construction-high.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:stockton-lodes-w-construction-high"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-stockton-lodes-w-construction-high.html" width="672" height="400px">
 </iframe>
@@ -2754,25 +3177,25 @@ Figure 2.15: Top 10 counties where Stockton residents work, not including jobs i
 </p>
 </div>
 <p><span class="math inline">\(~\)</span></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="origin-destination-commute-analysis.html#cb31-1"></a>stockton_lodes_w_scientific_high &lt;-</span>
-<span id="cb31-2"><a href="origin-destination-commute-analysis.html#cb31-2"></a><span class="st">  </span>ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-3"><a href="origin-destination-commute-analysis.html#cb31-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-4"><a href="origin-destination-commute-analysis.html#cb31-4"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-5"><a href="origin-destination-commute-analysis.html#cb31-5"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties_detail, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-6"><a href="origin-destination-commute-analysis.html#cb31-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>COUNTYFP) <span class="op">%&gt;%</span></span>
-<span id="cb31-7"><a href="origin-destination-commute-analysis.html#cb31-7"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>NAME <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stockton&quot;</span>,<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>,<span class="st">&quot;Riverside&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-8"><a href="origin-destination-commute-analysis.html#cb31-8"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-9"><a href="origin-destination-commute-analysis.html#cb31-9"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb31-10"><a href="origin-destination-commute-analysis.html#cb31-10"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
-<span id="cb31-11"><a href="origin-destination-commute-analysis.html#cb31-11"></a>    <span class="dt">County =</span> NAME,</span>
-<span id="cb31-12"><a href="origin-destination-commute-analysis.html#cb31-12"></a>    <span class="st">`</span><span class="dt">Number of Professional, Scientific, and Technical Services jobs</span><span class="st">`</span> =<span class="st"> </span>high_CNS12</span>
-<span id="cb31-13"><a href="origin-destination-commute-analysis.html#cb31-13"></a>  )</span>
-<span id="cb31-14"><a href="origin-destination-commute-analysis.html#cb31-14"></a></span>
-<span id="cb31-15"><a href="origin-destination-commute-analysis.html#cb31-15"></a><span class="co"># map = mapview(stockton_lodes_w_scientific_high[1:10,c(&quot;Number of Professional, Scientific, and Technical Services jobs&quot;)], zcol = &quot;Number of Professional, Scientific, and Technical Services jobs&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Number of&lt;/br&gt;Professional,&lt;/br&gt;Scientific,&lt;/br&gt;and Technical&lt;/br&gt;Services jobs&#39;)</span></span>
-<span id="cb31-16"><a href="origin-destination-commute-analysis.html#cb31-16"></a><span class="co"># </span></span>
-<span id="cb31-17"><a href="origin-destination-commute-analysis.html#cb31-17"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-scientific-high.html&quot;)</span></span>
-<span id="cb31-18"><a href="origin-destination-commute-analysis.html#cb31-18"></a></span>
-<span id="cb31-19"><a href="origin-destination-commute-analysis.html#cb31-19"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-stockton-lodes-w-scientific-high.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="origin-destination-commute-analysis.html#cb32-1"></a>stockton_lodes_w_scientific_high &lt;-</span>
+<span id="cb32-2"><a href="origin-destination-commute-analysis.html#cb32-2"></a><span class="st">  </span>ca_counties_and_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-3"><a href="origin-destination-commute-analysis.html#cb32-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(COUNTYFP, NAME) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-4"><a href="origin-destination-commute-analysis.html#cb32-4"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-5"><a href="origin-destination-commute-analysis.html#cb32-5"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_lodes_w_counties_detail, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;COUNTYFP&quot;</span> =<span class="st"> &quot;Workplace&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-6"><a href="origin-destination-commute-analysis.html#cb32-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>COUNTYFP) <span class="op">%&gt;%</span></span>
+<span id="cb32-7"><a href="origin-destination-commute-analysis.html#cb32-7"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>NAME <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stockton&quot;</span>,<span class="st">&quot;Los Angeles&quot;</span>,<span class="st">&quot;San Bernardino&quot;</span>,<span class="st">&quot;Orange&quot;</span>,<span class="st">&quot;San Diego&quot;</span>,<span class="st">&quot;Riverside&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-8"><a href="origin-destination-commute-analysis.html#cb32-8"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-9"><a href="origin-destination-commute-analysis.html#cb32-9"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Jobs)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-10"><a href="origin-destination-commute-analysis.html#cb32-10"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(</span>
+<span id="cb32-11"><a href="origin-destination-commute-analysis.html#cb32-11"></a>    <span class="dt">County =</span> NAME,</span>
+<span id="cb32-12"><a href="origin-destination-commute-analysis.html#cb32-12"></a>    <span class="st">`</span><span class="dt">Number of Professional, Scientific, and Technical Services jobs</span><span class="st">`</span> =<span class="st"> </span>high_CNS12</span>
+<span id="cb32-13"><a href="origin-destination-commute-analysis.html#cb32-13"></a>  )</span>
+<span id="cb32-14"><a href="origin-destination-commute-analysis.html#cb32-14"></a></span>
+<span id="cb32-15"><a href="origin-destination-commute-analysis.html#cb32-15"></a><span class="co"># map = mapview(stockton_lodes_w_scientific_high[1:10,c(&quot;Number of Professional, Scientific, and Technical Services jobs&quot;)], zcol = &quot;Number of Professional, Scientific, and Technical Services jobs&quot;, map.types = c(&quot;OpenStreetMap&quot;), legend = TRUE, layer.name = &#39;Number of&lt;/br&gt;Professional,&lt;/br&gt;Scientific,&lt;/br&gt;and Technical&lt;/br&gt;Services jobs&#39;)</span></span>
+<span id="cb32-16"><a href="origin-destination-commute-analysis.html#cb32-16"></a><span class="co"># </span></span>
+<span id="cb32-17"><a href="origin-destination-commute-analysis.html#cb32-17"></a><span class="co"># mapshot(map,url=&quot;map-stockton-lodes-w-scientific-high.html&quot;)</span></span>
+<span id="cb32-18"><a href="origin-destination-commute-analysis.html#cb32-18"></a></span>
+<span id="cb32-19"><a href="origin-destination-commute-analysis.html#cb32-19"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-stockton-lodes-w-scientific-high.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:stockton-lodes-w-scientific-high"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-stockton-lodes-w-scientific-high.html" width="672" height="400px">
 </iframe>

@@ -631,273 +631,273 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.9</span> Buildings</h2>
 <p>2018 data from the local County Assessor’s Office includes property use type and total building square footage for every parcel in Stockton. Because the assessor’s record of total building square footage is of poor quality, we chose to instead use <a href="https://github.com/microsoft/USBuildingFootprints">Microsoft’s U.S. Building Footprint Data</a>, joined each building footprint to a parcel (thereby also assigning a residential or commercial type based on the zoning of the parcel), and multiplied this footprint area by number of stories, which came either from the assessor’s record or from the Microsoft data. This dataset may still contain significant errors (e.g. mixed use parcels are mis-identified, the stories record may be incorrect, Microsoft’s building footprints may be incorrect, etc.), but we decided it was the best representation of total building square footage in Stockton.</p>
 <p>The following maps show the density of residents per acre across Stockton, followed by the density of jobs per acre of commercials buildings, at the block group level. Residential population was obtained from ACS 2017 5-yr data, and job count was obtained from LODES 2017.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="buildings.html#cb58-1"></a>pge_stockton_filtered &lt;-<span class="st"> </span></span>
-<span id="cb58-2"><a href="buildings.html#cb58-2"></a><span class="st">  </span>pge_data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-3"><a href="buildings.html#cb58-3"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>CUSTOMERCLASS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EI&quot;</span>,<span class="st">&quot;EA&quot;</span>) <span class="op">&amp;</span><span class="st"> </span>(YEAR <span class="op">==</span><span class="st"> </span><span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb58-4"><a href="buildings.html#cb58-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>YEAR,<span class="op">-</span>TOTALTCO2E,<span class="op">-</span>TCO2EPERCUST)</span>
-<span id="cb58-5"><a href="buildings.html#cb58-5"></a></span>
-<span id="cb58-6"><a href="buildings.html#cb58-6"></a>zips_spread &lt;-<span class="st"> </span></span>
-<span id="cb58-7"><a href="buildings.html#cb58-7"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-8"><a href="buildings.html#cb58-8"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-9"><a href="buildings.html#cb58-9"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb58-10"><a href="buildings.html#cb58-10"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
-<span id="cb58-11"><a href="buildings.html#cb58-11"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
-<span id="cb58-12"><a href="buildings.html#cb58-12"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-13"><a href="buildings.html#cb58-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-14"><a href="buildings.html#cb58-14"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-15"><a href="buildings.html#cb58-15"></a><span class="st">  </span><span class="kw">unite</span>(temp,CUSTOMERCLASS,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-16"><a href="buildings.html#cb58-16"></a><span class="st">  </span><span class="kw">spread</span>(temp,value) </span>
-<span id="cb58-17"><a href="buildings.html#cb58-17"></a></span>
-<span id="cb58-18"><a href="buildings.html#cb58-18"></a><span class="co">#next, since the previous line fully disaggregates by type AND class, but i also consider it valuable to disaggregate by type OR class individually on their own, i do a second and third spread. all of these &quot;spreads&quot; will be joined back to an original in the final step.</span></span>
-<span id="cb58-19"><a href="buildings.html#cb58-19"></a>zips_spread_<span class="dv">2</span> &lt;-<span class="st"> </span></span>
-<span id="cb58-20"><a href="buildings.html#cb58-20"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-21"><a href="buildings.html#cb58-21"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-22"><a href="buildings.html#cb58-22"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb58-23"><a href="buildings.html#cb58-23"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
-<span id="cb58-24"><a href="buildings.html#cb58-24"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
-<span id="cb58-25"><a href="buildings.html#cb58-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-26"><a href="buildings.html#cb58-26"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-27"><a href="buildings.html#cb58-27"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ENERGYTYPE =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-28"><a href="buildings.html#cb58-28"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-29"><a href="buildings.html#cb58-29"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ENERGYTYPE) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-30"><a href="buildings.html#cb58-30"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb58-31"><a href="buildings.html#cb58-31"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
-<span id="cb58-32"><a href="buildings.html#cb58-32"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">sum</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
-<span id="cb58-33"><a href="buildings.html#cb58-33"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-34"><a href="buildings.html#cb58-34"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-35"><a href="buildings.html#cb58-35"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-36"><a href="buildings.html#cb58-36"></a><span class="st">  </span><span class="kw">unite</span>(temp,ENERGYTYPE,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-37"><a href="buildings.html#cb58-37"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
-<span id="cb58-38"><a href="buildings.html#cb58-38"></a></span>
-<span id="cb58-39"><a href="buildings.html#cb58-39"></a><span class="co">#note that when combining into SECTOR, say electricity and gas for commercial, the summary function for TOTALCUSTOMERS switches to max(), with the reasoning that many of these commercial customers have both electricity and gas, so we would assume that the correct total # of customers is closer to the max of either, than to add them together (which presumes that there are no overlapping electricity and gas customers).</span></span>
-<span id="cb58-40"><a href="buildings.html#cb58-40"></a>zips_spread_<span class="dv">3</span> &lt;-<span class="st"> </span></span>
-<span id="cb58-41"><a href="buildings.html#cb58-41"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span></span>
-<span id="cb58-42"><a href="buildings.html#cb58-42"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-43"><a href="buildings.html#cb58-43"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb58-44"><a href="buildings.html#cb58-44"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
-<span id="cb58-45"><a href="buildings.html#cb58-45"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
-<span id="cb58-46"><a href="buildings.html#cb58-46"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-47"><a href="buildings.html#cb58-47"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-48"><a href="buildings.html#cb58-48"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">SECTOR =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">2</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-49"><a href="buildings.html#cb58-49"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-50"><a href="buildings.html#cb58-50"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, SECTOR) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-51"><a href="buildings.html#cb58-51"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
-<span id="cb58-52"><a href="buildings.html#cb58-52"></a>            <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">max</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-53"><a href="buildings.html#cb58-53"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-54"><a href="buildings.html#cb58-54"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-55"><a href="buildings.html#cb58-55"></a><span class="st">  </span><span class="kw">unite</span>(temp,SECTOR,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-56"><a href="buildings.html#cb58-56"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
-<span id="cb58-57"><a href="buildings.html#cb58-57"></a></span>
-<span id="cb58-58"><a href="buildings.html#cb58-58"></a><span class="co">#the final step here is to get the actual total totals for kbtu and TCO2E indicators, and then join all the &quot;subtotals&quot; from the previous 3 spreads.</span></span>
-<span id="cb58-59"><a href="buildings.html#cb58-59"></a>zips_total &lt;-<span class="st"> </span></span>
-<span id="cb58-60"><a href="buildings.html#cb58-60"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-61"><a href="buildings.html#cb58-61"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-62"><a href="buildings.html#cb58-62"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-63"><a href="buildings.html#cb58-63"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread_<span class="dv">3</span>, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-64"><a href="buildings.html#cb58-64"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">TOTALCUSTOMERS =</span> R_TOTALCUSTOMERS <span class="op">+</span><span class="st"> </span>C_TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-65"><a href="buildings.html#cb58-65"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread_<span class="dv">2</span>, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-66"><a href="buildings.html#cb58-66"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>)</span>
-<span id="cb58-67"><a href="buildings.html#cb58-67"></a></span>
-<span id="cb58-68"><a href="buildings.html#cb58-68"></a><span class="co">#join this massive summary back to the zcta geometries</span></span>
-<span id="cb58-69"><a href="buildings.html#cb58-69"></a>zcta_stockton_joined &lt;-<span class="st"> </span></span>
-<span id="cb58-70"><a href="buildings.html#cb58-70"></a><span class="st">  </span>zcta_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-71"><a href="buildings.html#cb58-71"></a><span class="st">  </span><span class="kw">left_join</span>(zips_total, <span class="dt">by=</span><span class="st">&quot;ZIPCODE&quot;</span>)</span>
-<span id="cb58-72"><a href="buildings.html#cb58-72"></a></span>
-<span id="cb58-73"><a href="buildings.html#cb58-73"></a><span class="co">#below I&#39;ve brought in all the code from stockton_bldg.R, but it can all be skipped by going to the load() of stockton_bldg.Rdata at the bottom. Kevin, whatever refinements you&#39;ve made, go ahead and make them here.</span></span>
-<span id="cb58-74"><a href="buildings.html#cb58-74"></a></span>
-<span id="cb58-75"><a href="buildings.html#cb58-75"></a><span class="co"># sjc_bldg &lt;- </span></span>
-<span id="cb58-76"><a href="buildings.html#cb58-76"></a><span class="co">#   read_csv(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/ca_06077_footprints.csv&quot;) %&gt;% </span></span>
-<span id="cb58-77"><a href="buildings.html#cb58-77"></a><span class="co">#   st_as_sf(wkt = &quot;WKT&quot;) %&gt;% </span></span>
-<span id="cb58-78"><a href="buildings.html#cb58-78"></a><span class="co">#   st_set_crs(4326) %&gt;% </span></span>
-<span id="cb58-79"><a href="buildings.html#cb58-79"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
-<span id="cb58-80"><a href="buildings.html#cb58-80"></a><span class="co">#   mutate(id = row_number())</span></span>
-<span id="cb58-81"><a href="buildings.html#cb58-81"></a><span class="co"># </span></span>
-<span id="cb58-82"><a href="buildings.html#cb58-82"></a><span class="co"># stockton_bldg &lt;- </span></span>
-<span id="cb58-83"><a href="buildings.html#cb58-83"></a><span class="co">#   sjc_bldg[which(sjc_bldg$id %in% st_centroid(sjc_bldg)[stockton_boundary_influence,]$id),]</span></span>
-<span id="cb58-84"><a href="buildings.html#cb58-84"></a><span class="co"># </span></span>
-<span id="cb58-85"><a href="buildings.html#cb58-85"></a><span class="co"># sjc_parcels &lt;- </span></span>
-<span id="cb58-86"><a href="buildings.html#cb58-86"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/Parcels.shp&quot;) %&gt;% </span></span>
-<span id="cb58-87"><a href="buildings.html#cb58-87"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
-<span id="cb58-88"><a href="buildings.html#cb58-88"></a><span class="co">#   st_make_valid()</span></span>
-<span id="cb58-89"><a href="buildings.html#cb58-89"></a><span class="co"># </span></span>
-<span id="cb58-90"><a href="buildings.html#cb58-90"></a><span class="co"># save(sjc_parcels, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/sjc_parcels.Rdata&quot;)</span></span>
-<span id="cb58-91"><a href="buildings.html#cb58-91"></a><span class="co"># </span></span>
-<span id="cb58-92"><a href="buildings.html#cb58-92"></a><span class="co"># stockton_parcels &lt;- </span></span>
-<span id="cb58-93"><a href="buildings.html#cb58-93"></a><span class="co">#   sjc_parcels[stockton_boundary_influence,]</span></span>
-<span id="cb58-94"><a href="buildings.html#cb58-94"></a><span class="co"># </span></span>
-<span id="cb58-95"><a href="buildings.html#cb58-95"></a><span class="co"># bldg_parcel_join &lt;- </span></span>
-<span id="cb58-96"><a href="buildings.html#cb58-96"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_parcels) %&gt;%</span></span>
-<span id="cb58-97"><a href="buildings.html#cb58-97"></a><span class="co">#   dplyr::select(APN, id, STAREA__) %&gt;% </span></span>
-<span id="cb58-98"><a href="buildings.html#cb58-98"></a><span class="co">#   rename(area = STAREA__) %&gt;% </span></span>
-<span id="cb58-99"><a href="buildings.html#cb58-99"></a><span class="co">#   st_set_geometry(NULL)</span></span>
-<span id="cb58-100"><a href="buildings.html#cb58-100"></a><span class="co"># </span></span>
-<span id="cb58-101"><a href="buildings.html#cb58-101"></a><span class="co"># sjc_zoning &lt;- </span></span>
-<span id="cb58-102"><a href="buildings.html#cb58-102"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Zoning/Zoning.shp&quot;) %&gt;% </span></span>
-<span id="cb58-103"><a href="buildings.html#cb58-103"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
-<span id="cb58-104"><a href="buildings.html#cb58-104"></a><span class="co">#   filter(ZNLABEL != &quot;STOCKTON&quot;)</span></span>
-<span id="cb58-105"><a href="buildings.html#cb58-105"></a><span class="co"># </span></span>
-<span id="cb58-106"><a href="buildings.html#cb58-106"></a><span class="co"># stockton_zoning &lt;- </span></span>
-<span id="cb58-107"><a href="buildings.html#cb58-107"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Stockton_Zoning/Zoning.shp&quot;) %&gt;% </span></span>
-<span id="cb58-108"><a href="buildings.html#cb58-108"></a><span class="co">#   st_transform(st_crs(zcta_stockton))</span></span>
-<span id="cb58-109"><a href="buildings.html#cb58-109"></a><span class="co"># </span></span>
-<span id="cb58-110"><a href="buildings.html#cb58-110"></a><span class="co"># bldg_zoning_join &lt;- </span></span>
-<span id="cb58-111"><a href="buildings.html#cb58-111"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_zoning) %&gt;% </span></span>
-<span id="cb58-112"><a href="buildings.html#cb58-112"></a><span class="co">#   dplyr::select(ZONE, id) %&gt;% </span></span>
-<span id="cb58-113"><a href="buildings.html#cb58-113"></a><span class="co">#   st_set_geometry(NULL)</span></span>
-<span id="cb58-114"><a href="buildings.html#cb58-114"></a><span class="co"># </span></span>
-<span id="cb58-115"><a href="buildings.html#cb58-115"></a><span class="co"># bldg_zoning_join_uninc &lt;- </span></span>
-<span id="cb58-116"><a href="buildings.html#cb58-116"></a><span class="co">#   st_join(st_centroid(stockton_bldg), sjc_zoning) %&gt;% </span></span>
-<span id="cb58-117"><a href="buildings.html#cb58-117"></a><span class="co">#   dplyr::select(ZNCODE, id) %&gt;% </span></span>
-<span id="cb58-118"><a href="buildings.html#cb58-118"></a><span class="co">#   st_set_geometry(NULL)</span></span>
-<span id="cb58-119"><a href="buildings.html#cb58-119"></a><span class="co"># </span></span>
-<span id="cb58-120"><a href="buildings.html#cb58-120"></a><span class="co"># bldg_zoning_join %&lt;&gt;% </span></span>
-<span id="cb58-121"><a href="buildings.html#cb58-121"></a><span class="co">#   merge(bldg_zoning_join_uninc) %&gt;% </span></span>
-<span id="cb58-122"><a href="buildings.html#cb58-122"></a><span class="co">#   mutate(ZONE = ifelse(is.na(ZONE),as.character(ZNCODE),as.character(ZONE))) %&gt;% </span></span>
-<span id="cb58-123"><a href="buildings.html#cb58-123"></a><span class="co">#   dplyr::select(ZONE, id)</span></span>
-<span id="cb58-124"><a href="buildings.html#cb58-124"></a><span class="co"># </span></span>
-<span id="cb58-125"><a href="buildings.html#cb58-125"></a><span class="co"># sjc_bgs &lt;- </span></span>
-<span id="cb58-126"><a href="buildings.html#cb58-126"></a><span class="co">#   block_groups(&quot;California&quot;, &quot;San Joaquin County&quot;)</span></span>
-<span id="cb58-127"><a href="buildings.html#cb58-127"></a><span class="co"># </span></span>
-<span id="cb58-128"><a href="buildings.html#cb58-128"></a><span class="co"># stockton_bgs &lt;- </span></span>
-<span id="cb58-129"><a href="buildings.html#cb58-129"></a><span class="co">#   sjc_bgs[stockton_boundary_influence,]</span></span>
-<span id="cb58-130"><a href="buildings.html#cb58-130"></a><span class="co"># </span></span>
-<span id="cb58-131"><a href="buildings.html#cb58-131"></a><span class="co"># bldg_bg_join &lt;- </span></span>
-<span id="cb58-132"><a href="buildings.html#cb58-132"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_bgs) %&gt;% </span></span>
-<span id="cb58-133"><a href="buildings.html#cb58-133"></a><span class="co">#   dplyr::select(GEOID, id) %&gt;% </span></span>
-<span id="cb58-134"><a href="buildings.html#cb58-134"></a><span class="co">#   st_set_geometry(NULL)</span></span>
-<span id="cb58-135"><a href="buildings.html#cb58-135"></a><span class="co"># </span></span>
-<span id="cb58-136"><a href="buildings.html#cb58-136"></a><span class="co"># bldg_zcta_join &lt;- </span></span>
-<span id="cb58-137"><a href="buildings.html#cb58-137"></a><span class="co">#   st_join(st_centroid(stockton_bldg), zcta_stockton) %&gt;% </span></span>
-<span id="cb58-138"><a href="buildings.html#cb58-138"></a><span class="co">#   dplyr::select(ZIPCODE, id) %&gt;% </span></span>
-<span id="cb58-139"><a href="buildings.html#cb58-139"></a><span class="co">#   st_set_geometry(NULL)</span></span>
-<span id="cb58-140"><a href="buildings.html#cb58-140"></a><span class="co"># </span></span>
-<span id="cb58-141"><a href="buildings.html#cb58-141"></a><span class="co"># load(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/tax_sjc.Rdata&quot;)</span></span>
-<span id="cb58-142"><a href="buildings.html#cb58-142"></a><span class="co"># </span></span>
-<span id="cb58-143"><a href="buildings.html#cb58-143"></a><span class="co"># tax_sjc &lt;- </span></span>
-<span id="cb58-144"><a href="buildings.html#cb58-144"></a><span class="co">#   tax_sjc %&gt;% </span></span>
-<span id="cb58-145"><a href="buildings.html#cb58-145"></a><span class="co">#   mutate(APN = as.numeric(apn)) %&gt;% </span></span>
-<span id="cb58-146"><a href="buildings.html#cb58-146"></a><span class="co">#   st_set_geometry(NULL)</span></span>
-<span id="cb58-147"><a href="buildings.html#cb58-147"></a><span class="co"># </span></span>
-<span id="cb58-148"><a href="buildings.html#cb58-148"></a><span class="co"># stockton_bldg_final &lt;-</span></span>
-<span id="cb58-149"><a href="buildings.html#cb58-149"></a><span class="co">#   stockton_bldg %&gt;%</span></span>
-<span id="cb58-150"><a href="buildings.html#cb58-150"></a><span class="co">#   left_join(bldg_parcel_join, by=&quot;id&quot;) %&gt;%</span></span>
-<span id="cb58-151"><a href="buildings.html#cb58-151"></a><span class="co">#   left_join(bldg_zoning_join, by=&quot;id&quot;) %&gt;%</span></span>
-<span id="cb58-152"><a href="buildings.html#cb58-152"></a><span class="co">#   left_join(bldg_bg_join, by=&quot;id&quot;) %&gt;%</span></span>
-<span id="cb58-153"><a href="buildings.html#cb58-153"></a><span class="co">#   left_join(bldg_zcta_join, by=&quot;id&quot;) %&gt;%</span></span>
-<span id="cb58-154"><a href="buildings.html#cb58-154"></a><span class="co">#   left_join(tax_sjc, by=&quot;APN&quot;) %&gt;%</span></span>
-<span id="cb58-155"><a href="buildings.html#cb58-155"></a><span class="co">#   mutate( # the following takes the bldg data, computes bldgground (ground footprint, where the factor conversion is sqm to sqft) and bldgtot (total sqft).</span></span>
-<span id="cb58-156"><a href="buildings.html#cb58-156"></a><span class="co">#     bldgground = as.numeric(st_area(WKT))*10.7639,</span></span>
-<span id="cb58-157"><a href="buildings.html#cb58-157"></a><span class="co">#     bldgtot =</span></span>
-<span id="cb58-158"><a href="buildings.html#cb58-158"></a><span class="co">#       ifelse(</span></span>
-<span id="cb58-159"><a href="buildings.html#cb58-159"></a><span class="co">#         is.na(stories),</span></span>
-<span id="cb58-160"><a href="buildings.html#cb58-160"></a><span class="co">#         bldgground,</span></span>
-<span id="cb58-161"><a href="buildings.html#cb58-161"></a><span class="co">#         bldgground*stories</span></span>
-<span id="cb58-162"><a href="buildings.html#cb58-162"></a><span class="co">#       ),</span></span>
-<span id="cb58-163"><a href="buildings.html#cb58-163"></a><span class="co">#     ZIPCODE = as.numeric(ZIPCODE),</span></span>
-<span id="cb58-164"><a href="buildings.html#cb58-164"></a><span class="co">#     ZONING = </span></span>
-<span id="cb58-165"><a href="buildings.html#cb58-165"></a><span class="co">#       case_when(</span></span>
-<span id="cb58-166"><a href="buildings.html#cb58-166"></a><span class="co">#         substr(ZONE,1,1) == &quot;R&quot; ~ &quot;R&quot;,</span></span>
-<span id="cb58-167"><a href="buildings.html#cb58-167"></a><span class="co">#         substr(ZONE,1,2) == &quot;(R&quot; ~ &quot;R&quot;,</span></span>
-<span id="cb58-168"><a href="buildings.html#cb58-168"></a><span class="co">#         substr(ZONE,1,1) %in% c(&quot;C&quot;,&quot;P&quot;,&quot;M&quot;,&quot;U&quot;) ~ &quot;C&quot;, </span></span>
-<span id="cb58-169"><a href="buildings.html#cb58-169"></a><span class="co">#         substr(ZONE,1,2) %in% c(&quot;(C&quot;,&quot;(P&quot;) ~ &quot;C&quot;,</span></span>
-<span id="cb58-170"><a href="buildings.html#cb58-170"></a><span class="co">#         TRUE ~ &quot;O&quot;</span></span>
-<span id="cb58-171"><a href="buildings.html#cb58-171"></a><span class="co">#       )</span></span>
-<span id="cb58-172"><a href="buildings.html#cb58-172"></a><span class="co">#   )</span></span>
-<span id="cb58-173"><a href="buildings.html#cb58-173"></a><span class="co"># </span></span>
-<span id="cb58-174"><a href="buildings.html#cb58-174"></a><span class="co"># save(stockton_bldg_final, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/stockton_bldg.Rdata&quot;)</span></span>
-<span id="cb58-175"><a href="buildings.html#cb58-175"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/stockton_bldg.Rdata&quot;</span>)</span>
-<span id="cb58-176"><a href="buildings.html#cb58-176"></a><span class="co"># </span></span>
-<span id="cb58-177"><a href="buildings.html#cb58-177"></a><span class="co"># stockton_bldg_17 &lt;- </span></span>
-<span id="cb58-178"><a href="buildings.html#cb58-178"></a><span class="co">#   readOGR(dsn = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/Stockton2017&quot;, layer = &quot;Stockton&quot;) %&gt;% </span></span>
-<span id="cb58-179"><a href="buildings.html#cb58-179"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
-<span id="cb58-180"><a href="buildings.html#cb58-180"></a><span class="co">#   st_transform(st_crs(stockton_bldg_final))</span></span>
-<span id="cb58-181"><a href="buildings.html#cb58-181"></a><span class="co"># </span></span>
-<span id="cb58-182"><a href="buildings.html#cb58-182"></a><span class="co"># save(stockton_bldg_17, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/stockton_bldg_17.Rdata&quot;)</span></span>
-<span id="cb58-183"><a href="buildings.html#cb58-183"></a><span class="co"># load(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/stockton_bldg_17.Rdata&quot;)</span></span>
-<span id="cb58-184"><a href="buildings.html#cb58-184"></a></span>
-<span id="cb58-185"><a href="buildings.html#cb58-185"></a><span class="co"># # match height from 2017 data</span></span>
-<span id="cb58-186"><a href="buildings.html#cb58-186"></a><span class="co"># bldg_join &lt;-</span></span>
-<span id="cb58-187"><a href="buildings.html#cb58-187"></a><span class="co">#   stockton_bldg_final %&gt;%</span></span>
-<span id="cb58-188"><a href="buildings.html#cb58-188"></a><span class="co">#   st_join(</span></span>
-<span id="cb58-189"><a href="buildings.html#cb58-189"></a><span class="co">#     stockton_bldg_17 %&gt;%</span></span>
-<span id="cb58-190"><a href="buildings.html#cb58-190"></a><span class="co">#       st_transform(26910) %&gt;%</span></span>
-<span id="cb58-191"><a href="buildings.html#cb58-191"></a><span class="co">#       st_buffer(-1) %&gt;%</span></span>
-<span id="cb58-192"><a href="buildings.html#cb58-192"></a><span class="co">#       st_transform(st_crs(stockton_bldg_final))</span></span>
-<span id="cb58-193"><a href="buildings.html#cb58-193"></a><span class="co">#   ) %&gt;%</span></span>
-<span id="cb58-194"><a href="buildings.html#cb58-194"></a><span class="co">#   group_by(id) %&gt;%</span></span>
-<span id="cb58-195"><a href="buildings.html#cb58-195"></a><span class="co">#   summarize(</span></span>
-<span id="cb58-196"><a href="buildings.html#cb58-196"></a><span class="co">#     Height = mean(Height,na.rm=T)</span></span>
-<span id="cb58-197"><a href="buildings.html#cb58-197"></a><span class="co">#   ) %&gt;%</span></span>
-<span id="cb58-198"><a href="buildings.html#cb58-198"></a><span class="co">#   left_join(stockton_bldg_final %&gt;% st_set_geometry(NULL),by=&quot;id&quot;)</span></span>
-<span id="cb58-199"><a href="buildings.html#cb58-199"></a><span class="co"># </span></span>
-<span id="cb58-200"><a href="buildings.html#cb58-200"></a><span class="co"># bldg_join &lt;-</span></span>
-<span id="cb58-201"><a href="buildings.html#cb58-201"></a><span class="co">#   bldg_join %&gt;% </span></span>
-<span id="cb58-202"><a href="buildings.html#cb58-202"></a><span class="co">#   mutate(</span></span>
-<span id="cb58-203"><a href="buildings.html#cb58-203"></a><span class="co">#     stories_by_height =</span></span>
-<span id="cb58-204"><a href="buildings.html#cb58-204"></a><span class="co">#       case_when(</span></span>
-<span id="cb58-205"><a href="buildings.html#cb58-205"></a><span class="co">#         GEOID == &quot;060770039001&quot; ~ 1, #Naval base</span></span>
-<span id="cb58-206"><a href="buildings.html#cb58-206"></a><span class="co">#         is.na(Height) &amp; is.na(stories) ~ 1,</span></span>
-<span id="cb58-207"><a href="buildings.html#cb58-207"></a><span class="co">#         is.na(Height) ~ round(stories),</span></span>
-<span id="cb58-208"><a href="buildings.html#cb58-208"></a><span class="co">#         !is.na(stories) ~ round(stories),</span></span>
-<span id="cb58-209"><a href="buildings.html#cb58-209"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==1),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==1),]$Height) ~ 1,</span></span>
-<span id="cb58-210"><a href="buildings.html#cb58-210"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==2),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==2),]$Height) ~ 2,</span></span>
-<span id="cb58-211"><a href="buildings.html#cb58-211"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==3),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==3),]$Height) ~ 3,</span></span>
-<span id="cb58-212"><a href="buildings.html#cb58-212"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==4),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==4),]$Height) ~ 4,</span></span>
-<span id="cb58-213"><a href="buildings.html#cb58-213"></a><span class="co">#         TRUE ~ round(Height/5)</span></span>
-<span id="cb58-214"><a href="buildings.html#cb58-214"></a><span class="co">#       ),</span></span>
-<span id="cb58-215"><a href="buildings.html#cb58-215"></a><span class="co">#     bldg_tot =</span></span>
-<span id="cb58-216"><a href="buildings.html#cb58-216"></a><span class="co">#       bldgground*stories_by_height</span></span>
-<span id="cb58-217"><a href="buildings.html#cb58-217"></a><span class="co">#   )</span></span>
-<span id="cb58-218"><a href="buildings.html#cb58-218"></a><span class="co"># # 6033 unmatched when using -1m buffer. #2637 of those did not have assessor stories data, set to 1F. Of other 3396, 2090 1F, 1248 2F, 58 3F.</span></span>
-<span id="cb58-219"><a href="buildings.html#cb58-219"></a><span class="co"># # 70757 had both 2017 heights and assessor stories data, go with assessor stories data. 51676 had assessor stories = 1, kept at 1F. 18974 had assessor stories = 2, kept at 2F. 107 had assessor stories &gt; 2, set to 2.5F.</span></span>
-<span id="cb58-220"><a href="buildings.html#cb58-220"></a><span class="co"># # mean height for assessor 1F: 11.30, sd 1.63. mean height for assessor 2F: 13.98, sd 2.25. mean height for assessor 3F: 15.39, sd 2.99. mean height for assessor 4F: 14.42, sd 5.35.</span></span>
-<span id="cb58-221"><a href="buildings.html#cb58-221"></a><span class="co"># # 24660 had no assessor stories data but had 2017 heights, use mean + 1 sd from above as thresholds. 1F: 12.92. 2F: 16.23. 3F: 18.38. 4F: 19.77</span></span>
-<span id="cb58-222"><a href="buildings.html#cb58-222"></a><span class="co"># # 15991 1F, 5642 2F, 908 3F, 1512 4F, 541 5F, 29 6F, 12 7F, 15 8F, 4 9F, 5 10F, 1 12F.</span></span>
-<span id="cb58-223"><a href="buildings.html#cb58-223"></a><span class="co"># </span></span>
-<span id="cb58-224"><a href="buildings.html#cb58-224"></a><span class="co"># save(bldg_join, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;)</span></span>
-<span id="cb58-225"><a href="buildings.html#cb58-225"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;</span>)</span>
-<span id="cb58-226"><a href="buildings.html#cb58-226"></a></span>
-<span id="cb58-227"><a href="buildings.html#cb58-227"></a>bg_bldg &lt;-</span>
-<span id="cb58-228"><a href="buildings.html#cb58-228"></a><span class="st">  </span>bldg_join <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-229"><a href="buildings.html#cb58-229"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-230"><a href="buildings.html#cb58-230"></a><span class="st">  </span><span class="kw">group_by</span>(GEOID, ZONING) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-231"><a href="buildings.html#cb58-231"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
-<span id="cb58-232"><a href="buildings.html#cb58-232"></a>    <span class="dt">numbldg =</span> <span class="kw">n</span>(),</span>
-<span id="cb58-233"><a href="buildings.html#cb58-233"></a>    <span class="dt">bldgtot =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
-<span id="cb58-234"><a href="buildings.html#cb58-234"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-235"><a href="buildings.html#cb58-235"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-236"><a href="buildings.html#cb58-236"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_bgs_full, <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-237"><a href="buildings.html#cb58-237"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-238"><a href="buildings.html#cb58-238"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(<span class="kw">st_dimension</span>(.)))</span>
-<span id="cb58-239"><a href="buildings.html#cb58-239"></a></span>
-<span id="cb58-240"><a href="buildings.html#cb58-240"></a><span class="co">#res/sqft per block group</span></span>
-<span id="cb58-241"><a href="buildings.html#cb58-241"></a>bg_pop &lt;-</span>
-<span id="cb58-242"><a href="buildings.html#cb58-242"></a><span class="st">  </span><span class="kw">getCensus</span>(</span>
-<span id="cb58-243"><a href="buildings.html#cb58-243"></a>    <span class="dt">name =</span> <span class="st">&quot;acs/acs5&quot;</span>,</span>
-<span id="cb58-244"><a href="buildings.html#cb58-244"></a>    <span class="dt">vintage =</span> <span class="dv">2017</span>, <span class="co"># satellite imagery is from around 2014/2015</span></span>
-<span id="cb58-245"><a href="buildings.html#cb58-245"></a>    <span class="dt">vars =</span> <span class="kw">c</span>(<span class="st">&quot;B01003_001E&quot;</span>),</span>
-<span id="cb58-246"><a href="buildings.html#cb58-246"></a>    <span class="dt">region =</span> <span class="st">&quot;block group:*&quot;</span>,</span>
-<span id="cb58-247"><a href="buildings.html#cb58-247"></a>    <span class="dt">regionin =</span> <span class="st">&quot;state:06+county:077&quot;</span></span>
-<span id="cb58-248"><a href="buildings.html#cb58-248"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb58-249"><a href="buildings.html#cb58-249"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
-<span id="cb58-250"><a href="buildings.html#cb58-250"></a>    <span class="dt">GEOID =</span> <span class="kw">paste0</span>(state,county,tract,block_group),</span>
-<span id="cb58-251"><a href="buildings.html#cb58-251"></a>    <span class="dt">pop =</span> B01003_001E</span>
-<span id="cb58-252"><a href="buildings.html#cb58-252"></a>  )</span>
-<span id="cb58-253"><a href="buildings.html#cb58-253"></a></span>
-<span id="cb58-254"><a href="buildings.html#cb58-254"></a>bg_bldg_norm_r &lt;-</span>
-<span id="cb58-255"><a href="buildings.html#cb58-255"></a><span class="st">  </span>bg_bldg <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-256"><a href="buildings.html#cb58-256"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;R&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-257"><a href="buildings.html#cb58-257"></a><span class="st">  </span><span class="kw">left_join</span>(bg_pop, <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb58-258"><a href="buildings.html#cb58-258"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb58-259"><a href="buildings.html#cb58-259"></a>    <span class="st">`</span><span class="dt">Residents per 1,000 sqft</span><span class="st">`</span> =<span class="st"> </span>pop<span class="op">/</span>bldgtot<span class="op">*</span><span class="dv">1000</span>,</span>
-<span id="cb58-260"><a href="buildings.html#cb58-260"></a>    <span class="dt">residential_density =</span> bldgtot<span class="op">/</span>(<span class="kw">as.numeric</span>(<span class="kw">st_area</span>(.))<span class="op">/</span><span class="fl">4046.86</span>)</span>
-<span id="cb58-261"><a href="buildings.html#cb58-261"></a>  )</span>
-<span id="cb58-262"><a href="buildings.html#cb58-262"></a></span>
-<span id="cb58-263"><a href="buildings.html#cb58-263"></a><span class="co"># map = mapview(bg_bldg_norm_r[,c(&quot;residential_density&quot;)],zcol=c(&quot;residential_density&quot;), legend = TRUE, layer.name = &quot;Residential&lt;/br&gt;density&lt;/br&gt;per acre&quot;)</span></span>
-<span id="cb58-264"><a href="buildings.html#cb58-264"></a><span class="co"># </span></span>
-<span id="cb58-265"><a href="buildings.html#cb58-265"></a><span class="co"># mapshot(map, url = &quot;map-residential-density.html&quot;)</span></span>
-<span id="cb58-266"><a href="buildings.html#cb58-266"></a></span>
-<span id="cb58-267"><a href="buildings.html#cb58-267"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-residential-density.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="buildings.html#cb60-1"></a>pge_stockton_filtered &lt;-<span class="st"> </span></span>
+<span id="cb60-2"><a href="buildings.html#cb60-2"></a><span class="st">  </span>pge_data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-3"><a href="buildings.html#cb60-3"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>CUSTOMERCLASS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;EI&quot;</span>,<span class="st">&quot;EA&quot;</span>) <span class="op">&amp;</span><span class="st"> </span>(YEAR <span class="op">==</span><span class="st"> </span><span class="dv">2018</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb60-4"><a href="buildings.html#cb60-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>YEAR,<span class="op">-</span>TOTALTCO2E,<span class="op">-</span>TCO2EPERCUST)</span>
+<span id="cb60-5"><a href="buildings.html#cb60-5"></a></span>
+<span id="cb60-6"><a href="buildings.html#cb60-6"></a>zips_spread &lt;-<span class="st"> </span></span>
+<span id="cb60-7"><a href="buildings.html#cb60-7"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-8"><a href="buildings.html#cb60-8"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-9"><a href="buildings.html#cb60-9"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb60-10"><a href="buildings.html#cb60-10"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-11"><a href="buildings.html#cb60-11"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-12"><a href="buildings.html#cb60-12"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-13"><a href="buildings.html#cb60-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-14"><a href="buildings.html#cb60-14"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-15"><a href="buildings.html#cb60-15"></a><span class="st">  </span><span class="kw">unite</span>(temp,CUSTOMERCLASS,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-16"><a href="buildings.html#cb60-16"></a><span class="st">  </span><span class="kw">spread</span>(temp,value) </span>
+<span id="cb60-17"><a href="buildings.html#cb60-17"></a></span>
+<span id="cb60-18"><a href="buildings.html#cb60-18"></a><span class="co">#next, since the previous line fully disaggregates by type AND class, but i also consider it valuable to disaggregate by type OR class individually on their own, i do a second and third spread. all of these &quot;spreads&quot; will be joined back to an original in the final step.</span></span>
+<span id="cb60-19"><a href="buildings.html#cb60-19"></a>zips_spread_<span class="dv">2</span> &lt;-<span class="st"> </span></span>
+<span id="cb60-20"><a href="buildings.html#cb60-20"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-21"><a href="buildings.html#cb60-21"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-22"><a href="buildings.html#cb60-22"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb60-23"><a href="buildings.html#cb60-23"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-24"><a href="buildings.html#cb60-24"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-25"><a href="buildings.html#cb60-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-26"><a href="buildings.html#cb60-26"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-27"><a href="buildings.html#cb60-27"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ENERGYTYPE =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-28"><a href="buildings.html#cb60-28"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-29"><a href="buildings.html#cb60-29"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ENERGYTYPE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-30"><a href="buildings.html#cb60-30"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb60-31"><a href="buildings.html#cb60-31"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-32"><a href="buildings.html#cb60-32"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">sum</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-33"><a href="buildings.html#cb60-33"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-34"><a href="buildings.html#cb60-34"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-35"><a href="buildings.html#cb60-35"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-36"><a href="buildings.html#cb60-36"></a><span class="st">  </span><span class="kw">unite</span>(temp,ENERGYTYPE,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-37"><a href="buildings.html#cb60-37"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
+<span id="cb60-38"><a href="buildings.html#cb60-38"></a></span>
+<span id="cb60-39"><a href="buildings.html#cb60-39"></a><span class="co">#note that when combining into SECTOR, say electricity and gas for commercial, the summary function for TOTALCUSTOMERS switches to max(), with the reasoning that many of these commercial customers have both electricity and gas, so we would assume that the correct total # of customers is closer to the max of either, than to add them together (which presumes that there are no overlapping electricity and gas customers).</span></span>
+<span id="cb60-40"><a href="buildings.html#cb60-40"></a>zips_spread_<span class="dv">3</span> &lt;-<span class="st"> </span></span>
+<span id="cb60-41"><a href="buildings.html#cb60-41"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span></span>
+<span id="cb60-42"><a href="buildings.html#cb60-42"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-43"><a href="buildings.html#cb60-43"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb60-44"><a href="buildings.html#cb60-44"></a>    <span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-45"><a href="buildings.html#cb60-45"></a>    <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">mean</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-46"><a href="buildings.html#cb60-46"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-47"><a href="buildings.html#cb60-47"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-48"><a href="buildings.html#cb60-48"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">SECTOR =</span> <span class="kw">substr</span>(CUSTOMERCLASS,<span class="dv">2</span>,<span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-49"><a href="buildings.html#cb60-49"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>CUSTOMERCLASS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-50"><a href="buildings.html#cb60-50"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, SECTOR) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-51"><a href="buildings.html#cb60-51"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T),</span>
+<span id="cb60-52"><a href="buildings.html#cb60-52"></a>            <span class="dt">TOTALCUSTOMERS =</span> <span class="kw">max</span>(TOTALCUSTOMERS, <span class="dt">na.rm=</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-53"><a href="buildings.html#cb60-53"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">KBTUPERCUST =</span> TOTALKBTU<span class="op">/</span>TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-54"><a href="buildings.html#cb60-54"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, value, TOTALKBTU<span class="op">:</span>KBTUPERCUST) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-55"><a href="buildings.html#cb60-55"></a><span class="st">  </span><span class="kw">unite</span>(temp,SECTOR,type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-56"><a href="buildings.html#cb60-56"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
+<span id="cb60-57"><a href="buildings.html#cb60-57"></a></span>
+<span id="cb60-58"><a href="buildings.html#cb60-58"></a><span class="co">#the final step here is to get the actual total totals for kbtu and TCO2E indicators, and then join all the &quot;subtotals&quot; from the previous 3 spreads.</span></span>
+<span id="cb60-59"><a href="buildings.html#cb60-59"></a>zips_total &lt;-<span class="st"> </span></span>
+<span id="cb60-60"><a href="buildings.html#cb60-60"></a><span class="st">  </span>pge_stockton_filtered <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-61"><a href="buildings.html#cb60-61"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-62"><a href="buildings.html#cb60-62"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">TOTALKBTU =</span> <span class="kw">sum</span>(TOTALKBTU, <span class="dt">na.rm=</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-63"><a href="buildings.html#cb60-63"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread_<span class="dv">3</span>, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-64"><a href="buildings.html#cb60-64"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">TOTALCUSTOMERS =</span> R_TOTALCUSTOMERS <span class="op">+</span><span class="st"> </span>C_TOTALCUSTOMERS) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-65"><a href="buildings.html#cb60-65"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread_<span class="dv">2</span>, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-66"><a href="buildings.html#cb60-66"></a><span class="st">  </span><span class="kw">left_join</span>(zips_spread, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>)</span>
+<span id="cb60-67"><a href="buildings.html#cb60-67"></a></span>
+<span id="cb60-68"><a href="buildings.html#cb60-68"></a><span class="co">#join this massive summary back to the zcta geometries</span></span>
+<span id="cb60-69"><a href="buildings.html#cb60-69"></a>zcta_stockton_joined &lt;-<span class="st"> </span></span>
+<span id="cb60-70"><a href="buildings.html#cb60-70"></a><span class="st">  </span>zcta_stockton <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-71"><a href="buildings.html#cb60-71"></a><span class="st">  </span><span class="kw">left_join</span>(zips_total, <span class="dt">by=</span><span class="st">&quot;ZIPCODE&quot;</span>)</span>
+<span id="cb60-72"><a href="buildings.html#cb60-72"></a></span>
+<span id="cb60-73"><a href="buildings.html#cb60-73"></a><span class="co">#below I&#39;ve brought in all the code from stockton_bldg.R, but it can all be skipped by going to the load() of stockton_bldg.Rdata at the bottom. Kevin, whatever refinements you&#39;ve made, go ahead and make them here.</span></span>
+<span id="cb60-74"><a href="buildings.html#cb60-74"></a></span>
+<span id="cb60-75"><a href="buildings.html#cb60-75"></a><span class="co"># sjc_bldg &lt;- </span></span>
+<span id="cb60-76"><a href="buildings.html#cb60-76"></a><span class="co">#   read_csv(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/ca_06077_footprints.csv&quot;) %&gt;% </span></span>
+<span id="cb60-77"><a href="buildings.html#cb60-77"></a><span class="co">#   st_as_sf(wkt = &quot;WKT&quot;) %&gt;% </span></span>
+<span id="cb60-78"><a href="buildings.html#cb60-78"></a><span class="co">#   st_set_crs(4326) %&gt;% </span></span>
+<span id="cb60-79"><a href="buildings.html#cb60-79"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
+<span id="cb60-80"><a href="buildings.html#cb60-80"></a><span class="co">#   mutate(id = row_number())</span></span>
+<span id="cb60-81"><a href="buildings.html#cb60-81"></a><span class="co"># </span></span>
+<span id="cb60-82"><a href="buildings.html#cb60-82"></a><span class="co"># stockton_bldg &lt;- </span></span>
+<span id="cb60-83"><a href="buildings.html#cb60-83"></a><span class="co">#   sjc_bldg[which(sjc_bldg$id %in% st_centroid(sjc_bldg)[stockton_boundary_influence,]$id),]</span></span>
+<span id="cb60-84"><a href="buildings.html#cb60-84"></a><span class="co"># </span></span>
+<span id="cb60-85"><a href="buildings.html#cb60-85"></a><span class="co"># sjc_parcels &lt;- </span></span>
+<span id="cb60-86"><a href="buildings.html#cb60-86"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/Parcels.shp&quot;) %&gt;% </span></span>
+<span id="cb60-87"><a href="buildings.html#cb60-87"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
+<span id="cb60-88"><a href="buildings.html#cb60-88"></a><span class="co">#   st_make_valid()</span></span>
+<span id="cb60-89"><a href="buildings.html#cb60-89"></a><span class="co"># </span></span>
+<span id="cb60-90"><a href="buildings.html#cb60-90"></a><span class="co"># save(sjc_parcels, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Parcels/sjc_parcels.Rdata&quot;)</span></span>
+<span id="cb60-91"><a href="buildings.html#cb60-91"></a><span class="co"># </span></span>
+<span id="cb60-92"><a href="buildings.html#cb60-92"></a><span class="co"># stockton_parcels &lt;- </span></span>
+<span id="cb60-93"><a href="buildings.html#cb60-93"></a><span class="co">#   sjc_parcels[stockton_boundary_influence,]</span></span>
+<span id="cb60-94"><a href="buildings.html#cb60-94"></a><span class="co"># </span></span>
+<span id="cb60-95"><a href="buildings.html#cb60-95"></a><span class="co"># bldg_parcel_join &lt;- </span></span>
+<span id="cb60-96"><a href="buildings.html#cb60-96"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_parcels) %&gt;%</span></span>
+<span id="cb60-97"><a href="buildings.html#cb60-97"></a><span class="co">#   dplyr::select(APN, id, STAREA__) %&gt;% </span></span>
+<span id="cb60-98"><a href="buildings.html#cb60-98"></a><span class="co">#   rename(area = STAREA__) %&gt;% </span></span>
+<span id="cb60-99"><a href="buildings.html#cb60-99"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb60-100"><a href="buildings.html#cb60-100"></a><span class="co"># </span></span>
+<span id="cb60-101"><a href="buildings.html#cb60-101"></a><span class="co"># sjc_zoning &lt;- </span></span>
+<span id="cb60-102"><a href="buildings.html#cb60-102"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Zoning/Zoning.shp&quot;) %&gt;% </span></span>
+<span id="cb60-103"><a href="buildings.html#cb60-103"></a><span class="co">#   st_transform(st_crs(zcta_stockton)) %&gt;% </span></span>
+<span id="cb60-104"><a href="buildings.html#cb60-104"></a><span class="co">#   filter(ZNLABEL != &quot;STOCKTON&quot;)</span></span>
+<span id="cb60-105"><a href="buildings.html#cb60-105"></a><span class="co"># </span></span>
+<span id="cb60-106"><a href="buildings.html#cb60-106"></a><span class="co"># stockton_zoning &lt;- </span></span>
+<span id="cb60-107"><a href="buildings.html#cb60-107"></a><span class="co">#   st_read(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/Stockton_Zoning/Zoning.shp&quot;) %&gt;% </span></span>
+<span id="cb60-108"><a href="buildings.html#cb60-108"></a><span class="co">#   st_transform(st_crs(zcta_stockton))</span></span>
+<span id="cb60-109"><a href="buildings.html#cb60-109"></a><span class="co"># </span></span>
+<span id="cb60-110"><a href="buildings.html#cb60-110"></a><span class="co"># bldg_zoning_join &lt;- </span></span>
+<span id="cb60-111"><a href="buildings.html#cb60-111"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_zoning) %&gt;% </span></span>
+<span id="cb60-112"><a href="buildings.html#cb60-112"></a><span class="co">#   dplyr::select(ZONE, id) %&gt;% </span></span>
+<span id="cb60-113"><a href="buildings.html#cb60-113"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb60-114"><a href="buildings.html#cb60-114"></a><span class="co"># </span></span>
+<span id="cb60-115"><a href="buildings.html#cb60-115"></a><span class="co"># bldg_zoning_join_uninc &lt;- </span></span>
+<span id="cb60-116"><a href="buildings.html#cb60-116"></a><span class="co">#   st_join(st_centroid(stockton_bldg), sjc_zoning) %&gt;% </span></span>
+<span id="cb60-117"><a href="buildings.html#cb60-117"></a><span class="co">#   dplyr::select(ZNCODE, id) %&gt;% </span></span>
+<span id="cb60-118"><a href="buildings.html#cb60-118"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb60-119"><a href="buildings.html#cb60-119"></a><span class="co"># </span></span>
+<span id="cb60-120"><a href="buildings.html#cb60-120"></a><span class="co"># bldg_zoning_join %&lt;&gt;% </span></span>
+<span id="cb60-121"><a href="buildings.html#cb60-121"></a><span class="co">#   merge(bldg_zoning_join_uninc) %&gt;% </span></span>
+<span id="cb60-122"><a href="buildings.html#cb60-122"></a><span class="co">#   mutate(ZONE = ifelse(is.na(ZONE),as.character(ZNCODE),as.character(ZONE))) %&gt;% </span></span>
+<span id="cb60-123"><a href="buildings.html#cb60-123"></a><span class="co">#   dplyr::select(ZONE, id)</span></span>
+<span id="cb60-124"><a href="buildings.html#cb60-124"></a><span class="co"># </span></span>
+<span id="cb60-125"><a href="buildings.html#cb60-125"></a><span class="co"># sjc_bgs &lt;- </span></span>
+<span id="cb60-126"><a href="buildings.html#cb60-126"></a><span class="co">#   block_groups(&quot;California&quot;, &quot;San Joaquin County&quot;)</span></span>
+<span id="cb60-127"><a href="buildings.html#cb60-127"></a><span class="co"># </span></span>
+<span id="cb60-128"><a href="buildings.html#cb60-128"></a><span class="co"># stockton_bgs &lt;- </span></span>
+<span id="cb60-129"><a href="buildings.html#cb60-129"></a><span class="co">#   sjc_bgs[stockton_boundary_influence,]</span></span>
+<span id="cb60-130"><a href="buildings.html#cb60-130"></a><span class="co"># </span></span>
+<span id="cb60-131"><a href="buildings.html#cb60-131"></a><span class="co"># bldg_bg_join &lt;- </span></span>
+<span id="cb60-132"><a href="buildings.html#cb60-132"></a><span class="co">#   st_join(st_centroid(stockton_bldg), stockton_bgs) %&gt;% </span></span>
+<span id="cb60-133"><a href="buildings.html#cb60-133"></a><span class="co">#   dplyr::select(GEOID, id) %&gt;% </span></span>
+<span id="cb60-134"><a href="buildings.html#cb60-134"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb60-135"><a href="buildings.html#cb60-135"></a><span class="co"># </span></span>
+<span id="cb60-136"><a href="buildings.html#cb60-136"></a><span class="co"># bldg_zcta_join &lt;- </span></span>
+<span id="cb60-137"><a href="buildings.html#cb60-137"></a><span class="co">#   st_join(st_centroid(stockton_bldg), zcta_stockton) %&gt;% </span></span>
+<span id="cb60-138"><a href="buildings.html#cb60-138"></a><span class="co">#   dplyr::select(ZIPCODE, id) %&gt;% </span></span>
+<span id="cb60-139"><a href="buildings.html#cb60-139"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb60-140"><a href="buildings.html#cb60-140"></a><span class="co"># </span></span>
+<span id="cb60-141"><a href="buildings.html#cb60-141"></a><span class="co"># load(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/tax_sjc.Rdata&quot;)</span></span>
+<span id="cb60-142"><a href="buildings.html#cb60-142"></a><span class="co"># </span></span>
+<span id="cb60-143"><a href="buildings.html#cb60-143"></a><span class="co"># tax_sjc &lt;- </span></span>
+<span id="cb60-144"><a href="buildings.html#cb60-144"></a><span class="co">#   tax_sjc %&gt;% </span></span>
+<span id="cb60-145"><a href="buildings.html#cb60-145"></a><span class="co">#   mutate(APN = as.numeric(apn)) %&gt;% </span></span>
+<span id="cb60-146"><a href="buildings.html#cb60-146"></a><span class="co">#   st_set_geometry(NULL)</span></span>
+<span id="cb60-147"><a href="buildings.html#cb60-147"></a><span class="co"># </span></span>
+<span id="cb60-148"><a href="buildings.html#cb60-148"></a><span class="co"># stockton_bldg_final &lt;-</span></span>
+<span id="cb60-149"><a href="buildings.html#cb60-149"></a><span class="co">#   stockton_bldg %&gt;%</span></span>
+<span id="cb60-150"><a href="buildings.html#cb60-150"></a><span class="co">#   left_join(bldg_parcel_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb60-151"><a href="buildings.html#cb60-151"></a><span class="co">#   left_join(bldg_zoning_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb60-152"><a href="buildings.html#cb60-152"></a><span class="co">#   left_join(bldg_bg_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb60-153"><a href="buildings.html#cb60-153"></a><span class="co">#   left_join(bldg_zcta_join, by=&quot;id&quot;) %&gt;%</span></span>
+<span id="cb60-154"><a href="buildings.html#cb60-154"></a><span class="co">#   left_join(tax_sjc, by=&quot;APN&quot;) %&gt;%</span></span>
+<span id="cb60-155"><a href="buildings.html#cb60-155"></a><span class="co">#   mutate( # the following takes the bldg data, computes bldgground (ground footprint, where the factor conversion is sqm to sqft) and bldgtot (total sqft).</span></span>
+<span id="cb60-156"><a href="buildings.html#cb60-156"></a><span class="co">#     bldgground = as.numeric(st_area(WKT))*10.7639,</span></span>
+<span id="cb60-157"><a href="buildings.html#cb60-157"></a><span class="co">#     bldgtot =</span></span>
+<span id="cb60-158"><a href="buildings.html#cb60-158"></a><span class="co">#       ifelse(</span></span>
+<span id="cb60-159"><a href="buildings.html#cb60-159"></a><span class="co">#         is.na(stories),</span></span>
+<span id="cb60-160"><a href="buildings.html#cb60-160"></a><span class="co">#         bldgground,</span></span>
+<span id="cb60-161"><a href="buildings.html#cb60-161"></a><span class="co">#         bldgground*stories</span></span>
+<span id="cb60-162"><a href="buildings.html#cb60-162"></a><span class="co">#       ),</span></span>
+<span id="cb60-163"><a href="buildings.html#cb60-163"></a><span class="co">#     ZIPCODE = as.numeric(ZIPCODE),</span></span>
+<span id="cb60-164"><a href="buildings.html#cb60-164"></a><span class="co">#     ZONING = </span></span>
+<span id="cb60-165"><a href="buildings.html#cb60-165"></a><span class="co">#       case_when(</span></span>
+<span id="cb60-166"><a href="buildings.html#cb60-166"></a><span class="co">#         substr(ZONE,1,1) == &quot;R&quot; ~ &quot;R&quot;,</span></span>
+<span id="cb60-167"><a href="buildings.html#cb60-167"></a><span class="co">#         substr(ZONE,1,2) == &quot;(R&quot; ~ &quot;R&quot;,</span></span>
+<span id="cb60-168"><a href="buildings.html#cb60-168"></a><span class="co">#         substr(ZONE,1,1) %in% c(&quot;C&quot;,&quot;P&quot;,&quot;M&quot;,&quot;U&quot;) ~ &quot;C&quot;, </span></span>
+<span id="cb60-169"><a href="buildings.html#cb60-169"></a><span class="co">#         substr(ZONE,1,2) %in% c(&quot;(C&quot;,&quot;(P&quot;) ~ &quot;C&quot;,</span></span>
+<span id="cb60-170"><a href="buildings.html#cb60-170"></a><span class="co">#         TRUE ~ &quot;O&quot;</span></span>
+<span id="cb60-171"><a href="buildings.html#cb60-171"></a><span class="co">#       )</span></span>
+<span id="cb60-172"><a href="buildings.html#cb60-172"></a><span class="co">#   )</span></span>
+<span id="cb60-173"><a href="buildings.html#cb60-173"></a><span class="co"># </span></span>
+<span id="cb60-174"><a href="buildings.html#cb60-174"></a><span class="co"># save(stockton_bldg_final, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/stockton_bldg.Rdata&quot;)</span></span>
+<span id="cb60-175"><a href="buildings.html#cb60-175"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/stockton_bldg.Rdata&quot;</span>)</span>
+<span id="cb60-176"><a href="buildings.html#cb60-176"></a><span class="co"># </span></span>
+<span id="cb60-177"><a href="buildings.html#cb60-177"></a><span class="co"># stockton_bldg_17 &lt;- </span></span>
+<span id="cb60-178"><a href="buildings.html#cb60-178"></a><span class="co">#   readOGR(dsn = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/Stockton2017&quot;, layer = &quot;Stockton&quot;) %&gt;% </span></span>
+<span id="cb60-179"><a href="buildings.html#cb60-179"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb60-180"><a href="buildings.html#cb60-180"></a><span class="co">#   st_transform(st_crs(stockton_bldg_final))</span></span>
+<span id="cb60-181"><a href="buildings.html#cb60-181"></a><span class="co"># </span></span>
+<span id="cb60-182"><a href="buildings.html#cb60-182"></a><span class="co"># save(stockton_bldg_17, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/stockton_bldg_17.Rdata&quot;)</span></span>
+<span id="cb60-183"><a href="buildings.html#cb60-183"></a><span class="co"># load(&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/stockton_bldg_17.Rdata&quot;)</span></span>
+<span id="cb60-184"><a href="buildings.html#cb60-184"></a></span>
+<span id="cb60-185"><a href="buildings.html#cb60-185"></a><span class="co"># # match height from 2017 data</span></span>
+<span id="cb60-186"><a href="buildings.html#cb60-186"></a><span class="co"># bldg_join &lt;-</span></span>
+<span id="cb60-187"><a href="buildings.html#cb60-187"></a><span class="co">#   stockton_bldg_final %&gt;%</span></span>
+<span id="cb60-188"><a href="buildings.html#cb60-188"></a><span class="co">#   st_join(</span></span>
+<span id="cb60-189"><a href="buildings.html#cb60-189"></a><span class="co">#     stockton_bldg_17 %&gt;%</span></span>
+<span id="cb60-190"><a href="buildings.html#cb60-190"></a><span class="co">#       st_transform(26910) %&gt;%</span></span>
+<span id="cb60-191"><a href="buildings.html#cb60-191"></a><span class="co">#       st_buffer(-1) %&gt;%</span></span>
+<span id="cb60-192"><a href="buildings.html#cb60-192"></a><span class="co">#       st_transform(st_crs(stockton_bldg_final))</span></span>
+<span id="cb60-193"><a href="buildings.html#cb60-193"></a><span class="co">#   ) %&gt;%</span></span>
+<span id="cb60-194"><a href="buildings.html#cb60-194"></a><span class="co">#   group_by(id) %&gt;%</span></span>
+<span id="cb60-195"><a href="buildings.html#cb60-195"></a><span class="co">#   summarize(</span></span>
+<span id="cb60-196"><a href="buildings.html#cb60-196"></a><span class="co">#     Height = mean(Height,na.rm=T)</span></span>
+<span id="cb60-197"><a href="buildings.html#cb60-197"></a><span class="co">#   ) %&gt;%</span></span>
+<span id="cb60-198"><a href="buildings.html#cb60-198"></a><span class="co">#   left_join(stockton_bldg_final %&gt;% st_set_geometry(NULL),by=&quot;id&quot;)</span></span>
+<span id="cb60-199"><a href="buildings.html#cb60-199"></a><span class="co"># </span></span>
+<span id="cb60-200"><a href="buildings.html#cb60-200"></a><span class="co"># bldg_join &lt;-</span></span>
+<span id="cb60-201"><a href="buildings.html#cb60-201"></a><span class="co">#   bldg_join %&gt;% </span></span>
+<span id="cb60-202"><a href="buildings.html#cb60-202"></a><span class="co">#   mutate(</span></span>
+<span id="cb60-203"><a href="buildings.html#cb60-203"></a><span class="co">#     stories_by_height =</span></span>
+<span id="cb60-204"><a href="buildings.html#cb60-204"></a><span class="co">#       case_when(</span></span>
+<span id="cb60-205"><a href="buildings.html#cb60-205"></a><span class="co">#         GEOID == &quot;060770039001&quot; ~ 1, #Naval base</span></span>
+<span id="cb60-206"><a href="buildings.html#cb60-206"></a><span class="co">#         is.na(Height) &amp; is.na(stories) ~ 1,</span></span>
+<span id="cb60-207"><a href="buildings.html#cb60-207"></a><span class="co">#         is.na(Height) ~ round(stories),</span></span>
+<span id="cb60-208"><a href="buildings.html#cb60-208"></a><span class="co">#         !is.na(stories) ~ round(stories),</span></span>
+<span id="cb60-209"><a href="buildings.html#cb60-209"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==1),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==1),]$Height) ~ 1,</span></span>
+<span id="cb60-210"><a href="buildings.html#cb60-210"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==2),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==2),]$Height) ~ 2,</span></span>
+<span id="cb60-211"><a href="buildings.html#cb60-211"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==3),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==3),]$Height) ~ 3,</span></span>
+<span id="cb60-212"><a href="buildings.html#cb60-212"></a><span class="co">#         Height &lt; mean(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==4),]$Height) + sd(bldg_join[which(!is.na(bldg_join$Height)&amp;round(bldg_join$stories)==4),]$Height) ~ 4,</span></span>
+<span id="cb60-213"><a href="buildings.html#cb60-213"></a><span class="co">#         TRUE ~ round(Height/5)</span></span>
+<span id="cb60-214"><a href="buildings.html#cb60-214"></a><span class="co">#       ),</span></span>
+<span id="cb60-215"><a href="buildings.html#cb60-215"></a><span class="co">#     bldg_tot =</span></span>
+<span id="cb60-216"><a href="buildings.html#cb60-216"></a><span class="co">#       bldgground*stories_by_height</span></span>
+<span id="cb60-217"><a href="buildings.html#cb60-217"></a><span class="co">#   )</span></span>
+<span id="cb60-218"><a href="buildings.html#cb60-218"></a><span class="co"># # 6033 unmatched when using -1m buffer. #2637 of those did not have assessor stories data, set to 1F. Of other 3396, 2090 1F, 1248 2F, 58 3F.</span></span>
+<span id="cb60-219"><a href="buildings.html#cb60-219"></a><span class="co"># # 70757 had both 2017 heights and assessor stories data, go with assessor stories data. 51676 had assessor stories = 1, kept at 1F. 18974 had assessor stories = 2, kept at 2F. 107 had assessor stories &gt; 2, set to 2.5F.</span></span>
+<span id="cb60-220"><a href="buildings.html#cb60-220"></a><span class="co"># # mean height for assessor 1F: 11.30, sd 1.63. mean height for assessor 2F: 13.98, sd 2.25. mean height for assessor 3F: 15.39, sd 2.99. mean height for assessor 4F: 14.42, sd 5.35.</span></span>
+<span id="cb60-221"><a href="buildings.html#cb60-221"></a><span class="co"># # 24660 had no assessor stories data but had 2017 heights, use mean + 1 sd from above as thresholds. 1F: 12.92. 2F: 16.23. 3F: 18.38. 4F: 19.77</span></span>
+<span id="cb60-222"><a href="buildings.html#cb60-222"></a><span class="co"># # 15991 1F, 5642 2F, 908 3F, 1512 4F, 541 5F, 29 6F, 12 7F, 15 8F, 4 9F, 5 10F, 1 12F.</span></span>
+<span id="cb60-223"><a href="buildings.html#cb60-223"></a><span class="co"># </span></span>
+<span id="cb60-224"><a href="buildings.html#cb60-224"></a><span class="co"># save(bldg_join, file = &quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;)</span></span>
+<span id="cb60-225"><a href="buildings.html#cb60-225"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/USBuildingFootprints/bldg_join.Rdata&quot;</span>)</span>
+<span id="cb60-226"><a href="buildings.html#cb60-226"></a></span>
+<span id="cb60-227"><a href="buildings.html#cb60-227"></a>bg_bldg &lt;-</span>
+<span id="cb60-228"><a href="buildings.html#cb60-228"></a><span class="st">  </span>bldg_join <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-229"><a href="buildings.html#cb60-229"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-230"><a href="buildings.html#cb60-230"></a><span class="st">  </span><span class="kw">group_by</span>(GEOID, ZONING) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-231"><a href="buildings.html#cb60-231"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
+<span id="cb60-232"><a href="buildings.html#cb60-232"></a>    <span class="dt">numbldg =</span> <span class="kw">n</span>(),</span>
+<span id="cb60-233"><a href="buildings.html#cb60-233"></a>    <span class="dt">bldgtot =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
+<span id="cb60-234"><a href="buildings.html#cb60-234"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-235"><a href="buildings.html#cb60-235"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-236"><a href="buildings.html#cb60-236"></a><span class="st">  </span><span class="kw">left_join</span>(stockton_bgs_full, <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-237"><a href="buildings.html#cb60-237"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-238"><a href="buildings.html#cb60-238"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(<span class="kw">st_dimension</span>(.)))</span>
+<span id="cb60-239"><a href="buildings.html#cb60-239"></a></span>
+<span id="cb60-240"><a href="buildings.html#cb60-240"></a><span class="co">#res/sqft per block group</span></span>
+<span id="cb60-241"><a href="buildings.html#cb60-241"></a>bg_pop &lt;-</span>
+<span id="cb60-242"><a href="buildings.html#cb60-242"></a><span class="st">  </span><span class="kw">getCensus</span>(</span>
+<span id="cb60-243"><a href="buildings.html#cb60-243"></a>    <span class="dt">name =</span> <span class="st">&quot;acs/acs5&quot;</span>,</span>
+<span id="cb60-244"><a href="buildings.html#cb60-244"></a>    <span class="dt">vintage =</span> <span class="dv">2017</span>, <span class="co"># satellite imagery is from around 2014/2015</span></span>
+<span id="cb60-245"><a href="buildings.html#cb60-245"></a>    <span class="dt">vars =</span> <span class="kw">c</span>(<span class="st">&quot;B01003_001E&quot;</span>),</span>
+<span id="cb60-246"><a href="buildings.html#cb60-246"></a>    <span class="dt">region =</span> <span class="st">&quot;block group:*&quot;</span>,</span>
+<span id="cb60-247"><a href="buildings.html#cb60-247"></a>    <span class="dt">regionin =</span> <span class="st">&quot;state:06+county:077&quot;</span></span>
+<span id="cb60-248"><a href="buildings.html#cb60-248"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb60-249"><a href="buildings.html#cb60-249"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb60-250"><a href="buildings.html#cb60-250"></a>    <span class="dt">GEOID =</span> <span class="kw">paste0</span>(state,county,tract,block_group),</span>
+<span id="cb60-251"><a href="buildings.html#cb60-251"></a>    <span class="dt">pop =</span> B01003_001E</span>
+<span id="cb60-252"><a href="buildings.html#cb60-252"></a>  )</span>
+<span id="cb60-253"><a href="buildings.html#cb60-253"></a></span>
+<span id="cb60-254"><a href="buildings.html#cb60-254"></a>bg_bldg_norm_r &lt;-</span>
+<span id="cb60-255"><a href="buildings.html#cb60-255"></a><span class="st">  </span>bg_bldg <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-256"><a href="buildings.html#cb60-256"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;R&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-257"><a href="buildings.html#cb60-257"></a><span class="st">  </span><span class="kw">left_join</span>(bg_pop, <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-258"><a href="buildings.html#cb60-258"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb60-259"><a href="buildings.html#cb60-259"></a>    <span class="st">`</span><span class="dt">Residents per 1,000 sqft</span><span class="st">`</span> =<span class="st"> </span>pop<span class="op">/</span>bldgtot<span class="op">*</span><span class="dv">1000</span>,</span>
+<span id="cb60-260"><a href="buildings.html#cb60-260"></a>    <span class="dt">residential_density =</span> bldgtot<span class="op">/</span>(<span class="kw">as.numeric</span>(<span class="kw">st_area</span>(.))<span class="op">/</span><span class="fl">4046.86</span>)</span>
+<span id="cb60-261"><a href="buildings.html#cb60-261"></a>  )</span>
+<span id="cb60-262"><a href="buildings.html#cb60-262"></a></span>
+<span id="cb60-263"><a href="buildings.html#cb60-263"></a><span class="co"># map = mapview(bg_bldg_norm_r[,c(&quot;residential_density&quot;)],zcol=c(&quot;residential_density&quot;), legend = TRUE, layer.name = &quot;Residential&lt;/br&gt;density&lt;/br&gt;per acre&quot;)</span></span>
+<span id="cb60-264"><a href="buildings.html#cb60-264"></a><span class="co"># </span></span>
+<span id="cb60-265"><a href="buildings.html#cb60-265"></a><span class="co"># mapshot(map, url = &quot;map-residential-density.html&quot;)</span></span>
+<span id="cb60-266"><a href="buildings.html#cb60-266"></a></span>
+<span id="cb60-267"><a href="buildings.html#cb60-267"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-residential-density.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:residential-density"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-residential-density.html" width="672" height="400px">
 </iframe>
@@ -906,52 +906,52 @@ Figure 2.36: Stockton residents per 1,000 sqft of residential building area, per
 </p>
 </div>
 <p><span class="math inline">\(~\)</span></p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="buildings.html#cb59-1"></a><span class="co"># bldg_norm_r &lt;-</span></span>
-<span id="cb59-2"><a href="buildings.html#cb59-2"></a><span class="co">#   bg_bldg %&gt;% </span></span>
-<span id="cb59-3"><a href="buildings.html#cb59-3"></a><span class="co">#   filter(ZONING == &quot;R&quot;) %&gt;% </span></span>
-<span id="cb59-4"><a href="buildings.html#cb59-4"></a><span class="co">#   left_join(bg_pop, by = &quot;GEOID&quot;) %&gt;% </span></span>
-<span id="cb59-5"><a href="buildings.html#cb59-5"></a><span class="co">#   summarize(</span></span>
-<span id="cb59-6"><a href="buildings.html#cb59-6"></a><span class="co">#     pop = sum(pop, na.rm=T),</span></span>
-<span id="cb59-7"><a href="buildings.html#cb59-7"></a><span class="co">#     bldgtot = sum(bldgtot, na.rm=T)</span></span>
-<span id="cb59-8"><a href="buildings.html#cb59-8"></a><span class="co">#   ) %&gt;% </span></span>
-<span id="cb59-9"><a href="buildings.html#cb59-9"></a><span class="co">#   mutate(`Residents/1000sqft` = pop/bldgtot*1000)</span></span>
-<span id="cb59-10"><a href="buildings.html#cb59-10"></a><span class="co"># </span></span>
-<span id="cb59-11"><a href="buildings.html#cb59-11"></a><span class="co"># bldg_norm_c &lt;-</span></span>
-<span id="cb59-12"><a href="buildings.html#cb59-12"></a><span class="co">#   bg_bldg %&gt;% </span></span>
-<span id="cb59-13"><a href="buildings.html#cb59-13"></a><span class="co">#   filter(ZONING == &quot;C&quot;) %&gt;% </span></span>
-<span id="cb59-14"><a href="buildings.html#cb59-14"></a><span class="co">#   left_join(</span></span>
-<span id="cb59-15"><a href="buildings.html#cb59-15"></a><span class="co">#     stockton_wac %&gt;% </span></span>
-<span id="cb59-16"><a href="buildings.html#cb59-16"></a><span class="co">#       filter(year == 2017) %&gt;% </span></span>
-<span id="cb59-17"><a href="buildings.html#cb59-17"></a><span class="co">#       dplyr::select(jobs = C000, GEOID), </span></span>
-<span id="cb59-18"><a href="buildings.html#cb59-18"></a><span class="co">#     by = &quot;GEOID&quot;</span></span>
-<span id="cb59-19"><a href="buildings.html#cb59-19"></a><span class="co">#   ) %&gt;% </span></span>
-<span id="cb59-20"><a href="buildings.html#cb59-20"></a><span class="co">#   summarize(</span></span>
-<span id="cb59-21"><a href="buildings.html#cb59-21"></a><span class="co">#     jobs = sum(jobs, na.rm=T),</span></span>
-<span id="cb59-22"><a href="buildings.html#cb59-22"></a><span class="co">#     bldgtot = sum(bldgtot, na.rm=T)</span></span>
-<span id="cb59-23"><a href="buildings.html#cb59-23"></a><span class="co">#   ) %&gt;% </span></span>
-<span id="cb59-24"><a href="buildings.html#cb59-24"></a><span class="co">#   mutate(`Jobs/1000sqft` = jobs/bldgtot*1000)</span></span>
-<span id="cb59-25"><a href="buildings.html#cb59-25"></a></span>
-<span id="cb59-26"><a href="buildings.html#cb59-26"></a>bg_bldg_norm_c &lt;-</span>
-<span id="cb59-27"><a href="buildings.html#cb59-27"></a><span class="st">  </span>bg_bldg <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-28"><a href="buildings.html#cb59-28"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;C&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-29"><a href="buildings.html#cb59-29"></a><span class="st">  </span><span class="kw">left_join</span>(</span>
-<span id="cb59-30"><a href="buildings.html#cb59-30"></a>    stockton_wac <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-31"><a href="buildings.html#cb59-31"></a><span class="st">      </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-32"><a href="buildings.html#cb59-32"></a><span class="st">      </span><span class="kw">filter</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2015</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-33"><a href="buildings.html#cb59-33"></a><span class="st">      </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">jobs=</span>C000,GEOID), </span>
-<span id="cb59-34"><a href="buildings.html#cb59-34"></a>    <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span></span>
-<span id="cb59-35"><a href="buildings.html#cb59-35"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-36"><a href="buildings.html#cb59-36"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb59-37"><a href="buildings.html#cb59-37"></a>    <span class="st">`</span><span class="dt">Jobs per 1,000 sqft</span><span class="st">`</span> =<span class="st"> </span>jobs<span class="op">/</span>bldgtot<span class="op">*</span><span class="dv">1000</span>,</span>
-<span id="cb59-38"><a href="buildings.html#cb59-38"></a>    <span class="dt">commercial_density =</span> bldgtot<span class="op">/</span>(<span class="kw">as.numeric</span>(<span class="kw">st_area</span>(.))<span class="op">/</span><span class="fl">4046.86</span>)</span>
-<span id="cb59-39"><a href="buildings.html#cb59-39"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb59-40"><a href="buildings.html#cb59-40"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>GEOID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;060770039001&quot;</span>,<span class="st">&quot;060770039002&quot;</span>))</span>
-<span id="cb59-41"><a href="buildings.html#cb59-41"></a></span>
-<span id="cb59-42"><a href="buildings.html#cb59-42"></a><span class="co"># map = mapview(bg_bldg_norm_c[,c(&quot;commercial_density&quot;)],zcol=c(&quot;commercial_density&quot;), legend = TRUE, layer.name = &quot;Commercial&lt;/br&gt;density&lt;/br&gt;per acre&quot;)</span></span>
-<span id="cb59-43"><a href="buildings.html#cb59-43"></a><span class="co"># </span></span>
-<span id="cb59-44"><a href="buildings.html#cb59-44"></a><span class="co"># mapshot(map, url = &quot;map-commercial-density.html&quot;)</span></span>
-<span id="cb59-45"><a href="buildings.html#cb59-45"></a></span>
-<span id="cb59-46"><a href="buildings.html#cb59-46"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-commercial-density.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="buildings.html#cb61-1"></a><span class="co"># bldg_norm_r &lt;-</span></span>
+<span id="cb61-2"><a href="buildings.html#cb61-2"></a><span class="co">#   bg_bldg %&gt;% </span></span>
+<span id="cb61-3"><a href="buildings.html#cb61-3"></a><span class="co">#   filter(ZONING == &quot;R&quot;) %&gt;% </span></span>
+<span id="cb61-4"><a href="buildings.html#cb61-4"></a><span class="co">#   left_join(bg_pop, by = &quot;GEOID&quot;) %&gt;% </span></span>
+<span id="cb61-5"><a href="buildings.html#cb61-5"></a><span class="co">#   summarize(</span></span>
+<span id="cb61-6"><a href="buildings.html#cb61-6"></a><span class="co">#     pop = sum(pop, na.rm=T),</span></span>
+<span id="cb61-7"><a href="buildings.html#cb61-7"></a><span class="co">#     bldgtot = sum(bldgtot, na.rm=T)</span></span>
+<span id="cb61-8"><a href="buildings.html#cb61-8"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb61-9"><a href="buildings.html#cb61-9"></a><span class="co">#   mutate(`Residents/1000sqft` = pop/bldgtot*1000)</span></span>
+<span id="cb61-10"><a href="buildings.html#cb61-10"></a><span class="co"># </span></span>
+<span id="cb61-11"><a href="buildings.html#cb61-11"></a><span class="co"># bldg_norm_c &lt;-</span></span>
+<span id="cb61-12"><a href="buildings.html#cb61-12"></a><span class="co">#   bg_bldg %&gt;% </span></span>
+<span id="cb61-13"><a href="buildings.html#cb61-13"></a><span class="co">#   filter(ZONING == &quot;C&quot;) %&gt;% </span></span>
+<span id="cb61-14"><a href="buildings.html#cb61-14"></a><span class="co">#   left_join(</span></span>
+<span id="cb61-15"><a href="buildings.html#cb61-15"></a><span class="co">#     stockton_wac %&gt;% </span></span>
+<span id="cb61-16"><a href="buildings.html#cb61-16"></a><span class="co">#       filter(year == 2017) %&gt;% </span></span>
+<span id="cb61-17"><a href="buildings.html#cb61-17"></a><span class="co">#       dplyr::select(jobs = C000, GEOID), </span></span>
+<span id="cb61-18"><a href="buildings.html#cb61-18"></a><span class="co">#     by = &quot;GEOID&quot;</span></span>
+<span id="cb61-19"><a href="buildings.html#cb61-19"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb61-20"><a href="buildings.html#cb61-20"></a><span class="co">#   summarize(</span></span>
+<span id="cb61-21"><a href="buildings.html#cb61-21"></a><span class="co">#     jobs = sum(jobs, na.rm=T),</span></span>
+<span id="cb61-22"><a href="buildings.html#cb61-22"></a><span class="co">#     bldgtot = sum(bldgtot, na.rm=T)</span></span>
+<span id="cb61-23"><a href="buildings.html#cb61-23"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb61-24"><a href="buildings.html#cb61-24"></a><span class="co">#   mutate(`Jobs/1000sqft` = jobs/bldgtot*1000)</span></span>
+<span id="cb61-25"><a href="buildings.html#cb61-25"></a></span>
+<span id="cb61-26"><a href="buildings.html#cb61-26"></a>bg_bldg_norm_c &lt;-</span>
+<span id="cb61-27"><a href="buildings.html#cb61-27"></a><span class="st">  </span>bg_bldg <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-28"><a href="buildings.html#cb61-28"></a><span class="st">  </span><span class="kw">filter</span>(ZONING <span class="op">==</span><span class="st"> &quot;C&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-29"><a href="buildings.html#cb61-29"></a><span class="st">  </span><span class="kw">left_join</span>(</span>
+<span id="cb61-30"><a href="buildings.html#cb61-30"></a>    stockton_wac <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-31"><a href="buildings.html#cb61-31"></a><span class="st">      </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-32"><a href="buildings.html#cb61-32"></a><span class="st">      </span><span class="kw">filter</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">2015</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-33"><a href="buildings.html#cb61-33"></a><span class="st">      </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">jobs=</span>C000,GEOID), </span>
+<span id="cb61-34"><a href="buildings.html#cb61-34"></a>    <span class="dt">by =</span> <span class="st">&quot;GEOID&quot;</span></span>
+<span id="cb61-35"><a href="buildings.html#cb61-35"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-36"><a href="buildings.html#cb61-36"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb61-37"><a href="buildings.html#cb61-37"></a>    <span class="st">`</span><span class="dt">Jobs per 1,000 sqft</span><span class="st">`</span> =<span class="st"> </span>jobs<span class="op">/</span>bldgtot<span class="op">*</span><span class="dv">1000</span>,</span>
+<span id="cb61-38"><a href="buildings.html#cb61-38"></a>    <span class="dt">commercial_density =</span> bldgtot<span class="op">/</span>(<span class="kw">as.numeric</span>(<span class="kw">st_area</span>(.))<span class="op">/</span><span class="fl">4046.86</span>)</span>
+<span id="cb61-39"><a href="buildings.html#cb61-39"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb61-40"><a href="buildings.html#cb61-40"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>GEOID <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;060770039001&quot;</span>,<span class="st">&quot;060770039002&quot;</span>))</span>
+<span id="cb61-41"><a href="buildings.html#cb61-41"></a></span>
+<span id="cb61-42"><a href="buildings.html#cb61-42"></a><span class="co"># map = mapview(bg_bldg_norm_c[,c(&quot;commercial_density&quot;)],zcol=c(&quot;commercial_density&quot;), legend = TRUE, layer.name = &quot;Commercial&lt;/br&gt;density&lt;/br&gt;per acre&quot;)</span></span>
+<span id="cb61-43"><a href="buildings.html#cb61-43"></a><span class="co"># </span></span>
+<span id="cb61-44"><a href="buildings.html#cb61-44"></a><span class="co"># mapshot(map, url = &quot;map-commercial-density.html&quot;)</span></span>
+<span id="cb61-45"><a href="buildings.html#cb61-45"></a></span>
+<span id="cb61-46"><a href="buildings.html#cb61-46"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-commercial-density.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:commercial-density"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-commercial-density.html" width="672" height="400px">
 </iframe>
@@ -962,54 +962,54 @@ Figure 2.37: Stockton jobs per 1,000 sqft of commercial building area, per block
 <p><span class="math inline">\(~\)</span></p>
 <p>Because we do not have robust historical building datasets, we cannot analyze the change in building square footages over time. For forecasting, we assumed an overall fixed building utilization estimate of 1.7 residents per 1000 sqft of residential buildings, and 1.3 jobs per 1000 sqft of commercial buildings. In the intervention stage, if we expect a strategy would change building utilization, we would make a reduction in energy consumption relative to these baseline utilization rates.</p>
 <p>As one last couple of building-specific analyses, we aggregated building square footage information up to the zipcode level and compared with energy usage data to see residential and commercial building energy efficiency at a recent snapshot of time, spatially distributed across Stockton.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="buildings.html#cb60-1"></a><span class="co">#disaggregating by zipcode and zoning type of the buildings to get summaries of # of buildings, total ground footprint, and total bldg sqft. the filter removes NAs in the data, which could be missing zones in specific zipcodes.</span></span>
-<span id="cb60-2"><a href="buildings.html#cb60-2"></a>zcta_bldg_spread &lt;-<span class="st"> </span></span>
-<span id="cb60-3"><a href="buildings.html#cb60-3"></a><span class="st">  </span>stockton_bldg_final <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-4"><a href="buildings.html#cb60-4"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-5"><a href="buildings.html#cb60-5"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ZONING) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-6"><a href="buildings.html#cb60-6"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb60-7"><a href="buildings.html#cb60-7"></a>    <span class="dt">NUMBLDG =</span> <span class="kw">n</span>(),</span>
-<span id="cb60-8"><a href="buildings.html#cb60-8"></a>    <span class="dt">TOTSQFTGROUND =</span> <span class="kw">sum</span>(bldgground, <span class="dt">na.rm=</span>T),</span>
-<span id="cb60-9"><a href="buildings.html#cb60-9"></a>    <span class="dt">TOTSQFT =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
-<span id="cb60-10"><a href="buildings.html#cb60-10"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-11"><a href="buildings.html#cb60-11"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(ZIPCODE) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(ZONING)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-12"><a href="buildings.html#cb60-12"></a><span class="st">  </span><span class="kw">gather</span>(key, value, NUMBLDG<span class="op">:</span>TOTSQFT) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-13"><a href="buildings.html#cb60-13"></a><span class="st">  </span><span class="kw">unite</span>(temp,ZONING,key) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-14"><a href="buildings.html#cb60-14"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
-<span id="cb60-15"><a href="buildings.html#cb60-15"></a></span>
-<span id="cb60-16"><a href="buildings.html#cb60-16"></a><span class="co">#summarize totals by zipcode, then join the zoning-specific subtotals to it.</span></span>
-<span id="cb60-17"><a href="buildings.html#cb60-17"></a>zcta_bldg_summary &lt;-</span>
-<span id="cb60-18"><a href="buildings.html#cb60-18"></a><span class="st">  </span>stockton_bldg_final <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-19"><a href="buildings.html#cb60-19"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-20"><a href="buildings.html#cb60-20"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-21"><a href="buildings.html#cb60-21"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb60-22"><a href="buildings.html#cb60-22"></a>    <span class="dt">NUMBLDG =</span> <span class="kw">n</span>(),</span>
-<span id="cb60-23"><a href="buildings.html#cb60-23"></a>    <span class="dt">TOTSQFTGROUND =</span> <span class="kw">sum</span>(bldgground, <span class="dt">na.rm=</span>T),</span>
-<span id="cb60-24"><a href="buildings.html#cb60-24"></a>    <span class="dt">TOTSQFT =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
-<span id="cb60-25"><a href="buildings.html#cb60-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-26"><a href="buildings.html#cb60-26"></a><span class="st">  </span><span class="kw">left_join</span>(zcta_bldg_spread, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>)</span>
-<span id="cb60-27"><a href="buildings.html#cb60-27"></a></span>
-<span id="cb60-28"><a href="buildings.html#cb60-28"></a>zcta_bldg_stockton_joined &lt;-<span class="st"> </span></span>
-<span id="cb60-29"><a href="buildings.html#cb60-29"></a><span class="st">  </span>zcta_stockton_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-30"><a href="buildings.html#cb60-30"></a><span class="st">  </span><span class="kw">filter</span>(ZIPCODE <span class="op">!=</span><span class="st"> </span><span class="dv">95211</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-31"><a href="buildings.html#cb60-31"></a><span class="st">  </span><span class="kw">left_join</span>(zcta_bldg_summary, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb60-32"><a href="buildings.html#cb60-32"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb60-33"><a href="buildings.html#cb60-33"></a>    <span class="dt">ER_KBTUperSQFT =</span> ER_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
-<span id="cb60-34"><a href="buildings.html#cb60-34"></a>    <span class="dt">GR_KBTUperSQFT =</span> GR_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
-<span id="cb60-35"><a href="buildings.html#cb60-35"></a>    <span class="dt">EC_KBTUperSQFT =</span> EC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
-<span id="cb60-36"><a href="buildings.html#cb60-36"></a>    <span class="dt">GC_KBTUperSQFT =</span> GC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
-<span id="cb60-37"><a href="buildings.html#cb60-37"></a>    <span class="dt">R_KBTUperSQFT =</span> R_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
-<span id="cb60-38"><a href="buildings.html#cb60-38"></a>    <span class="dt">C_KBTUperSQFT =</span> C_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
-<span id="cb60-39"><a href="buildings.html#cb60-39"></a>    <span class="dt">E_KBTUperSQFT =</span> E_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
-<span id="cb60-40"><a href="buildings.html#cb60-40"></a>    <span class="dt">G_KBTUperSQFT =</span> G_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
-<span id="cb60-41"><a href="buildings.html#cb60-41"></a>    <span class="dt">KBTUperSQFT =</span> TOTALKBTU<span class="op">/</span>TOTSQFT</span>
-<span id="cb60-42"><a href="buildings.html#cb60-42"></a>  )</span>
-<span id="cb60-43"><a href="buildings.html#cb60-43"></a></span>
-<span id="cb60-44"><a href="buildings.html#cb60-44"></a><span class="co"># map = mapview(zcta_bldg_stockton_joined[,c(&quot;R_KBTUPERCUST&quot;)], zcol=c(&quot;R_KBTUPERCUST&quot;), legend = TRUE, layer.name = &quot;kBTU per customer,&lt;/br&gt;Residential&quot;)</span></span>
-<span id="cb60-45"><a href="buildings.html#cb60-45"></a><span class="co"># </span></span>
-<span id="cb60-46"><a href="buildings.html#cb60-46"></a><span class="co"># mapshot(map, url = &quot;map-res-customer.html&quot;)</span></span>
-<span id="cb60-47"><a href="buildings.html#cb60-47"></a></span>
-<span id="cb60-48"><a href="buildings.html#cb60-48"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-res-customer.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="buildings.html#cb62-1"></a><span class="co">#disaggregating by zipcode and zoning type of the buildings to get summaries of # of buildings, total ground footprint, and total bldg sqft. the filter removes NAs in the data, which could be missing zones in specific zipcodes.</span></span>
+<span id="cb62-2"><a href="buildings.html#cb62-2"></a>zcta_bldg_spread &lt;-<span class="st"> </span></span>
+<span id="cb62-3"><a href="buildings.html#cb62-3"></a><span class="st">  </span>stockton_bldg_final <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-4"><a href="buildings.html#cb62-4"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-5"><a href="buildings.html#cb62-5"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE, ZONING) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-6"><a href="buildings.html#cb62-6"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb62-7"><a href="buildings.html#cb62-7"></a>    <span class="dt">NUMBLDG =</span> <span class="kw">n</span>(),</span>
+<span id="cb62-8"><a href="buildings.html#cb62-8"></a>    <span class="dt">TOTSQFTGROUND =</span> <span class="kw">sum</span>(bldgground, <span class="dt">na.rm=</span>T),</span>
+<span id="cb62-9"><a href="buildings.html#cb62-9"></a>    <span class="dt">TOTSQFT =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
+<span id="cb62-10"><a href="buildings.html#cb62-10"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-11"><a href="buildings.html#cb62-11"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(ZIPCODE) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(ZONING)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-12"><a href="buildings.html#cb62-12"></a><span class="st">  </span><span class="kw">gather</span>(key, value, NUMBLDG<span class="op">:</span>TOTSQFT) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-13"><a href="buildings.html#cb62-13"></a><span class="st">  </span><span class="kw">unite</span>(temp,ZONING,key) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-14"><a href="buildings.html#cb62-14"></a><span class="st">  </span><span class="kw">spread</span>(temp,value)</span>
+<span id="cb62-15"><a href="buildings.html#cb62-15"></a></span>
+<span id="cb62-16"><a href="buildings.html#cb62-16"></a><span class="co">#summarize totals by zipcode, then join the zoning-specific subtotals to it.</span></span>
+<span id="cb62-17"><a href="buildings.html#cb62-17"></a>zcta_bldg_summary &lt;-</span>
+<span id="cb62-18"><a href="buildings.html#cb62-18"></a><span class="st">  </span>stockton_bldg_final <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-19"><a href="buildings.html#cb62-19"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-20"><a href="buildings.html#cb62-20"></a><span class="st">  </span><span class="kw">group_by</span>(ZIPCODE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-21"><a href="buildings.html#cb62-21"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb62-22"><a href="buildings.html#cb62-22"></a>    <span class="dt">NUMBLDG =</span> <span class="kw">n</span>(),</span>
+<span id="cb62-23"><a href="buildings.html#cb62-23"></a>    <span class="dt">TOTSQFTGROUND =</span> <span class="kw">sum</span>(bldgground, <span class="dt">na.rm=</span>T),</span>
+<span id="cb62-24"><a href="buildings.html#cb62-24"></a>    <span class="dt">TOTSQFT =</span> <span class="kw">sum</span>(bldgtot, <span class="dt">na.rm=</span>T)</span>
+<span id="cb62-25"><a href="buildings.html#cb62-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-26"><a href="buildings.html#cb62-26"></a><span class="st">  </span><span class="kw">left_join</span>(zcta_bldg_spread, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>)</span>
+<span id="cb62-27"><a href="buildings.html#cb62-27"></a></span>
+<span id="cb62-28"><a href="buildings.html#cb62-28"></a>zcta_bldg_stockton_joined &lt;-<span class="st"> </span></span>
+<span id="cb62-29"><a href="buildings.html#cb62-29"></a><span class="st">  </span>zcta_stockton_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-30"><a href="buildings.html#cb62-30"></a><span class="st">  </span><span class="kw">filter</span>(ZIPCODE <span class="op">!=</span><span class="st"> </span><span class="dv">95211</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-31"><a href="buildings.html#cb62-31"></a><span class="st">  </span><span class="kw">left_join</span>(zcta_bldg_summary, <span class="dt">by =</span> <span class="st">&quot;ZIPCODE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-32"><a href="buildings.html#cb62-32"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb62-33"><a href="buildings.html#cb62-33"></a>    <span class="dt">ER_KBTUperSQFT =</span> ER_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb62-34"><a href="buildings.html#cb62-34"></a>    <span class="dt">GR_KBTUperSQFT =</span> GR_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb62-35"><a href="buildings.html#cb62-35"></a>    <span class="dt">EC_KBTUperSQFT =</span> EC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb62-36"><a href="buildings.html#cb62-36"></a>    <span class="dt">GC_KBTUperSQFT =</span> GC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb62-37"><a href="buildings.html#cb62-37"></a>    <span class="dt">R_KBTUperSQFT =</span> R_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb62-38"><a href="buildings.html#cb62-38"></a>    <span class="dt">C_KBTUperSQFT =</span> C_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb62-39"><a href="buildings.html#cb62-39"></a>    <span class="dt">E_KBTUperSQFT =</span> E_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb62-40"><a href="buildings.html#cb62-40"></a>    <span class="dt">G_KBTUperSQFT =</span> G_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb62-41"><a href="buildings.html#cb62-41"></a>    <span class="dt">KBTUperSQFT =</span> TOTALKBTU<span class="op">/</span>TOTSQFT</span>
+<span id="cb62-42"><a href="buildings.html#cb62-42"></a>  )</span>
+<span id="cb62-43"><a href="buildings.html#cb62-43"></a></span>
+<span id="cb62-44"><a href="buildings.html#cb62-44"></a><span class="co"># map = mapview(zcta_bldg_stockton_joined[,c(&quot;R_KBTUPERCUST&quot;)], zcol=c(&quot;R_KBTUPERCUST&quot;), legend = TRUE, layer.name = &quot;kBTU per customer,&lt;/br&gt;Residential&quot;)</span></span>
+<span id="cb62-45"><a href="buildings.html#cb62-45"></a><span class="co"># </span></span>
+<span id="cb62-46"><a href="buildings.html#cb62-46"></a><span class="co"># mapshot(map, url = &quot;map-res-customer.html&quot;)</span></span>
+<span id="cb62-47"><a href="buildings.html#cb62-47"></a></span>
+<span id="cb62-48"><a href="buildings.html#cb62-48"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-res-customer.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:res-customer"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-res-customer.html" width="672" height="400px">
 </iframe>
@@ -1018,11 +1018,11 @@ Figure 2.38: Stockton residential kBTU per sqft of residential building area, pe
 </p>
 </div>
 <p><span class="math inline">\(~\)</span></p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="buildings.html#cb61-1"></a><span class="co"># map = mapview(zcta_bldg_stockton_joined[,c(&quot;C_KBTUPERCUST&quot;)], zcol=c(&quot;C_KBTUPERCUST&quot;), legend = TRUE, layer.name = &quot;kBTU per customer,&lt;/br&gt;Commercial&quot;)</span></span>
-<span id="cb61-2"><a href="buildings.html#cb61-2"></a><span class="co"># </span></span>
-<span id="cb61-3"><a href="buildings.html#cb61-3"></a><span class="co"># mapshot(map, url = &quot;map-comm-customer.html&quot;)</span></span>
-<span id="cb61-4"><a href="buildings.html#cb61-4"></a></span>
-<span id="cb61-5"><a href="buildings.html#cb61-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-comm-customer.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="buildings.html#cb63-1"></a><span class="co"># map = mapview(zcta_bldg_stockton_joined[,c(&quot;C_KBTUPERCUST&quot;)], zcol=c(&quot;C_KBTUPERCUST&quot;), legend = TRUE, layer.name = &quot;kBTU per customer,&lt;/br&gt;Commercial&quot;)</span></span>
+<span id="cb63-2"><a href="buildings.html#cb63-2"></a><span class="co"># </span></span>
+<span id="cb63-3"><a href="buildings.html#cb63-3"></a><span class="co"># mapshot(map, url = &quot;map-comm-customer.html&quot;)</span></span>
+<span id="cb63-4"><a href="buildings.html#cb63-4"></a></span>
+<span id="cb63-5"><a href="buildings.html#cb63-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-comm-customer.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:comm-customer"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-comm-customer.html" width="672" height="400px">
 </iframe>
@@ -1031,147 +1031,147 @@ Figure 2.39: Stockton commercial kBTU per sqft of commercial building area, per 
 </p>
 </div>
 <p><span class="math inline">\(~\)</span></p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="buildings.html#cb62-1"></a>zcta_bldg_stockton_summary &lt;-<span class="st"> </span></span>
-<span id="cb62-2"><a href="buildings.html#cb62-2"></a><span class="st">  </span>zcta_bldg_stockton_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-3"><a href="buildings.html#cb62-3"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-4"><a href="buildings.html#cb62-4"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
-<span id="cb62-5"><a href="buildings.html#cb62-5"></a>    <span class="kw">c</span>(</span>
-<span id="cb62-6"><a href="buildings.html#cb62-6"></a>      <span class="st">&quot;NUMBLDG&quot;</span>, </span>
-<span id="cb62-7"><a href="buildings.html#cb62-7"></a>      <span class="st">&quot;R_NUMBLDG&quot;</span>, </span>
-<span id="cb62-8"><a href="buildings.html#cb62-8"></a>      <span class="st">&quot;C_NUMBLDG&quot;</span>,</span>
-<span id="cb62-9"><a href="buildings.html#cb62-9"></a>      <span class="st">&quot;TOTSQFTGROUND&quot;</span>,</span>
-<span id="cb62-10"><a href="buildings.html#cb62-10"></a>      <span class="st">&quot;TOTSQFT&quot;</span>,</span>
-<span id="cb62-11"><a href="buildings.html#cb62-11"></a>      <span class="st">&quot;R_TOTSQFT&quot;</span>,</span>
-<span id="cb62-12"><a href="buildings.html#cb62-12"></a>      <span class="st">&quot;C_TOTSQFT&quot;</span>,</span>
-<span id="cb62-13"><a href="buildings.html#cb62-13"></a>      <span class="st">&quot;R_TOTSQFTGROUND&quot;</span>,</span>
-<span id="cb62-14"><a href="buildings.html#cb62-14"></a>      <span class="st">&quot;C_TOTSQFTGROUND&quot;</span>,</span>
-<span id="cb62-15"><a href="buildings.html#cb62-15"></a>      <span class="st">&quot;TOTALKBTU&quot;</span>,</span>
-<span id="cb62-16"><a href="buildings.html#cb62-16"></a>      <span class="st">&quot;E_TOTALKBTU&quot;</span>,</span>
-<span id="cb62-17"><a href="buildings.html#cb62-17"></a>      <span class="st">&quot;G_TOTALKBTU&quot;</span>,</span>
-<span id="cb62-18"><a href="buildings.html#cb62-18"></a>      <span class="st">&quot;R_TOTALKBTU&quot;</span>,</span>
-<span id="cb62-19"><a href="buildings.html#cb62-19"></a>      <span class="st">&quot;C_TOTALKBTU&quot;</span>, </span>
-<span id="cb62-20"><a href="buildings.html#cb62-20"></a>      <span class="st">&quot;ER_TOTALKBTU&quot;</span>, </span>
-<span id="cb62-21"><a href="buildings.html#cb62-21"></a>      <span class="st">&quot;GR_TOTALKBTU&quot;</span>, </span>
-<span id="cb62-22"><a href="buildings.html#cb62-22"></a>      <span class="st">&quot;EC_TOTALKBTU&quot;</span>, </span>
-<span id="cb62-23"><a href="buildings.html#cb62-23"></a>      <span class="st">&quot;GC_TOTALKBTU&quot;</span></span>
-<span id="cb62-24"><a href="buildings.html#cb62-24"></a>    ), sum, <span class="dt">na.rm=</span>T</span>
-<span id="cb62-25"><a href="buildings.html#cb62-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-26"><a href="buildings.html#cb62-26"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb62-27"><a href="buildings.html#cb62-27"></a>    <span class="dt">ER_KBTUperSQFT =</span> ER_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
-<span id="cb62-28"><a href="buildings.html#cb62-28"></a>    <span class="dt">GR_KBTUperSQFT =</span> GR_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
-<span id="cb62-29"><a href="buildings.html#cb62-29"></a>    <span class="dt">EC_KBTUperSQFT =</span> EC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
-<span id="cb62-30"><a href="buildings.html#cb62-30"></a>    <span class="dt">GC_KBTUperSQFT =</span> GC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
-<span id="cb62-31"><a href="buildings.html#cb62-31"></a>    <span class="dt">R_KBTUperSQFT =</span> R_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
-<span id="cb62-32"><a href="buildings.html#cb62-32"></a>    <span class="dt">C_KBTUperSQFT =</span> C_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
-<span id="cb62-33"><a href="buildings.html#cb62-33"></a>    <span class="dt">E_KBTUperSQFT =</span> E_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
-<span id="cb62-34"><a href="buildings.html#cb62-34"></a>    <span class="dt">G_KBTUperSQFT =</span> G_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
-<span id="cb62-35"><a href="buildings.html#cb62-35"></a>    <span class="dt">KBTUperSQFT =</span> TOTALKBTU<span class="op">/</span>TOTSQFT,</span>
-<span id="cb62-36"><a href="buildings.html#cb62-36"></a>  )</span>
-<span id="cb62-37"><a href="buildings.html#cb62-37"></a></span>
-<span id="cb62-38"><a href="buildings.html#cb62-38"></a>zcta_bldg_stockton_table &lt;-</span>
-<span id="cb62-39"><a href="buildings.html#cb62-39"></a><span class="st">  </span><span class="kw">data.frame</span>(</span>
-<span id="cb62-40"><a href="buildings.html#cb62-40"></a>    <span class="dt">Type =</span> <span class="kw">c</span>(</span>
-<span id="cb62-41"><a href="buildings.html#cb62-41"></a>      <span class="st">&quot;Residential Electricity&quot;</span>,</span>
-<span id="cb62-42"><a href="buildings.html#cb62-42"></a>      <span class="st">&quot;Residential Gas&quot;</span>,</span>
-<span id="cb62-43"><a href="buildings.html#cb62-43"></a>      <span class="st">&quot;Commercial Electricity&quot;</span>,</span>
-<span id="cb62-44"><a href="buildings.html#cb62-44"></a>      <span class="st">&quot;Commercial Gas&quot;</span>,</span>
-<span id="cb62-45"><a href="buildings.html#cb62-45"></a>      <span class="st">&quot;Residential Total&quot;</span>,</span>
-<span id="cb62-46"><a href="buildings.html#cb62-46"></a>      <span class="st">&quot;Commercial Total&quot;</span>,</span>
-<span id="cb62-47"><a href="buildings.html#cb62-47"></a>      <span class="st">&quot;Electricity Total&quot;</span>,</span>
-<span id="cb62-48"><a href="buildings.html#cb62-48"></a>      <span class="st">&quot;Gas Total&quot;</span>,</span>
-<span id="cb62-49"><a href="buildings.html#cb62-49"></a>      <span class="st">&quot;Total&quot;</span></span>
-<span id="cb62-50"><a href="buildings.html#cb62-50"></a>    ),</span>
-<span id="cb62-51"><a href="buildings.html#cb62-51"></a>    <span class="dt">Bldg =</span> <span class="kw">c</span>(</span>
-<span id="cb62-52"><a href="buildings.html#cb62-52"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-53"><a href="buildings.html#cb62-53"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-54"><a href="buildings.html#cb62-54"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-55"><a href="buildings.html#cb62-55"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-56"><a href="buildings.html#cb62-56"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_NUMBLDG,</span>
-<span id="cb62-57"><a href="buildings.html#cb62-57"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_NUMBLDG,</span>
-<span id="cb62-58"><a href="buildings.html#cb62-58"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-59"><a href="buildings.html#cb62-59"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-60"><a href="buildings.html#cb62-60"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_NUMBLDG<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_NUMBLDG</span>
-<span id="cb62-61"><a href="buildings.html#cb62-61"></a>    ),</span>
-<span id="cb62-62"><a href="buildings.html#cb62-62"></a>    <span class="dt">Footprint =</span> <span class="kw">c</span>(</span>
-<span id="cb62-63"><a href="buildings.html#cb62-63"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-64"><a href="buildings.html#cb62-64"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-65"><a href="buildings.html#cb62-65"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-66"><a href="buildings.html#cb62-66"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-67"><a href="buildings.html#cb62-67"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFTGROUND,</span>
-<span id="cb62-68"><a href="buildings.html#cb62-68"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFTGROUND,</span>
-<span id="cb62-69"><a href="buildings.html#cb62-69"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-70"><a href="buildings.html#cb62-70"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-71"><a href="buildings.html#cb62-71"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFTGROUND<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFTGROUND</span>
-<span id="cb62-72"><a href="buildings.html#cb62-72"></a>    ),</span>
-<span id="cb62-73"><a href="buildings.html#cb62-73"></a>    <span class="dt">sqft =</span> <span class="kw">c</span>(</span>
-<span id="cb62-74"><a href="buildings.html#cb62-74"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-75"><a href="buildings.html#cb62-75"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-76"><a href="buildings.html#cb62-76"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-77"><a href="buildings.html#cb62-77"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-78"><a href="buildings.html#cb62-78"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT,</span>
-<span id="cb62-79"><a href="buildings.html#cb62-79"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT,</span>
-<span id="cb62-80"><a href="buildings.html#cb62-80"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-81"><a href="buildings.html#cb62-81"></a>      <span class="ot">NA</span>,</span>
-<span id="cb62-82"><a href="buildings.html#cb62-82"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT</span>
-<span id="cb62-83"><a href="buildings.html#cb62-83"></a>    ),</span>
-<span id="cb62-84"><a href="buildings.html#cb62-84"></a>    <span class="dt">kbtu =</span> <span class="kw">c</span>(</span>
-<span id="cb62-85"><a href="buildings.html#cb62-85"></a>      zcta_bldg_stockton_summary<span class="op">$</span>ER_TOTALKBTU,</span>
-<span id="cb62-86"><a href="buildings.html#cb62-86"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GR_TOTALKBTU,</span>
-<span id="cb62-87"><a href="buildings.html#cb62-87"></a>      zcta_bldg_stockton_summary<span class="op">$</span>EC_TOTALKBTU,</span>
-<span id="cb62-88"><a href="buildings.html#cb62-88"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GC_TOTALKBTU,</span>
-<span id="cb62-89"><a href="buildings.html#cb62-89"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTALKBTU,</span>
-<span id="cb62-90"><a href="buildings.html#cb62-90"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTALKBTU,</span>
-<span id="cb62-91"><a href="buildings.html#cb62-91"></a>      zcta_bldg_stockton_summary<span class="op">$</span>E_TOTALKBTU,</span>
-<span id="cb62-92"><a href="buildings.html#cb62-92"></a>      zcta_bldg_stockton_summary<span class="op">$</span>G_TOTALKBTU,</span>
-<span id="cb62-93"><a href="buildings.html#cb62-93"></a>      zcta_bldg_stockton_summary<span class="op">$</span>TOTALKBTU</span>
-<span id="cb62-94"><a href="buildings.html#cb62-94"></a>    ),</span>
-<span id="cb62-95"><a href="buildings.html#cb62-95"></a>    <span class="dt">kbtusqft =</span> <span class="kw">c</span>(</span>
-<span id="cb62-96"><a href="buildings.html#cb62-96"></a>      zcta_bldg_stockton_summary<span class="op">$</span>ER_KBTUperSQFT,</span>
-<span id="cb62-97"><a href="buildings.html#cb62-97"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GR_KBTUperSQFT,</span>
-<span id="cb62-98"><a href="buildings.html#cb62-98"></a>      zcta_bldg_stockton_summary<span class="op">$</span>EC_KBTUperSQFT,</span>
-<span id="cb62-99"><a href="buildings.html#cb62-99"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GC_KBTUperSQFT,</span>
-<span id="cb62-100"><a href="buildings.html#cb62-100"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_KBTUperSQFT,</span>
-<span id="cb62-101"><a href="buildings.html#cb62-101"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_KBTUperSQFT,</span>
-<span id="cb62-102"><a href="buildings.html#cb62-102"></a>      zcta_bldg_stockton_summary<span class="op">$</span>E_KBTUperSQFT,</span>
-<span id="cb62-103"><a href="buildings.html#cb62-103"></a>      zcta_bldg_stockton_summary<span class="op">$</span>G_KBTUperSQFT,</span>
-<span id="cb62-104"><a href="buildings.html#cb62-104"></a>      zcta_bldg_stockton_summary<span class="op">$</span>TOTALKBTU<span class="op">/</span>(zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT)</span>
-<span id="cb62-105"><a href="buildings.html#cb62-105"></a>    )</span>
-<span id="cb62-106"><a href="buildings.html#cb62-106"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-107"><a href="buildings.html#cb62-107"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
-<span id="cb62-108"><a href="buildings.html#cb62-108"></a>    <span class="dt">Type =</span> Type,</span>
-<span id="cb62-109"><a href="buildings.html#cb62-109"></a>    <span class="st">`</span><span class="dt">Number of Buildings</span><span class="st">`</span> =<span class="st"> </span></span>
-<span id="cb62-110"><a href="buildings.html#cb62-110"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
-<span id="cb62-111"><a href="buildings.html#cb62-111"></a>        <span class="kw">is.na</span>(Bldg),</span>
-<span id="cb62-112"><a href="buildings.html#cb62-112"></a>        <span class="st">&quot;&quot;</span>,</span>
-<span id="cb62-113"><a href="buildings.html#cb62-113"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(Bldg,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb62-114"><a href="buildings.html#cb62-114"></a>      ),</span>
-<span id="cb62-115"><a href="buildings.html#cb62-115"></a>    <span class="st">`</span><span class="dt">Total Footprint</span><span class="st">`</span> =</span>
-<span id="cb62-116"><a href="buildings.html#cb62-116"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
-<span id="cb62-117"><a href="buildings.html#cb62-117"></a>        <span class="kw">is.na</span>(Footprint),</span>
-<span id="cb62-118"><a href="buildings.html#cb62-118"></a>        <span class="st">&quot;&quot;</span>,</span>
-<span id="cb62-119"><a href="buildings.html#cb62-119"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(Footprint,<span class="op">-</span><span class="dv">6</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb62-120"><a href="buildings.html#cb62-120"></a>      ),</span>
-<span id="cb62-121"><a href="buildings.html#cb62-121"></a>    <span class="st">`</span><span class="dt">Total Sqft</span><span class="st">`</span> =</span>
-<span id="cb62-122"><a href="buildings.html#cb62-122"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
-<span id="cb62-123"><a href="buildings.html#cb62-123"></a>        <span class="kw">is.na</span>(sqft),</span>
-<span id="cb62-124"><a href="buildings.html#cb62-124"></a>        <span class="st">&quot;&quot;</span>,</span>
-<span id="cb62-125"><a href="buildings.html#cb62-125"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(sqft,<span class="op">-</span><span class="dv">6</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb62-126"><a href="buildings.html#cb62-126"></a>      ),</span>
-<span id="cb62-127"><a href="buildings.html#cb62-127"></a>    <span class="st">`</span><span class="dt">Total kBTU</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(kbtu,<span class="op">-</span><span class="dv">7</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
-<span id="cb62-128"><a href="buildings.html#cb62-128"></a>    <span class="st">`</span><span class="dt">kBTU/sqft</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(kbtusqft),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb62-129"><a href="buildings.html#cb62-129"></a>  )</span>
-<span id="cb62-130"><a href="buildings.html#cb62-130"></a></span>
-<span id="cb62-131"><a href="buildings.html#cb62-131"></a><span class="kw">kable</span>(</span>
-<span id="cb62-132"><a href="buildings.html#cb62-132"></a>  zcta_bldg_stockton_table, </span>
-<span id="cb62-133"><a href="buildings.html#cb62-133"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb62-134"><a href="buildings.html#cb62-134"></a>  <span class="dt">caption =</span> <span class="st">&#39;Summary of Building count, size, and energy usage for residential/commercial and electricity/gas. Data from PG&amp;E, 2018.&#39;</span></span>
-<span id="cb62-135"><a href="buildings.html#cb62-135"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-136"><a href="buildings.html#cb62-136"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb62-137"><a href="buildings.html#cb62-137"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="buildings.html#cb64-1"></a>zcta_bldg_stockton_summary &lt;-<span class="st"> </span></span>
+<span id="cb64-2"><a href="buildings.html#cb64-2"></a><span class="st">  </span>zcta_bldg_stockton_joined <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-3"><a href="buildings.html#cb64-3"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-4"><a href="buildings.html#cb64-4"></a><span class="st">  </span><span class="kw">summarise_at</span>(</span>
+<span id="cb64-5"><a href="buildings.html#cb64-5"></a>    <span class="kw">c</span>(</span>
+<span id="cb64-6"><a href="buildings.html#cb64-6"></a>      <span class="st">&quot;NUMBLDG&quot;</span>, </span>
+<span id="cb64-7"><a href="buildings.html#cb64-7"></a>      <span class="st">&quot;R_NUMBLDG&quot;</span>, </span>
+<span id="cb64-8"><a href="buildings.html#cb64-8"></a>      <span class="st">&quot;C_NUMBLDG&quot;</span>,</span>
+<span id="cb64-9"><a href="buildings.html#cb64-9"></a>      <span class="st">&quot;TOTSQFTGROUND&quot;</span>,</span>
+<span id="cb64-10"><a href="buildings.html#cb64-10"></a>      <span class="st">&quot;TOTSQFT&quot;</span>,</span>
+<span id="cb64-11"><a href="buildings.html#cb64-11"></a>      <span class="st">&quot;R_TOTSQFT&quot;</span>,</span>
+<span id="cb64-12"><a href="buildings.html#cb64-12"></a>      <span class="st">&quot;C_TOTSQFT&quot;</span>,</span>
+<span id="cb64-13"><a href="buildings.html#cb64-13"></a>      <span class="st">&quot;R_TOTSQFTGROUND&quot;</span>,</span>
+<span id="cb64-14"><a href="buildings.html#cb64-14"></a>      <span class="st">&quot;C_TOTSQFTGROUND&quot;</span>,</span>
+<span id="cb64-15"><a href="buildings.html#cb64-15"></a>      <span class="st">&quot;TOTALKBTU&quot;</span>,</span>
+<span id="cb64-16"><a href="buildings.html#cb64-16"></a>      <span class="st">&quot;E_TOTALKBTU&quot;</span>,</span>
+<span id="cb64-17"><a href="buildings.html#cb64-17"></a>      <span class="st">&quot;G_TOTALKBTU&quot;</span>,</span>
+<span id="cb64-18"><a href="buildings.html#cb64-18"></a>      <span class="st">&quot;R_TOTALKBTU&quot;</span>,</span>
+<span id="cb64-19"><a href="buildings.html#cb64-19"></a>      <span class="st">&quot;C_TOTALKBTU&quot;</span>, </span>
+<span id="cb64-20"><a href="buildings.html#cb64-20"></a>      <span class="st">&quot;ER_TOTALKBTU&quot;</span>, </span>
+<span id="cb64-21"><a href="buildings.html#cb64-21"></a>      <span class="st">&quot;GR_TOTALKBTU&quot;</span>, </span>
+<span id="cb64-22"><a href="buildings.html#cb64-22"></a>      <span class="st">&quot;EC_TOTALKBTU&quot;</span>, </span>
+<span id="cb64-23"><a href="buildings.html#cb64-23"></a>      <span class="st">&quot;GC_TOTALKBTU&quot;</span></span>
+<span id="cb64-24"><a href="buildings.html#cb64-24"></a>    ), sum, <span class="dt">na.rm=</span>T</span>
+<span id="cb64-25"><a href="buildings.html#cb64-25"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-26"><a href="buildings.html#cb64-26"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb64-27"><a href="buildings.html#cb64-27"></a>    <span class="dt">ER_KBTUperSQFT =</span> ER_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb64-28"><a href="buildings.html#cb64-28"></a>    <span class="dt">GR_KBTUperSQFT =</span> GR_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb64-29"><a href="buildings.html#cb64-29"></a>    <span class="dt">EC_KBTUperSQFT =</span> EC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb64-30"><a href="buildings.html#cb64-30"></a>    <span class="dt">GC_KBTUperSQFT =</span> GC_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb64-31"><a href="buildings.html#cb64-31"></a>    <span class="dt">R_KBTUperSQFT =</span> R_TOTALKBTU<span class="op">/</span>R_TOTSQFT, </span>
+<span id="cb64-32"><a href="buildings.html#cb64-32"></a>    <span class="dt">C_KBTUperSQFT =</span> C_TOTALKBTU<span class="op">/</span>C_TOTSQFT, </span>
+<span id="cb64-33"><a href="buildings.html#cb64-33"></a>    <span class="dt">E_KBTUperSQFT =</span> E_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb64-34"><a href="buildings.html#cb64-34"></a>    <span class="dt">G_KBTUperSQFT =</span> G_TOTALKBTU<span class="op">/</span>TOTSQFT, </span>
+<span id="cb64-35"><a href="buildings.html#cb64-35"></a>    <span class="dt">KBTUperSQFT =</span> TOTALKBTU<span class="op">/</span>TOTSQFT,</span>
+<span id="cb64-36"><a href="buildings.html#cb64-36"></a>  )</span>
+<span id="cb64-37"><a href="buildings.html#cb64-37"></a></span>
+<span id="cb64-38"><a href="buildings.html#cb64-38"></a>zcta_bldg_stockton_table &lt;-</span>
+<span id="cb64-39"><a href="buildings.html#cb64-39"></a><span class="st">  </span><span class="kw">data.frame</span>(</span>
+<span id="cb64-40"><a href="buildings.html#cb64-40"></a>    <span class="dt">Type =</span> <span class="kw">c</span>(</span>
+<span id="cb64-41"><a href="buildings.html#cb64-41"></a>      <span class="st">&quot;Residential Electricity&quot;</span>,</span>
+<span id="cb64-42"><a href="buildings.html#cb64-42"></a>      <span class="st">&quot;Residential Gas&quot;</span>,</span>
+<span id="cb64-43"><a href="buildings.html#cb64-43"></a>      <span class="st">&quot;Commercial Electricity&quot;</span>,</span>
+<span id="cb64-44"><a href="buildings.html#cb64-44"></a>      <span class="st">&quot;Commercial Gas&quot;</span>,</span>
+<span id="cb64-45"><a href="buildings.html#cb64-45"></a>      <span class="st">&quot;Residential Total&quot;</span>,</span>
+<span id="cb64-46"><a href="buildings.html#cb64-46"></a>      <span class="st">&quot;Commercial Total&quot;</span>,</span>
+<span id="cb64-47"><a href="buildings.html#cb64-47"></a>      <span class="st">&quot;Electricity Total&quot;</span>,</span>
+<span id="cb64-48"><a href="buildings.html#cb64-48"></a>      <span class="st">&quot;Gas Total&quot;</span>,</span>
+<span id="cb64-49"><a href="buildings.html#cb64-49"></a>      <span class="st">&quot;Total&quot;</span></span>
+<span id="cb64-50"><a href="buildings.html#cb64-50"></a>    ),</span>
+<span id="cb64-51"><a href="buildings.html#cb64-51"></a>    <span class="dt">Bldg =</span> <span class="kw">c</span>(</span>
+<span id="cb64-52"><a href="buildings.html#cb64-52"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-53"><a href="buildings.html#cb64-53"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-54"><a href="buildings.html#cb64-54"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-55"><a href="buildings.html#cb64-55"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-56"><a href="buildings.html#cb64-56"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_NUMBLDG,</span>
+<span id="cb64-57"><a href="buildings.html#cb64-57"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_NUMBLDG,</span>
+<span id="cb64-58"><a href="buildings.html#cb64-58"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-59"><a href="buildings.html#cb64-59"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-60"><a href="buildings.html#cb64-60"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_NUMBLDG<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_NUMBLDG</span>
+<span id="cb64-61"><a href="buildings.html#cb64-61"></a>    ),</span>
+<span id="cb64-62"><a href="buildings.html#cb64-62"></a>    <span class="dt">Footprint =</span> <span class="kw">c</span>(</span>
+<span id="cb64-63"><a href="buildings.html#cb64-63"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-64"><a href="buildings.html#cb64-64"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-65"><a href="buildings.html#cb64-65"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-66"><a href="buildings.html#cb64-66"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-67"><a href="buildings.html#cb64-67"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFTGROUND,</span>
+<span id="cb64-68"><a href="buildings.html#cb64-68"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFTGROUND,</span>
+<span id="cb64-69"><a href="buildings.html#cb64-69"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-70"><a href="buildings.html#cb64-70"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-71"><a href="buildings.html#cb64-71"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFTGROUND<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFTGROUND</span>
+<span id="cb64-72"><a href="buildings.html#cb64-72"></a>    ),</span>
+<span id="cb64-73"><a href="buildings.html#cb64-73"></a>    <span class="dt">sqft =</span> <span class="kw">c</span>(</span>
+<span id="cb64-74"><a href="buildings.html#cb64-74"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-75"><a href="buildings.html#cb64-75"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-76"><a href="buildings.html#cb64-76"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-77"><a href="buildings.html#cb64-77"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-78"><a href="buildings.html#cb64-78"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT,</span>
+<span id="cb64-79"><a href="buildings.html#cb64-79"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT,</span>
+<span id="cb64-80"><a href="buildings.html#cb64-80"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-81"><a href="buildings.html#cb64-81"></a>      <span class="ot">NA</span>,</span>
+<span id="cb64-82"><a href="buildings.html#cb64-82"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT</span>
+<span id="cb64-83"><a href="buildings.html#cb64-83"></a>    ),</span>
+<span id="cb64-84"><a href="buildings.html#cb64-84"></a>    <span class="dt">kbtu =</span> <span class="kw">c</span>(</span>
+<span id="cb64-85"><a href="buildings.html#cb64-85"></a>      zcta_bldg_stockton_summary<span class="op">$</span>ER_TOTALKBTU,</span>
+<span id="cb64-86"><a href="buildings.html#cb64-86"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GR_TOTALKBTU,</span>
+<span id="cb64-87"><a href="buildings.html#cb64-87"></a>      zcta_bldg_stockton_summary<span class="op">$</span>EC_TOTALKBTU,</span>
+<span id="cb64-88"><a href="buildings.html#cb64-88"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GC_TOTALKBTU,</span>
+<span id="cb64-89"><a href="buildings.html#cb64-89"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_TOTALKBTU,</span>
+<span id="cb64-90"><a href="buildings.html#cb64-90"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_TOTALKBTU,</span>
+<span id="cb64-91"><a href="buildings.html#cb64-91"></a>      zcta_bldg_stockton_summary<span class="op">$</span>E_TOTALKBTU,</span>
+<span id="cb64-92"><a href="buildings.html#cb64-92"></a>      zcta_bldg_stockton_summary<span class="op">$</span>G_TOTALKBTU,</span>
+<span id="cb64-93"><a href="buildings.html#cb64-93"></a>      zcta_bldg_stockton_summary<span class="op">$</span>TOTALKBTU</span>
+<span id="cb64-94"><a href="buildings.html#cb64-94"></a>    ),</span>
+<span id="cb64-95"><a href="buildings.html#cb64-95"></a>    <span class="dt">kbtusqft =</span> <span class="kw">c</span>(</span>
+<span id="cb64-96"><a href="buildings.html#cb64-96"></a>      zcta_bldg_stockton_summary<span class="op">$</span>ER_KBTUperSQFT,</span>
+<span id="cb64-97"><a href="buildings.html#cb64-97"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GR_KBTUperSQFT,</span>
+<span id="cb64-98"><a href="buildings.html#cb64-98"></a>      zcta_bldg_stockton_summary<span class="op">$</span>EC_KBTUperSQFT,</span>
+<span id="cb64-99"><a href="buildings.html#cb64-99"></a>      zcta_bldg_stockton_summary<span class="op">$</span>GC_KBTUperSQFT,</span>
+<span id="cb64-100"><a href="buildings.html#cb64-100"></a>      zcta_bldg_stockton_summary<span class="op">$</span>R_KBTUperSQFT,</span>
+<span id="cb64-101"><a href="buildings.html#cb64-101"></a>      zcta_bldg_stockton_summary<span class="op">$</span>C_KBTUperSQFT,</span>
+<span id="cb64-102"><a href="buildings.html#cb64-102"></a>      zcta_bldg_stockton_summary<span class="op">$</span>E_KBTUperSQFT,</span>
+<span id="cb64-103"><a href="buildings.html#cb64-103"></a>      zcta_bldg_stockton_summary<span class="op">$</span>G_KBTUperSQFT,</span>
+<span id="cb64-104"><a href="buildings.html#cb64-104"></a>      zcta_bldg_stockton_summary<span class="op">$</span>TOTALKBTU<span class="op">/</span>(zcta_bldg_stockton_summary<span class="op">$</span>R_TOTSQFT<span class="op">+</span>zcta_bldg_stockton_summary<span class="op">$</span>C_TOTSQFT)</span>
+<span id="cb64-105"><a href="buildings.html#cb64-105"></a>    )</span>
+<span id="cb64-106"><a href="buildings.html#cb64-106"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-107"><a href="buildings.html#cb64-107"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb64-108"><a href="buildings.html#cb64-108"></a>    <span class="dt">Type =</span> Type,</span>
+<span id="cb64-109"><a href="buildings.html#cb64-109"></a>    <span class="st">`</span><span class="dt">Number of Buildings</span><span class="st">`</span> =<span class="st"> </span></span>
+<span id="cb64-110"><a href="buildings.html#cb64-110"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb64-111"><a href="buildings.html#cb64-111"></a>        <span class="kw">is.na</span>(Bldg),</span>
+<span id="cb64-112"><a href="buildings.html#cb64-112"></a>        <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-113"><a href="buildings.html#cb64-113"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(Bldg,<span class="op">-</span><span class="dv">3</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb64-114"><a href="buildings.html#cb64-114"></a>      ),</span>
+<span id="cb64-115"><a href="buildings.html#cb64-115"></a>    <span class="st">`</span><span class="dt">Total Footprint</span><span class="st">`</span> =</span>
+<span id="cb64-116"><a href="buildings.html#cb64-116"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb64-117"><a href="buildings.html#cb64-117"></a>        <span class="kw">is.na</span>(Footprint),</span>
+<span id="cb64-118"><a href="buildings.html#cb64-118"></a>        <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-119"><a href="buildings.html#cb64-119"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(Footprint,<span class="op">-</span><span class="dv">6</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb64-120"><a href="buildings.html#cb64-120"></a>      ),</span>
+<span id="cb64-121"><a href="buildings.html#cb64-121"></a>    <span class="st">`</span><span class="dt">Total Sqft</span><span class="st">`</span> =</span>
+<span id="cb64-122"><a href="buildings.html#cb64-122"></a><span class="st">      </span><span class="kw">ifelse</span>(</span>
+<span id="cb64-123"><a href="buildings.html#cb64-123"></a>        <span class="kw">is.na</span>(sqft),</span>
+<span id="cb64-124"><a href="buildings.html#cb64-124"></a>        <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-125"><a href="buildings.html#cb64-125"></a>        <span class="kw">prettyNum</span>(<span class="kw">round</span>(sqft,<span class="op">-</span><span class="dv">6</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb64-126"><a href="buildings.html#cb64-126"></a>      ),</span>
+<span id="cb64-127"><a href="buildings.html#cb64-127"></a>    <span class="st">`</span><span class="dt">Total kBTU</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(kbtu,<span class="op">-</span><span class="dv">7</span>),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>),</span>
+<span id="cb64-128"><a href="buildings.html#cb64-128"></a>    <span class="st">`</span><span class="dt">kBTU/sqft</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(kbtusqft),<span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb64-129"><a href="buildings.html#cb64-129"></a>  )</span>
+<span id="cb64-130"><a href="buildings.html#cb64-130"></a></span>
+<span id="cb64-131"><a href="buildings.html#cb64-131"></a><span class="kw">kable</span>(</span>
+<span id="cb64-132"><a href="buildings.html#cb64-132"></a>  zcta_bldg_stockton_table, </span>
+<span id="cb64-133"><a href="buildings.html#cb64-133"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb64-134"><a href="buildings.html#cb64-134"></a>  <span class="dt">caption =</span> <span class="st">&#39;Summary of Building count, size, and energy usage for residential/commercial and electricity/gas. Data from PG&amp;E, 2018.&#39;</span></span>
+<span id="cb64-135"><a href="buildings.html#cb64-135"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-136"><a href="buildings.html#cb64-136"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-137"><a href="buildings.html#cb64-137"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:zcta-bldg-stockton-table">Table 2.22: </span>Summary of Building count, size, and energy usage for residential/commercial and electricity/gas. Data from PG&amp;E, 2018.
+<span id="tab:zcta-bldg-stockton-table">Table 2.24: </span>Summary of Building count, size, and energy usage for residential/commercial and electricity/gas. Data from PG&amp;E, 2018.
 </caption>
 <thead>
 <tr>

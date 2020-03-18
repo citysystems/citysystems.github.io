@@ -634,26 +634,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We used 2018 <a href="https://marketplace.arcgis.com/listing.html?id=3425348e4bee4059af2b353e52df43c2">Safegraph</a> data to collect trip visit data to amenities in and around Stockton by Stockton residents. Safegraph reports total visits from its panel of monitored devices each month, which can be weighted to represent the full population. It indicates any census block group which is the origin of more than 5 monitored devices in a given month, which can be used to estimate the routes and VMTs for Stockton visitors, similar to how origin-destination data is used in the commute VMT analysis. We also applied revision factors to the analysis to account for: (1) converting Safegraph
 s reported median travel distance to mean; (2) linked trips, such as dropping by the grocery store and library on the same trip, which reduce the total VMTs; (3) carpooling; and other factors.</p>
 <p>The map below shows the location of all points of interest in California that had recorded visitors from Stockton in 2018. Each point is colored and sized based on the VMTs we calculated associated with Stockton visitors; purple/small is low, yellow/large is high.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="non-commute-vehicle-miles-traveled.html#cb41-1"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/results.Rdata&quot;</span>)</span>
-<span id="cb41-2"><a href="non-commute-vehicle-miles-traveled.html#cb41-2"></a></span>
-<span id="cb41-3"><a href="non-commute-vehicle-miles-traveled.html#cb41-3"></a>amenity_VMT &lt;-<span class="st"> </span>location_VMT_new_join_agg</span>
-<span id="cb41-4"><a href="non-commute-vehicle-miles-traveled.html#cb41-4"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">2</span>] &lt;-<span class="st"> &quot;location name&quot;</span></span>
-<span id="cb41-5"><a href="non-commute-vehicle-miles-traveled.html#cb41-5"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">3</span>] &lt;-<span class="st"> &quot;total VMT&quot;</span></span>
-<span id="cb41-6"><a href="non-commute-vehicle-miles-traveled.html#cb41-6"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">4</span>] &lt;-<span class="st"> &quot;business type&quot;</span></span>
-<span id="cb41-7"><a href="non-commute-vehicle-miles-traveled.html#cb41-7"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">7</span>] &lt;-<span class="st"> &quot;street address&quot;</span></span>
-<span id="cb41-8"><a href="non-commute-vehicle-miles-traveled.html#cb41-8"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">10</span>] &lt;-<span class="st"> &quot;zip code&quot;</span></span>
-<span id="cb41-9"><a href="non-commute-vehicle-miles-traveled.html#cb41-9"></a></span>
-<span id="cb41-10"><a href="non-commute-vehicle-miles-traveled.html#cb41-10"></a>amenity_VMT<span class="op">$</span>full_address &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb41-11"><a href="non-commute-vehicle-miles-traveled.html#cb41-11"></a>amenity_VMT<span class="op">$</span>sub_category &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb41-12"><a href="non-commute-vehicle-miles-traveled.html#cb41-12"></a>amenity_VMT<span class="op">$</span>naics_code &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb41-13"><a href="non-commute-vehicle-miles-traveled.html#cb41-13"></a></span>
-<span id="cb41-14"><a href="non-commute-vehicle-miles-traveled.html#cb41-14"></a>amenity_VMT &lt;-<span class="st"> </span>amenity_VMT[,<span class="kw">c</span>(<span class="st">&quot;total VMT&quot;</span>, <span class="st">&quot;location name&quot;</span>, <span class="st">&quot;business type&quot;</span>, <span class="st">&quot;street address&quot;</span>, <span class="st">&quot;city&quot;</span>, <span class="st">&quot;state&quot;</span>, <span class="st">&quot;zip code&quot;</span>, <span class="st">&quot;geometry&quot;</span>)]</span>
-<span id="cb41-15"><a href="non-commute-vehicle-miles-traveled.html#cb41-15"></a></span>
-<span id="cb41-16"><a href="non-commute-vehicle-miles-traveled.html#cb41-16"></a><span class="co"># map &lt;- mapview(amenity_VMT, zcol = &quot;total VMT&quot;, legend = TRUE, cex= &quot;total VMT&quot;, alpha = 0)</span></span>
-<span id="cb41-17"><a href="non-commute-vehicle-miles-traveled.html#cb41-17"></a><span class="co"># </span></span>
-<span id="cb41-18"><a href="non-commute-vehicle-miles-traveled.html#cb41-18"></a><span class="co"># mapshot(map, url = &quot;map-amenity-vmt-location.html&quot;)</span></span>
-<span id="cb41-19"><a href="non-commute-vehicle-miles-traveled.html#cb41-19"></a></span>
-<span id="cb41-20"><a href="non-commute-vehicle-miles-traveled.html#cb41-20"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-amenity-vmt-location.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="non-commute-vehicle-miles-traveled.html#cb42-1"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/results.Rdata&quot;</span>)</span>
+<span id="cb42-2"><a href="non-commute-vehicle-miles-traveled.html#cb42-2"></a></span>
+<span id="cb42-3"><a href="non-commute-vehicle-miles-traveled.html#cb42-3"></a>amenity_VMT &lt;-<span class="st"> </span>location_VMT_new_join_agg</span>
+<span id="cb42-4"><a href="non-commute-vehicle-miles-traveled.html#cb42-4"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">2</span>] &lt;-<span class="st"> &quot;location name&quot;</span></span>
+<span id="cb42-5"><a href="non-commute-vehicle-miles-traveled.html#cb42-5"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">3</span>] &lt;-<span class="st"> &quot;total VMT&quot;</span></span>
+<span id="cb42-6"><a href="non-commute-vehicle-miles-traveled.html#cb42-6"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">4</span>] &lt;-<span class="st"> &quot;business type&quot;</span></span>
+<span id="cb42-7"><a href="non-commute-vehicle-miles-traveled.html#cb42-7"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">7</span>] &lt;-<span class="st"> &quot;street address&quot;</span></span>
+<span id="cb42-8"><a href="non-commute-vehicle-miles-traveled.html#cb42-8"></a><span class="kw">colnames</span>(amenity_VMT)[<span class="dv">10</span>] &lt;-<span class="st"> &quot;zip code&quot;</span></span>
+<span id="cb42-9"><a href="non-commute-vehicle-miles-traveled.html#cb42-9"></a></span>
+<span id="cb42-10"><a href="non-commute-vehicle-miles-traveled.html#cb42-10"></a>amenity_VMT<span class="op">$</span>full_address &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb42-11"><a href="non-commute-vehicle-miles-traveled.html#cb42-11"></a>amenity_VMT<span class="op">$</span>sub_category &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb42-12"><a href="non-commute-vehicle-miles-traveled.html#cb42-12"></a>amenity_VMT<span class="op">$</span>naics_code &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb42-13"><a href="non-commute-vehicle-miles-traveled.html#cb42-13"></a></span>
+<span id="cb42-14"><a href="non-commute-vehicle-miles-traveled.html#cb42-14"></a>amenity_VMT &lt;-<span class="st"> </span>amenity_VMT[,<span class="kw">c</span>(<span class="st">&quot;total VMT&quot;</span>, <span class="st">&quot;location name&quot;</span>, <span class="st">&quot;business type&quot;</span>, <span class="st">&quot;street address&quot;</span>, <span class="st">&quot;city&quot;</span>, <span class="st">&quot;state&quot;</span>, <span class="st">&quot;zip code&quot;</span>, <span class="st">&quot;geometry&quot;</span>)]</span>
+<span id="cb42-15"><a href="non-commute-vehicle-miles-traveled.html#cb42-15"></a></span>
+<span id="cb42-16"><a href="non-commute-vehicle-miles-traveled.html#cb42-16"></a><span class="co"># map &lt;- mapview(amenity_VMT, zcol = &quot;total VMT&quot;, legend = TRUE, cex= &quot;total VMT&quot;, alpha = 0)</span></span>
+<span id="cb42-17"><a href="non-commute-vehicle-miles-traveled.html#cb42-17"></a><span class="co"># </span></span>
+<span id="cb42-18"><a href="non-commute-vehicle-miles-traveled.html#cb42-18"></a><span class="co"># mapshot(map, url = &quot;map-amenity-vmt-location.html&quot;)</span></span>
+<span id="cb42-19"><a href="non-commute-vehicle-miles-traveled.html#cb42-19"></a></span>
+<span id="cb42-20"><a href="non-commute-vehicle-miles-traveled.html#cb42-20"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-amenity-vmt-location.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:amenity-vmt-location"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-amenity-vmt-location.html" width="672" height="400px">
 </iframe>
@@ -663,48 +663,48 @@ Figure 2.24: Location of points of interest with Stockton visitors in 2018. Sour
 </div>
 <p><span class="math inline">\(~\)</span></p>
 <p>The following plot shows the distribution of VMTs by amenity type (out of hundreds available). The largest category by far is the second tall bar, “Restaurants and Other Eating Places”, followed by “Traveler Accommodations” and “Gas Stations”.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="non-commute-vehicle-miles-traveled.html#cb42-1"></a>business_listing &lt;-<span class="st"> </span><span class="kw">unique</span>(location_VMT_new_join_agg<span class="op">$</span>top_category)</span>
-<span id="cb42-2"><a href="non-commute-vehicle-miles-traveled.html#cb42-2"></a>bus_list_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">0</span>, <span class="dt">nrow =</span> <span class="kw">length</span>(business_listing), <span class="dt">ncol =</span> <span class="dv">3</span>))</span>
-<span id="cb42-3"><a href="non-commute-vehicle-miles-traveled.html#cb42-3"></a><span class="kw">colnames</span>(bus_list_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business type&quot;</span>, <span class="st">&quot;total VMT&quot;</span>, <span class="st">&quot;% VMT&quot;</span>)</span>
-<span id="cb42-4"><a href="non-commute-vehicle-miles-traveled.html#cb42-4"></a></span>
-<span id="cb42-5"><a href="non-commute-vehicle-miles-traveled.html#cb42-5"></a>count &lt;-<span class="st"> </span><span class="dv">0</span></span>
-<span id="cb42-6"><a href="non-commute-vehicle-miles-traveled.html#cb42-6"></a></span>
-<span id="cb42-7"><a href="non-commute-vehicle-miles-traveled.html#cb42-7"></a><span class="cf">for</span> (business_iter <span class="cf">in</span> business_listing){</span>
-<span id="cb42-8"><a href="non-commute-vehicle-miles-traveled.html#cb42-8"></a>  </span>
-<span id="cb42-9"><a href="non-commute-vehicle-miles-traveled.html#cb42-9"></a>  count &lt;-<span class="st"> </span>count <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb42-10"><a href="non-commute-vehicle-miles-traveled.html#cb42-10"></a>  bus_iter_df &lt;-<span class="st"> </span>location_VMT_new_join_agg[location_VMT_new_join_agg<span class="op">$</span>top_category <span class="op">==</span><span class="st"> </span>business_iter, ]</span>
-<span id="cb42-11"><a href="non-commute-vehicle-miles-traveled.html#cb42-11"></a></span>
-<span id="cb42-12"><a href="non-commute-vehicle-miles-traveled.html#cb42-12"></a>  bus_list_df[count, <span class="st">&quot;business type&quot;</span>] &lt;-<span class="st"> </span>business_iter</span>
-<span id="cb42-13"><a href="non-commute-vehicle-miles-traveled.html#cb42-13"></a>  bus_list_df[count, <span class="st">&quot;total VMT&quot;</span>] &lt;-<span class="st"> </span><span class="kw">sum</span>(bus_iter_df<span class="op">$</span>VMT_total, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb42-14"><a href="non-commute-vehicle-miles-traveled.html#cb42-14"></a>  </span>
-<span id="cb42-15"><a href="non-commute-vehicle-miles-traveled.html#cb42-15"></a>}</span>
-<span id="cb42-16"><a href="non-commute-vehicle-miles-traveled.html#cb42-16"></a></span>
-<span id="cb42-17"><a href="non-commute-vehicle-miles-traveled.html#cb42-17"></a>bus_list_df[, <span class="st">&quot;% VMT&quot;</span>] &lt;-<span class="st"> </span>bus_list_df[, <span class="st">&quot;total VMT&quot;</span>] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(bus_list_df[, <span class="st">&quot;total VMT&quot;</span>]) <span class="op">*</span><span class="st"> </span><span class="dv">100</span></span>
-<span id="cb42-18"><a href="non-commute-vehicle-miles-traveled.html#cb42-18"></a></span>
-<span id="cb42-19"><a href="non-commute-vehicle-miles-traveled.html#cb42-19"></a>bus_list_df_ordered &lt;-<span class="st"> </span>bus_list_df[<span class="kw">order</span>(<span class="op">-</span>bus_list_df<span class="op">$</span><span class="st">`</span><span class="dt">total VMT</span><span class="st">`</span>),]</span>
-<span id="cb42-20"><a href="non-commute-vehicle-miles-traveled.html#cb42-20"></a><span class="kw">colnames</span>(bus_list_df_ordered) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business_type&quot;</span>, <span class="st">&quot;total_VMT&quot;</span>, <span class="st">&quot;p_VMT&quot;</span>)</span>
-<span id="cb42-21"><a href="non-commute-vehicle-miles-traveled.html#cb42-21"></a></span>
-<span id="cb42-22"><a href="non-commute-vehicle-miles-traveled.html#cb42-22"></a>bus_list_df_ordered_other_label &lt;-<span class="st"> &quot;Other&quot;</span></span>
-<span id="cb42-23"><a href="non-commute-vehicle-miles-traveled.html#cb42-23"></a>bus_list_df_ordered_other_VMT &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">as.numeric</span>(bus_list_df_ordered[<span class="dv">21</span><span class="op">:</span><span class="kw">nrow</span>(bus_list_df_ordered),<span class="st">&#39;total_VMT&#39;</span>]))</span>
-<span id="cb42-24"><a href="non-commute-vehicle-miles-traveled.html#cb42-24"></a>bus_list_df_ordered_other_perc &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">as.numeric</span>(bus_list_df_ordered[<span class="dv">21</span><span class="op">:</span><span class="kw">nrow</span>(bus_list_df_ordered),<span class="st">&#39;p_VMT&#39;</span>]))</span>
-<span id="cb42-25"><a href="non-commute-vehicle-miles-traveled.html#cb42-25"></a>bus_list_df_ordered_other &lt;-<span class="st"> </span><span class="kw">cbind</span>(bus_list_df_ordered_other_label, bus_list_df_ordered_other_VMT, bus_list_df_ordered_other_perc)</span>
-<span id="cb42-26"><a href="non-commute-vehicle-miles-traveled.html#cb42-26"></a><span class="kw">colnames</span>(bus_list_df_ordered_other) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business_type&quot;</span>, <span class="st">&quot;total_VMT&quot;</span>, <span class="st">&quot;p_VMT&quot;</span>)</span>
-<span id="cb42-27"><a href="non-commute-vehicle-miles-traveled.html#cb42-27"></a></span>
-<span id="cb42-28"><a href="non-commute-vehicle-miles-traveled.html#cb42-28"></a>bus_list_df_ordered_new &lt;-<span class="st"> </span><span class="kw">rbind</span>(bus_list_df_ordered[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>,], bus_list_df_ordered_other)</span>
-<span id="cb42-29"><a href="non-commute-vehicle-miles-traveled.html#cb42-29"></a><span class="kw">colnames</span>(bus_list_df_ordered_new) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business_type&quot;</span>, <span class="st">&quot;total_VMT&quot;</span>, <span class="st">&quot;p_VMT&quot;</span>)</span>
-<span id="cb42-30"><a href="non-commute-vehicle-miles-traveled.html#cb42-30"></a>bus_list_df_ordered_new<span class="op">$</span>total_VMT &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(bus_list_df_ordered_new<span class="op">$</span>total_VMT)</span>
-<span id="cb42-31"><a href="non-commute-vehicle-miles-traveled.html#cb42-31"></a></span>
-<span id="cb42-32"><a href="non-commute-vehicle-miles-traveled.html#cb42-32"></a><span class="kw">ggplot</span>(</span>
-<span id="cb42-33"><a href="non-commute-vehicle-miles-traveled.html#cb42-33"></a>  bus_list_df_ordered_new,</span>
-<span id="cb42-34"><a href="non-commute-vehicle-miles-traveled.html#cb42-34"></a>  <span class="kw">aes</span>(</span>
-<span id="cb42-35"><a href="non-commute-vehicle-miles-traveled.html#cb42-35"></a>    <span class="dt">x =</span> business_type,</span>
-<span id="cb42-36"><a href="non-commute-vehicle-miles-traveled.html#cb42-36"></a>    <span class="dt">y =</span> total_VMT</span>
-<span id="cb42-37"><a href="non-commute-vehicle-miles-traveled.html#cb42-37"></a>  )</span>
-<span id="cb42-38"><a href="non-commute-vehicle-miles-traveled.html#cb42-38"></a>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb42-39"><a href="non-commute-vehicle-miles-traveled.html#cb42-39"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&#39;identity&#39;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> total_VMT), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
-<span id="cb42-40"><a href="non-commute-vehicle-miles-traveled.html#cb42-40"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Amenity Type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Total VMT&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Amenity Type VMT Count&quot;</span>) <span class="op">+</span></span>
-<span id="cb42-41"><a href="non-commute-vehicle-miles-traveled.html#cb42-41"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">35</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) <span class="op">+</span></span>
-<span id="cb42-42"><a href="non-commute-vehicle-miles-traveled.html#cb42-42"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="non-commute-vehicle-miles-traveled.html#cb43-1"></a>business_listing &lt;-<span class="st"> </span><span class="kw">unique</span>(location_VMT_new_join_agg<span class="op">$</span>top_category)</span>
+<span id="cb43-2"><a href="non-commute-vehicle-miles-traveled.html#cb43-2"></a>bus_list_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">0</span>, <span class="dt">nrow =</span> <span class="kw">length</span>(business_listing), <span class="dt">ncol =</span> <span class="dv">3</span>))</span>
+<span id="cb43-3"><a href="non-commute-vehicle-miles-traveled.html#cb43-3"></a><span class="kw">colnames</span>(bus_list_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business type&quot;</span>, <span class="st">&quot;total VMT&quot;</span>, <span class="st">&quot;% VMT&quot;</span>)</span>
+<span id="cb43-4"><a href="non-commute-vehicle-miles-traveled.html#cb43-4"></a></span>
+<span id="cb43-5"><a href="non-commute-vehicle-miles-traveled.html#cb43-5"></a>count &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb43-6"><a href="non-commute-vehicle-miles-traveled.html#cb43-6"></a></span>
+<span id="cb43-7"><a href="non-commute-vehicle-miles-traveled.html#cb43-7"></a><span class="cf">for</span> (business_iter <span class="cf">in</span> business_listing){</span>
+<span id="cb43-8"><a href="non-commute-vehicle-miles-traveled.html#cb43-8"></a>  </span>
+<span id="cb43-9"><a href="non-commute-vehicle-miles-traveled.html#cb43-9"></a>  count &lt;-<span class="st"> </span>count <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb43-10"><a href="non-commute-vehicle-miles-traveled.html#cb43-10"></a>  bus_iter_df &lt;-<span class="st"> </span>location_VMT_new_join_agg[location_VMT_new_join_agg<span class="op">$</span>top_category <span class="op">==</span><span class="st"> </span>business_iter, ]</span>
+<span id="cb43-11"><a href="non-commute-vehicle-miles-traveled.html#cb43-11"></a></span>
+<span id="cb43-12"><a href="non-commute-vehicle-miles-traveled.html#cb43-12"></a>  bus_list_df[count, <span class="st">&quot;business type&quot;</span>] &lt;-<span class="st"> </span>business_iter</span>
+<span id="cb43-13"><a href="non-commute-vehicle-miles-traveled.html#cb43-13"></a>  bus_list_df[count, <span class="st">&quot;total VMT&quot;</span>] &lt;-<span class="st"> </span><span class="kw">sum</span>(bus_iter_df<span class="op">$</span>VMT_total, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb43-14"><a href="non-commute-vehicle-miles-traveled.html#cb43-14"></a>  </span>
+<span id="cb43-15"><a href="non-commute-vehicle-miles-traveled.html#cb43-15"></a>}</span>
+<span id="cb43-16"><a href="non-commute-vehicle-miles-traveled.html#cb43-16"></a></span>
+<span id="cb43-17"><a href="non-commute-vehicle-miles-traveled.html#cb43-17"></a>bus_list_df[, <span class="st">&quot;% VMT&quot;</span>] &lt;-<span class="st"> </span>bus_list_df[, <span class="st">&quot;total VMT&quot;</span>] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(bus_list_df[, <span class="st">&quot;total VMT&quot;</span>]) <span class="op">*</span><span class="st"> </span><span class="dv">100</span></span>
+<span id="cb43-18"><a href="non-commute-vehicle-miles-traveled.html#cb43-18"></a></span>
+<span id="cb43-19"><a href="non-commute-vehicle-miles-traveled.html#cb43-19"></a>bus_list_df_ordered &lt;-<span class="st"> </span>bus_list_df[<span class="kw">order</span>(<span class="op">-</span>bus_list_df<span class="op">$</span><span class="st">`</span><span class="dt">total VMT</span><span class="st">`</span>),]</span>
+<span id="cb43-20"><a href="non-commute-vehicle-miles-traveled.html#cb43-20"></a><span class="kw">colnames</span>(bus_list_df_ordered) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business_type&quot;</span>, <span class="st">&quot;total_VMT&quot;</span>, <span class="st">&quot;p_VMT&quot;</span>)</span>
+<span id="cb43-21"><a href="non-commute-vehicle-miles-traveled.html#cb43-21"></a></span>
+<span id="cb43-22"><a href="non-commute-vehicle-miles-traveled.html#cb43-22"></a>bus_list_df_ordered_other_label &lt;-<span class="st"> &quot;Other&quot;</span></span>
+<span id="cb43-23"><a href="non-commute-vehicle-miles-traveled.html#cb43-23"></a>bus_list_df_ordered_other_VMT &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">as.numeric</span>(bus_list_df_ordered[<span class="dv">21</span><span class="op">:</span><span class="kw">nrow</span>(bus_list_df_ordered),<span class="st">&#39;total_VMT&#39;</span>]))</span>
+<span id="cb43-24"><a href="non-commute-vehicle-miles-traveled.html#cb43-24"></a>bus_list_df_ordered_other_perc &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">as.numeric</span>(bus_list_df_ordered[<span class="dv">21</span><span class="op">:</span><span class="kw">nrow</span>(bus_list_df_ordered),<span class="st">&#39;p_VMT&#39;</span>]))</span>
+<span id="cb43-25"><a href="non-commute-vehicle-miles-traveled.html#cb43-25"></a>bus_list_df_ordered_other &lt;-<span class="st"> </span><span class="kw">cbind</span>(bus_list_df_ordered_other_label, bus_list_df_ordered_other_VMT, bus_list_df_ordered_other_perc)</span>
+<span id="cb43-26"><a href="non-commute-vehicle-miles-traveled.html#cb43-26"></a><span class="kw">colnames</span>(bus_list_df_ordered_other) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business_type&quot;</span>, <span class="st">&quot;total_VMT&quot;</span>, <span class="st">&quot;p_VMT&quot;</span>)</span>
+<span id="cb43-27"><a href="non-commute-vehicle-miles-traveled.html#cb43-27"></a></span>
+<span id="cb43-28"><a href="non-commute-vehicle-miles-traveled.html#cb43-28"></a>bus_list_df_ordered_new &lt;-<span class="st"> </span><span class="kw">rbind</span>(bus_list_df_ordered[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>,], bus_list_df_ordered_other)</span>
+<span id="cb43-29"><a href="non-commute-vehicle-miles-traveled.html#cb43-29"></a><span class="kw">colnames</span>(bus_list_df_ordered_new) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;business_type&quot;</span>, <span class="st">&quot;total_VMT&quot;</span>, <span class="st">&quot;p_VMT&quot;</span>)</span>
+<span id="cb43-30"><a href="non-commute-vehicle-miles-traveled.html#cb43-30"></a>bus_list_df_ordered_new<span class="op">$</span>total_VMT &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(bus_list_df_ordered_new<span class="op">$</span>total_VMT)</span>
+<span id="cb43-31"><a href="non-commute-vehicle-miles-traveled.html#cb43-31"></a></span>
+<span id="cb43-32"><a href="non-commute-vehicle-miles-traveled.html#cb43-32"></a><span class="kw">ggplot</span>(</span>
+<span id="cb43-33"><a href="non-commute-vehicle-miles-traveled.html#cb43-33"></a>  bus_list_df_ordered_new,</span>
+<span id="cb43-34"><a href="non-commute-vehicle-miles-traveled.html#cb43-34"></a>  <span class="kw">aes</span>(</span>
+<span id="cb43-35"><a href="non-commute-vehicle-miles-traveled.html#cb43-35"></a>    <span class="dt">x =</span> business_type,</span>
+<span id="cb43-36"><a href="non-commute-vehicle-miles-traveled.html#cb43-36"></a>    <span class="dt">y =</span> total_VMT</span>
+<span id="cb43-37"><a href="non-commute-vehicle-miles-traveled.html#cb43-37"></a>  )</span>
+<span id="cb43-38"><a href="non-commute-vehicle-miles-traveled.html#cb43-38"></a>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-39"><a href="non-commute-vehicle-miles-traveled.html#cb43-39"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&#39;identity&#39;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> total_VMT), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb43-40"><a href="non-commute-vehicle-miles-traveled.html#cb43-40"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Amenity Type&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Total VMT&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Amenity Type VMT Count&quot;</span>) <span class="op">+</span></span>
+<span id="cb43-41"><a href="non-commute-vehicle-miles-traveled.html#cb43-41"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">35</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) <span class="op">+</span></span>
+<span id="cb43-42"><a href="non-commute-vehicle-miles-traveled.html#cb43-42"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:vmt-amenity-location-chart"></span>
 <img src="stockton_greeneconomy_files/figure-html/vmt-amenity-location-chart-1.png" alt="Non-commute VMT by type of amenity. Source: Safegraph 2018." width="672" />
 <p class="caption">
@@ -713,25 +713,25 @@ Figure 2.25: Non-commute VMT by type of amenity. Source: Safegraph 2018.
 </div>
 <p><span class="math inline">\(~\)</span></p>
 <p>The following table shows the top 50 individual points of interest from the same dataset.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="non-commute-vehicle-miles-traveled.html#cb43-1"></a>location_VMT_CA_table &lt;-</span>
-<span id="cb43-2"><a href="non-commute-vehicle-miles-traveled.html#cb43-2"></a><span class="st">  </span>location_VMT_new_join_agg <span class="op">%&gt;%</span></span>
-<span id="cb43-3"><a href="non-commute-vehicle-miles-traveled.html#cb43-3"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
-<span id="cb43-4"><a href="non-commute-vehicle-miles-traveled.html#cb43-4"></a>    <span class="st">&#39;Location Name&#39;</span> =<span class="st"> </span>location_name,</span>
-<span id="cb43-5"><a href="non-commute-vehicle-miles-traveled.html#cb43-5"></a>    <span class="st">&#39;Total Stockton VMT&#39;</span> =<span class="st"> </span>VMT_total <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.numeric</span>(),</span>
-<span id="cb43-6"><a href="non-commute-vehicle-miles-traveled.html#cb43-6"></a>    <span class="st">&#39;Amenity Type&#39;</span> =<span class="st"> </span>top_category,</span>
-<span id="cb43-7"><a href="non-commute-vehicle-miles-traveled.html#cb43-7"></a>    <span class="st">&#39;Street Address&#39;</span> =<span class="st"> </span>street_address,</span>
-<span id="cb43-8"><a href="non-commute-vehicle-miles-traveled.html#cb43-8"></a>    <span class="st">&#39;City&#39;</span> =<span class="st"> </span>city</span>
-<span id="cb43-9"><a href="non-commute-vehicle-miles-traveled.html#cb43-9"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb43-10"><a href="non-commute-vehicle-miles-traveled.html#cb43-10"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="st">`</span><span class="dt">Total Stockton VMT</span><span class="st">`</span>))</span>
-<span id="cb43-11"><a href="non-commute-vehicle-miles-traveled.html#cb43-11"></a></span>
-<span id="cb43-12"><a href="non-commute-vehicle-miles-traveled.html#cb43-12"></a>location_VMT_CA_table<span class="op">$</span>geometry &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb43-13"><a href="non-commute-vehicle-miles-traveled.html#cb43-13"></a>location_VMT_CA_table<span class="op">$</span><span class="st">`</span><span class="dt">Total Stockton VMT</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(location_VMT_CA_table<span class="op">$</span><span class="st">`</span><span class="dt">Total Stockton VMT</span><span class="st">`</span>,<span class="op">-</span><span class="dv">4</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>)</span>
-<span id="cb43-14"><a href="non-commute-vehicle-miles-traveled.html#cb43-14"></a></span>
-<span id="cb43-15"><a href="non-commute-vehicle-miles-traveled.html#cb43-15"></a><span class="kw">kable</span>(location_VMT_CA_table[<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>,], <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, <span class="dt">caption =</span> <span class="st">&quot;Top 50 points of interest for Stockton residents in 2018. Source: Safegraph.&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="dt">height =</span> <span class="st">&quot;500px&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="non-commute-vehicle-miles-traveled.html#cb44-1"></a>location_VMT_CA_table &lt;-</span>
+<span id="cb44-2"><a href="non-commute-vehicle-miles-traveled.html#cb44-2"></a><span class="st">  </span>location_VMT_new_join_agg <span class="op">%&gt;%</span></span>
+<span id="cb44-3"><a href="non-commute-vehicle-miles-traveled.html#cb44-3"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb44-4"><a href="non-commute-vehicle-miles-traveled.html#cb44-4"></a>    <span class="st">&#39;Location Name&#39;</span> =<span class="st"> </span>location_name,</span>
+<span id="cb44-5"><a href="non-commute-vehicle-miles-traveled.html#cb44-5"></a>    <span class="st">&#39;Total Stockton VMT&#39;</span> =<span class="st"> </span>VMT_total <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.numeric</span>(),</span>
+<span id="cb44-6"><a href="non-commute-vehicle-miles-traveled.html#cb44-6"></a>    <span class="st">&#39;Amenity Type&#39;</span> =<span class="st"> </span>top_category,</span>
+<span id="cb44-7"><a href="non-commute-vehicle-miles-traveled.html#cb44-7"></a>    <span class="st">&#39;Street Address&#39;</span> =<span class="st"> </span>street_address,</span>
+<span id="cb44-8"><a href="non-commute-vehicle-miles-traveled.html#cb44-8"></a>    <span class="st">&#39;City&#39;</span> =<span class="st"> </span>city</span>
+<span id="cb44-9"><a href="non-commute-vehicle-miles-traveled.html#cb44-9"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb44-10"><a href="non-commute-vehicle-miles-traveled.html#cb44-10"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="st">`</span><span class="dt">Total Stockton VMT</span><span class="st">`</span>))</span>
+<span id="cb44-11"><a href="non-commute-vehicle-miles-traveled.html#cb44-11"></a></span>
+<span id="cb44-12"><a href="non-commute-vehicle-miles-traveled.html#cb44-12"></a>location_VMT_CA_table<span class="op">$</span>geometry &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb44-13"><a href="non-commute-vehicle-miles-traveled.html#cb44-13"></a>location_VMT_CA_table<span class="op">$</span><span class="st">`</span><span class="dt">Total Stockton VMT</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(location_VMT_CA_table<span class="op">$</span><span class="st">`</span><span class="dt">Total Stockton VMT</span><span class="st">`</span>,<span class="op">-</span><span class="dv">4</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb44-14"><a href="non-commute-vehicle-miles-traveled.html#cb44-14"></a></span>
+<span id="cb44-15"><a href="non-commute-vehicle-miles-traveled.html#cb44-15"></a><span class="kw">kable</span>(location_VMT_CA_table[<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>,], <span class="dt">booktabs =</span> <span class="ot">TRUE</span>, <span class="dt">caption =</span> <span class="st">&quot;Top 50 points of interest for Stockton residents in 2018. Source: Safegraph.&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="dt">height =</span> <span class="st">&quot;500px&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:500px; overflow-x: scroll; width:100%; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:amenity-vmt-location-table">Table 2.17: </span>Top 50 points of interest for Stockton residents in 2018. Source: Safegraph.
+<span id="tab:amenity-vmt-location-table">Table 2.18: </span>Top 50 points of interest for Stockton residents in 2018. Source: Safegraph.
 </caption>
 <thead>
 <tr>
@@ -1608,11 +1608,11 @@ stockton
 </div>
 <p><span class="math inline">\(~\)</span></p>
 <p>The following map shows the same data aggregated back to Stockton blockgroups, and shown as VMT per capita. For most of Stockton there is no clear pattern, but some there are notable block groups at the periphery that have high VMT per capita. Transit and ride-sharing strategies, or land use policy and development that brings needed amenities closer to where people live, could target VMT reduction where it is needed the most.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="non-commute-vehicle-miles-traveled.html#cb44-1"></a><span class="co"># map &lt;- mapview(bg_VMT, zcol = c(&quot;per_capita&quot;), legend = TRUE, layer.name = &quot;Non-commute&lt;br&gt;VMTper capita&quot;)</span></span>
-<span id="cb44-2"><a href="non-commute-vehicle-miles-traveled.html#cb44-2"></a><span class="co"># </span></span>
-<span id="cb44-3"><a href="non-commute-vehicle-miles-traveled.html#cb44-3"></a><span class="co"># mapshot(map, url = &quot;map-amenity-vmt-bg.html&quot;)</span></span>
-<span id="cb44-4"><a href="non-commute-vehicle-miles-traveled.html#cb44-4"></a></span>
-<span id="cb44-5"><a href="non-commute-vehicle-miles-traveled.html#cb44-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-amenity-vmt-bg.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="non-commute-vehicle-miles-traveled.html#cb45-1"></a><span class="co"># map &lt;- mapview(bg_VMT, zcol = c(&quot;per_capita&quot;), legend = TRUE, layer.name = &quot;Non-commute&lt;br&gt;VMTper capita&quot;)</span></span>
+<span id="cb45-2"><a href="non-commute-vehicle-miles-traveled.html#cb45-2"></a><span class="co"># </span></span>
+<span id="cb45-3"><a href="non-commute-vehicle-miles-traveled.html#cb45-3"></a><span class="co"># mapshot(map, url = &quot;map-amenity-vmt-bg.html&quot;)</span></span>
+<span id="cb45-4"><a href="non-commute-vehicle-miles-traveled.html#cb45-4"></a></span>
+<span id="cb45-5"><a href="non-commute-vehicle-miles-traveled.html#cb45-5"></a>knitr<span class="op">::</span><span class="kw">include_url</span>(<span class="st">&quot;https://city.systems/stockton-greeneconomy/map-amenity-vmt-bg.html&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:amenity-vmt-map"></span>
 <iframe src="https://city.systems/stockton-greeneconomy/map-amenity-vmt-bg.html" width="672" height="400px">
 </iframe>
