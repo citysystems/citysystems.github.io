@@ -542,6 +542,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3.3" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#provide-grants-to-income-eligible-residents-for-the-replacement-of-high-emission-cars-with-low-emission-cars"><i class="fa fa-check"></i><b>3.3.3</b> Provide grants to income eligible residents for the replacement of high-emission cars with low-emission cars</a></li>
 <li class="chapter" data-level="3.3.4" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#engage-automobile-manufacturers-as-stakeholders-in-the-ev-market"><i class="fa fa-check"></i><b>3.3.4</b> Engage automobile manufacturers as stakeholders in the EV market</a></li>
 <li class="chapter" data-level="3.3.5" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#reduce-vehicle-speed-limits"><i class="fa fa-check"></i><b>3.3.5</b> Reduce vehicle speed limits</a></li>
+<li class="chapter" data-level="3.3.6" data-path="vehicle-emissions-1.html"><a href="vehicle-emissions-1.html#install-smart-streetlights"><i class="fa fa-check"></i><b>3.3.6</b> Install smart streetlights</a></li>
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="local-jobs.html"><a href="local-jobs.html"><i class="fa fa-check"></i><b>3.4</b> Local Jobs</a>
 <ul>
@@ -632,55 +633,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="strategy-electrification" class="section level3" number="4.4.1">
 <h3><span class="header-section-number">4.4.1</span> Strategy: Electrification</h3>
 <p>Building electrification refers generally to the conversion of building systems and appliances that are powered directly by fossil fuels into alternative systems and appliances that are powered by electricity, which is becoming increasingly low-carbon. The primary opportunities for electrification are in suburban areas with old homes that have water and space heating powered by natural gas. Household heating fuel type in Stockton from 2018 ACS 1-Yr data is shown below.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="building-energy-1.html#cb77-1"></a><span class="co"># acs_vars &lt;-</span></span>
-<span id="cb77-2"><a href="building-energy-1.html#cb77-2"></a><span class="co">#   listCensusMetadata(</span></span>
-<span id="cb77-3"><a href="building-energy-1.html#cb77-3"></a><span class="co">#     name = &quot;2018/acs/acs1&quot;,</span></span>
-<span id="cb77-4"><a href="building-energy-1.html#cb77-4"></a><span class="co">#     type = &quot;variables&quot;</span></span>
-<span id="cb77-5"><a href="building-energy-1.html#cb77-5"></a><span class="co">#   )</span></span>
-<span id="cb77-6"><a href="building-energy-1.html#cb77-6"></a><span class="co"># </span></span>
-<span id="cb77-7"><a href="building-energy-1.html#cb77-7"></a><span class="co"># save(acs_vars, file=&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/acs1_vars_2018.Rdata&quot;)</span></span>
-<span id="cb77-8"><a href="building-energy-1.html#cb77-8"></a></span>
-<span id="cb77-9"><a href="building-energy-1.html#cb77-9"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/acs1_vars_2018.Rdata&quot;</span>)</span>
-<span id="cb77-10"><a href="building-energy-1.html#cb77-10"></a></span>
-<span id="cb77-11"><a href="building-energy-1.html#cb77-11"></a>heating_fuel &lt;-</span>
-<span id="cb77-12"><a href="building-energy-1.html#cb77-12"></a><span class="st">  </span><span class="kw">getCensus</span>(</span>
-<span id="cb77-13"><a href="building-energy-1.html#cb77-13"></a>    <span class="dt">name =</span> <span class="st">&quot;acs/acs1&quot;</span>,</span>
-<span id="cb77-14"><a href="building-energy-1.html#cb77-14"></a>    <span class="dt">vintage =</span> <span class="dv">2018</span>,</span>
-<span id="cb77-15"><a href="building-energy-1.html#cb77-15"></a>    <span class="dt">vars =</span> <span class="st">&quot;group(B25040)&quot;</span>,</span>
-<span id="cb77-16"><a href="building-energy-1.html#cb77-16"></a>    <span class="dt">region =</span> <span class="st">&quot;place:75000&quot;</span>,</span>
-<span id="cb77-17"><a href="building-energy-1.html#cb77-17"></a>    <span class="dt">regionin =</span> <span class="st">&quot;state:06&quot;</span></span>
-<span id="cb77-18"><a href="building-energy-1.html#cb77-18"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb77-19"><a href="building-energy-1.html#cb77-19"></a><span class="st">  </span><span class="kw">select_if</span>(<span class="op">!</span><span class="kw">names</span>(.) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;GEO_ID&quot;</span>,<span class="st">&quot;state&quot;</span>,<span class="st">&quot;place&quot;</span>,<span class="st">&quot;NAME&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb77-20"><a href="building-energy-1.html#cb77-20"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="kw">contains</span>(<span class="st">&quot;EA&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;MA&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;M&quot;</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb77-21"><a href="building-energy-1.html#cb77-21"></a><span class="st">  </span><span class="kw">gather</span>(</span>
-<span id="cb77-22"><a href="building-energy-1.html#cb77-22"></a>    <span class="dt">key =</span> <span class="st">&quot;variable&quot;</span>,</span>
-<span id="cb77-23"><a href="building-energy-1.html#cb77-23"></a>    <span class="dt">value =</span> <span class="st">&quot;estimate&quot;</span></span>
-<span id="cb77-24"><a href="building-energy-1.html#cb77-24"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb77-25"><a href="building-energy-1.html#cb77-25"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb77-26"><a href="building-energy-1.html#cb77-26"></a>    <span class="dt">label =</span> acs_vars<span class="op">$</span>label[<span class="kw">match</span>(variable,acs_vars<span class="op">$</span>name)]</span>
-<span id="cb77-27"><a href="building-energy-1.html#cb77-27"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb77-28"><a href="building-energy-1.html#cb77-28"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
-<span id="cb77-29"><a href="building-energy-1.html#cb77-29"></a>    <span class="st">`</span><span class="dt">Heating Fuel Type</span><span class="st">`</span> =<span class="st"> </span></span>
-<span id="cb77-30"><a href="building-energy-1.html#cb77-30"></a><span class="st">      </span><span class="kw">substr</span>(</span>
-<span id="cb77-31"><a href="building-energy-1.html#cb77-31"></a>        label,</span>
-<span id="cb77-32"><a href="building-energy-1.html#cb77-32"></a>        <span class="kw">lapply</span>(</span>
-<span id="cb77-33"><a href="building-energy-1.html#cb77-33"></a>          label, <span class="cf">function</span>(x){</span>
-<span id="cb77-34"><a href="building-energy-1.html#cb77-34"></a>            <span class="kw">max</span>(<span class="kw">unlist</span>(<span class="kw">gregexpr</span>(<span class="st">&#39;!!&#39;</span>,x)))<span class="op">+</span><span class="dv">2</span></span>
-<span id="cb77-35"><a href="building-energy-1.html#cb77-35"></a>          }</span>
-<span id="cb77-36"><a href="building-energy-1.html#cb77-36"></a>        ),</span>
-<span id="cb77-37"><a href="building-energy-1.html#cb77-37"></a>        <span class="kw">nchar</span>(label)</span>
-<span id="cb77-38"><a href="building-energy-1.html#cb77-38"></a>      ),</span>
-<span id="cb77-39"><a href="building-energy-1.html#cb77-39"></a>    <span class="st">`</span><span class="dt">Number of Households</span><span class="st">`</span> =<span class="st"> </span>estimate,</span>
-<span id="cb77-40"><a href="building-energy-1.html#cb77-40"></a>    <span class="st">`</span><span class="dt">Percent of Households</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(estimate<span class="op">/</span><span class="dv">95557</span><span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>),<span class="st">&quot;%&quot;</span>)</span>
-<span id="cb77-41"><a href="building-energy-1.html#cb77-41"></a>  )</span>
-<span id="cb77-42"><a href="building-energy-1.html#cb77-42"></a></span>
-<span id="cb77-43"><a href="building-energy-1.html#cb77-43"></a><span class="kw">kable</span>(</span>
-<span id="cb77-44"><a href="building-energy-1.html#cb77-44"></a>  heating_fuel,</span>
-<span id="cb77-45"><a href="building-energy-1.html#cb77-45"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb77-46"><a href="building-energy-1.html#cb77-46"></a>  <span class="dt">caption =</span> <span class="st">&#39;Heating fuel type for Stockton households. Data from ACS 1-yr, 2018.&#39;</span></span>
-<span id="cb77-47"><a href="building-energy-1.html#cb77-47"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb77-48"><a href="building-energy-1.html#cb77-48"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb77-49"><a href="building-energy-1.html#cb77-49"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="building-energy-1.html#cb80-1"></a><span class="co"># acs_vars &lt;-</span></span>
+<span id="cb80-2"><a href="building-energy-1.html#cb80-2"></a><span class="co">#   listCensusMetadata(</span></span>
+<span id="cb80-3"><a href="building-energy-1.html#cb80-3"></a><span class="co">#     name = &quot;2018/acs/acs1&quot;,</span></span>
+<span id="cb80-4"><a href="building-energy-1.html#cb80-4"></a><span class="co">#     type = &quot;variables&quot;</span></span>
+<span id="cb80-5"><a href="building-energy-1.html#cb80-5"></a><span class="co">#   )</span></span>
+<span id="cb80-6"><a href="building-energy-1.html#cb80-6"></a><span class="co"># </span></span>
+<span id="cb80-7"><a href="building-energy-1.html#cb80-7"></a><span class="co"># save(acs_vars, file=&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/acs1_vars_2018.Rdata&quot;)</span></span>
+<span id="cb80-8"><a href="building-energy-1.html#cb80-8"></a></span>
+<span id="cb80-9"><a href="building-energy-1.html#cb80-9"></a><span class="kw">load</span>(<span class="st">&quot;C:/Users/derek/Google Drive/City Systems/Stockton Green Economy/acs1_vars_2018.Rdata&quot;</span>)</span>
+<span id="cb80-10"><a href="building-energy-1.html#cb80-10"></a></span>
+<span id="cb80-11"><a href="building-energy-1.html#cb80-11"></a>heating_fuel &lt;-</span>
+<span id="cb80-12"><a href="building-energy-1.html#cb80-12"></a><span class="st">  </span><span class="kw">getCensus</span>(</span>
+<span id="cb80-13"><a href="building-energy-1.html#cb80-13"></a>    <span class="dt">name =</span> <span class="st">&quot;acs/acs1&quot;</span>,</span>
+<span id="cb80-14"><a href="building-energy-1.html#cb80-14"></a>    <span class="dt">vintage =</span> <span class="dv">2018</span>,</span>
+<span id="cb80-15"><a href="building-energy-1.html#cb80-15"></a>    <span class="dt">vars =</span> <span class="st">&quot;group(B25040)&quot;</span>,</span>
+<span id="cb80-16"><a href="building-energy-1.html#cb80-16"></a>    <span class="dt">region =</span> <span class="st">&quot;place:75000&quot;</span>,</span>
+<span id="cb80-17"><a href="building-energy-1.html#cb80-17"></a>    <span class="dt">regionin =</span> <span class="st">&quot;state:06&quot;</span></span>
+<span id="cb80-18"><a href="building-energy-1.html#cb80-18"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb80-19"><a href="building-energy-1.html#cb80-19"></a><span class="st">  </span><span class="kw">select_if</span>(<span class="op">!</span><span class="kw">names</span>(.) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;GEO_ID&quot;</span>,<span class="st">&quot;state&quot;</span>,<span class="st">&quot;place&quot;</span>,<span class="st">&quot;NAME&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb80-20"><a href="building-energy-1.html#cb80-20"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="kw">contains</span>(<span class="st">&quot;EA&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;MA&quot;</span>),<span class="kw">contains</span>(<span class="st">&quot;M&quot;</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb80-21"><a href="building-energy-1.html#cb80-21"></a><span class="st">  </span><span class="kw">gather</span>(</span>
+<span id="cb80-22"><a href="building-energy-1.html#cb80-22"></a>    <span class="dt">key =</span> <span class="st">&quot;variable&quot;</span>,</span>
+<span id="cb80-23"><a href="building-energy-1.html#cb80-23"></a>    <span class="dt">value =</span> <span class="st">&quot;estimate&quot;</span></span>
+<span id="cb80-24"><a href="building-energy-1.html#cb80-24"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb80-25"><a href="building-energy-1.html#cb80-25"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb80-26"><a href="building-energy-1.html#cb80-26"></a>    <span class="dt">label =</span> acs_vars<span class="op">$</span>label[<span class="kw">match</span>(variable,acs_vars<span class="op">$</span>name)]</span>
+<span id="cb80-27"><a href="building-energy-1.html#cb80-27"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb80-28"><a href="building-energy-1.html#cb80-28"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb80-29"><a href="building-energy-1.html#cb80-29"></a>    <span class="st">`</span><span class="dt">Heating Fuel Type</span><span class="st">`</span> =<span class="st"> </span></span>
+<span id="cb80-30"><a href="building-energy-1.html#cb80-30"></a><span class="st">      </span><span class="kw">substr</span>(</span>
+<span id="cb80-31"><a href="building-energy-1.html#cb80-31"></a>        label,</span>
+<span id="cb80-32"><a href="building-energy-1.html#cb80-32"></a>        <span class="kw">lapply</span>(</span>
+<span id="cb80-33"><a href="building-energy-1.html#cb80-33"></a>          label, <span class="cf">function</span>(x){</span>
+<span id="cb80-34"><a href="building-energy-1.html#cb80-34"></a>            <span class="kw">max</span>(<span class="kw">unlist</span>(<span class="kw">gregexpr</span>(<span class="st">&#39;!!&#39;</span>,x)))<span class="op">+</span><span class="dv">2</span></span>
+<span id="cb80-35"><a href="building-energy-1.html#cb80-35"></a>          }</span>
+<span id="cb80-36"><a href="building-energy-1.html#cb80-36"></a>        ),</span>
+<span id="cb80-37"><a href="building-energy-1.html#cb80-37"></a>        <span class="kw">nchar</span>(label)</span>
+<span id="cb80-38"><a href="building-energy-1.html#cb80-38"></a>      ),</span>
+<span id="cb80-39"><a href="building-energy-1.html#cb80-39"></a>    <span class="st">`</span><span class="dt">Number of Households</span><span class="st">`</span> =<span class="st"> </span>estimate,</span>
+<span id="cb80-40"><a href="building-energy-1.html#cb80-40"></a>    <span class="st">`</span><span class="dt">Percent of Households</span><span class="st">`</span> =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">round</span>(estimate<span class="op">/</span><span class="dv">95557</span><span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>),<span class="st">&quot;%&quot;</span>)</span>
+<span id="cb80-41"><a href="building-energy-1.html#cb80-41"></a>  )</span>
+<span id="cb80-42"><a href="building-energy-1.html#cb80-42"></a></span>
+<span id="cb80-43"><a href="building-energy-1.html#cb80-43"></a><span class="kw">kable</span>(</span>
+<span id="cb80-44"><a href="building-energy-1.html#cb80-44"></a>  heating_fuel,</span>
+<span id="cb80-45"><a href="building-energy-1.html#cb80-45"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb80-46"><a href="building-energy-1.html#cb80-46"></a>  <span class="dt">caption =</span> <span class="st">&#39;Heating fuel type for Stockton households. Data from ACS 1-yr, 2018.&#39;</span></span>
+<span id="cb80-47"><a href="building-energy-1.html#cb80-47"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb80-48"><a href="building-energy-1.html#cb80-48"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb80-49"><a href="building-energy-1.html#cb80-49"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
@@ -861,7 +862,7 @@ No fuel used
 </ul>
 <p>The City of Palo Alto commissioned a <a href="https://www.cityofpaloalto.org/civicax/filebank/documents/55069">2016 study by TRC Energy Services</a> which modeled the costs and impact of electrifying air and space gas heaters with heat pumps.</p>
 <p>The pasted figure below shows results for their model combining simulations of retrofitting a typical existing single family residential home of either one-story 2,100 or two-story 2,700 sqft in Palo Alto’s climate zone (CZ4).</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="building-energy-1.html#cb78-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/electrification-1.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="building-energy-1.html#cb81-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/electrification-1.png&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:electrification-screenshot-1"></span>
 <img src="images/electrification-1.png" alt="Figure from the City of Palo Alto's 2016 Electrification study. Single family retrofit." width="718" />
 <p class="caption">
@@ -919,7 +920,7 @@ Figure 4.7: Figure from the City of Palo Alto’s 2016 Electrification study. Si
 </tbody>
 </table>
 <p>The study also produced the same kinds of estimates for electrification in low-rise multifamily (7,000 sqft, two-story, 8 units) and small office (5,500 sqft, two-story) buildings (medium office building retrofits were considered to be significantly cost-prohibitive).</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="building-energy-1.html#cb79-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/electrification-2.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="building-energy-1.html#cb82-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/electrification-2.png&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:electrification-screenshot-2"></span>
 <img src="images/electrification-2.png" alt="Figure from the City of Palo Alto's 2016 Electrification study. Low-rise multifamily retrofit." width="718" />
 <p class="caption">
@@ -927,7 +928,7 @@ Figure 4.8: Figure from the City of Palo Alto’s 2016 Electrification study. Lo
 </p>
 </div>
 <p><span class="math inline">\(~\)</span></p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="building-energy-1.html#cb80-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/electrification-3.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="building-energy-1.html#cb83-1"></a><span class="kw">include_graphics</span>(<span class="st">&quot;images/electrification-3.png&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:electrification-screenshot-3"></span>
 <img src="images/electrification-3.png" alt="Figure from the City of Palo Alto's 2016 Electrification study. Small office retrofit." width="717" />
 <p class="caption">
@@ -936,51 +937,51 @@ Figure 4.9: Figure from the City of Palo Alto’s 2016 Electrification study. Sm
 </div>
 <p><span class="math inline">\(~\)</span></p>
 <p>The table below summarizes the estimated net savings tCO2e per customer, using the same methodology as above, as well as the approximate number of buildings of each type in Stockton and their average building size.</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="building-energy-1.html#cb81-1"></a>bldg_electrification_summary &lt;-</span>
-<span id="cb81-2"><a href="building-energy-1.html#cb81-2"></a><span class="st">  </span>bldg_join <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-3"><a href="building-energy-1.html#cb81-3"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-4"><a href="building-energy-1.html#cb81-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(bldg_tot, ZONE) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-5"><a href="building-energy-1.html#cb81-5"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb81-6"><a href="building-energy-1.html#cb81-6"></a>    <span class="dt">bldg_type =</span></span>
-<span id="cb81-7"><a href="building-energy-1.html#cb81-7"></a>      <span class="kw">case_when</span>(</span>
-<span id="cb81-8"><a href="building-energy-1.html#cb81-8"></a>        ZONE <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;RL&quot;</span>,<span class="st">&quot;R-L&quot;</span>,<span class="st">&quot;RLP&quot;</span>,<span class="st">&quot;(RL)&quot;</span>) <span class="op">~</span><span class="st"> &quot;Single family&quot;</span>,</span>
-<span id="cb81-9"><a href="building-energy-1.html#cb81-9"></a>        ZONE <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;RM&quot;</span>,<span class="st">&quot;(RM)&quot;</span>,<span class="st">&quot;R-M&quot;</span>,<span class="st">&quot;RMP&quot;</span>,<span class="st">&quot;RH&quot;</span>,<span class="st">&quot;RHP&quot;</span>,<span class="st">&quot;(RH)&quot;</span>) <span class="op">~</span><span class="st"> &quot;Low-rise multifamily&quot;</span>,</span>
-<span id="cb81-10"><a href="building-energy-1.html#cb81-10"></a>        ZONE <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CO&quot;</span>,<span class="st">&quot;C-O&quot;</span>) <span class="op">&amp;</span><span class="st"> </span>bldg_tot <span class="op">&lt;</span><span class="st"> </span><span class="dv">17500</span> <span class="op">~</span><span class="st"> &quot;Small office&quot;</span>,</span>
-<span id="cb81-11"><a href="building-energy-1.html#cb81-11"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Other&quot;</span></span>
-<span id="cb81-12"><a href="building-energy-1.html#cb81-12"></a>      ),</span>
-<span id="cb81-13"><a href="building-energy-1.html#cb81-13"></a>    <span class="dt">bldg_type =</span> bldg_type <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Single family&quot;</span>,<span class="st">&quot;Low-rise multifamily&quot;</span>,<span class="st">&quot;Small office&quot;</span>,<span class="st">&quot;Other&quot;</span>))</span>
-<span id="cb81-14"><a href="building-energy-1.html#cb81-14"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-15"><a href="building-energy-1.html#cb81-15"></a><span class="st">  </span><span class="kw">filter</span>(bldg_type <span class="op">!=</span><span class="st"> &quot;Other&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-16"><a href="building-energy-1.html#cb81-16"></a><span class="st">  </span><span class="kw">group_by</span>(bldg_type) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-17"><a href="building-energy-1.html#cb81-17"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
-<span id="cb81-18"><a href="building-energy-1.html#cb81-18"></a>    <span class="dt">Count =</span> <span class="kw">n</span>(),</span>
-<span id="cb81-19"><a href="building-energy-1.html#cb81-19"></a>    <span class="dt">Average_size =</span> <span class="kw">mean</span>(bldg_tot, <span class="dt">na.rm =</span> T)</span>
-<span id="cb81-20"><a href="building-energy-1.html#cb81-20"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-21"><a href="building-energy-1.html#cb81-21"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb81-22"><a href="building-energy-1.html#cb81-22"></a>    <span class="dt">savings =</span> </span>
-<span id="cb81-23"><a href="building-energy-1.html#cb81-23"></a>      <span class="kw">case_when</span>(</span>
-<span id="cb81-24"><a href="building-energy-1.html#cb81-24"></a>        bldg_type <span class="op">==</span><span class="st"> &quot;Single family&quot;</span> <span class="op">~</span><span class="st"> </span>(<span class="dv">445</span><span class="op">*</span><span class="fl">11.7</span> <span class="op">-</span><span class="st"> </span><span class="dv">3680</span><span class="op">*</span><span class="fl">0.1875</span>)<span class="op">*</span><span class="fl">0.000453592</span>,</span>
-<span id="cb81-25"><a href="building-energy-1.html#cb81-25"></a>        bldg_type <span class="op">==</span><span class="st"> &quot;Low-rise multifamily&quot;</span> <span class="op">~</span><span class="st"> </span>(<span class="dv">1378</span><span class="op">*</span><span class="fl">11.7</span> <span class="op">-</span><span class="st"> </span><span class="dv">8919</span><span class="op">*</span><span class="fl">0.1875</span>)<span class="op">*</span><span class="fl">0.000453592</span>,</span>
-<span id="cb81-26"><a href="building-energy-1.html#cb81-26"></a>        bldg_type <span class="op">==</span><span class="st"> &quot;Small office&quot;</span> <span class="op">~</span><span class="st"> </span>(<span class="dv">747</span><span class="op">*</span><span class="fl">11.7</span> <span class="op">-</span><span class="st"> </span><span class="dv">5714</span><span class="op">*</span><span class="fl">0.1875</span>)<span class="op">*</span><span class="fl">0.000453592</span></span>
-<span id="cb81-27"><a href="building-energy-1.html#cb81-27"></a>      )</span>
-<span id="cb81-28"><a href="building-energy-1.html#cb81-28"></a>  )</span>
-<span id="cb81-29"><a href="building-energy-1.html#cb81-29"></a></span>
-<span id="cb81-30"><a href="building-energy-1.html#cb81-30"></a>bldg_electrification_summary_table &lt;-</span>
-<span id="cb81-31"><a href="building-energy-1.html#cb81-31"></a><span class="st">  </span>bldg_electrification_summary <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-32"><a href="building-energy-1.html#cb81-32"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
-<span id="cb81-33"><a href="building-energy-1.html#cb81-33"></a>    <span class="st">`</span><span class="dt">Building Type</span><span class="st">`</span> =<span class="st"> </span>bldg_type,</span>
-<span id="cb81-34"><a href="building-energy-1.html#cb81-34"></a>    <span class="dt">Count =</span> <span class="kw">prettyNum</span>(<span class="kw">round</span>(Count<span class="op">/</span><span class="dv">10</span><span class="op">^</span>(<span class="kw">nchar</span>(Count)<span class="op">-</span><span class="dv">2</span>))<span class="op">*</span><span class="dv">10</span><span class="op">^</span>(<span class="kw">nchar</span>(Count)<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
-<span id="cb81-35"><a href="building-energy-1.html#cb81-35"></a>    <span class="st">`</span><span class="dt">Average Sqft</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(Average_size,<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
-<span id="cb81-36"><a href="building-energy-1.html#cb81-36"></a>    <span class="st">`</span><span class="dt">tCO2e Savings</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(savings,<span class="dv">1</span>)</span>
-<span id="cb81-37"><a href="building-energy-1.html#cb81-37"></a>  )</span>
-<span id="cb81-38"><a href="building-energy-1.html#cb81-38"></a></span>
-<span id="cb81-39"><a href="building-energy-1.html#cb81-39"></a><span class="kw">kable</span>(</span>
-<span id="cb81-40"><a href="building-energy-1.html#cb81-40"></a>  bldg_electrification_summary_table,</span>
-<span id="cb81-41"><a href="building-energy-1.html#cb81-41"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb81-42"><a href="building-energy-1.html#cb81-42"></a>  <span class="dt">caption =</span> <span class="st">&#39;Summary of electrification impacts for different building types in Stockton.&#39;</span></span>
-<span id="cb81-43"><a href="building-energy-1.html#cb81-43"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-44"><a href="building-energy-1.html#cb81-44"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb81-45"><a href="building-energy-1.html#cb81-45"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="building-energy-1.html#cb84-1"></a>bldg_electrification_summary &lt;-</span>
+<span id="cb84-2"><a href="building-energy-1.html#cb84-2"></a><span class="st">  </span>bldg_join <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-3"><a href="building-energy-1.html#cb84-3"></a><span class="st">  </span><span class="kw">st_set_geometry</span>(<span class="ot">NULL</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-4"><a href="building-energy-1.html#cb84-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(bldg_tot, ZONE) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-5"><a href="building-energy-1.html#cb84-5"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb84-6"><a href="building-energy-1.html#cb84-6"></a>    <span class="dt">bldg_type =</span></span>
+<span id="cb84-7"><a href="building-energy-1.html#cb84-7"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb84-8"><a href="building-energy-1.html#cb84-8"></a>        ZONE <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;RL&quot;</span>,<span class="st">&quot;R-L&quot;</span>,<span class="st">&quot;RLP&quot;</span>,<span class="st">&quot;(RL)&quot;</span>) <span class="op">~</span><span class="st"> &quot;Single family&quot;</span>,</span>
+<span id="cb84-9"><a href="building-energy-1.html#cb84-9"></a>        ZONE <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;RM&quot;</span>,<span class="st">&quot;(RM)&quot;</span>,<span class="st">&quot;R-M&quot;</span>,<span class="st">&quot;RMP&quot;</span>,<span class="st">&quot;RH&quot;</span>,<span class="st">&quot;RHP&quot;</span>,<span class="st">&quot;(RH)&quot;</span>) <span class="op">~</span><span class="st"> &quot;Low-rise multifamily&quot;</span>,</span>
+<span id="cb84-10"><a href="building-energy-1.html#cb84-10"></a>        ZONE <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CO&quot;</span>,<span class="st">&quot;C-O&quot;</span>) <span class="op">&amp;</span><span class="st"> </span>bldg_tot <span class="op">&lt;</span><span class="st"> </span><span class="dv">17500</span> <span class="op">~</span><span class="st"> &quot;Small office&quot;</span>,</span>
+<span id="cb84-11"><a href="building-energy-1.html#cb84-11"></a>        <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;Other&quot;</span></span>
+<span id="cb84-12"><a href="building-energy-1.html#cb84-12"></a>      ),</span>
+<span id="cb84-13"><a href="building-energy-1.html#cb84-13"></a>    <span class="dt">bldg_type =</span> bldg_type <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Single family&quot;</span>,<span class="st">&quot;Low-rise multifamily&quot;</span>,<span class="st">&quot;Small office&quot;</span>,<span class="st">&quot;Other&quot;</span>))</span>
+<span id="cb84-14"><a href="building-energy-1.html#cb84-14"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-15"><a href="building-energy-1.html#cb84-15"></a><span class="st">  </span><span class="kw">filter</span>(bldg_type <span class="op">!=</span><span class="st"> &quot;Other&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-16"><a href="building-energy-1.html#cb84-16"></a><span class="st">  </span><span class="kw">group_by</span>(bldg_type) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-17"><a href="building-energy-1.html#cb84-17"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
+<span id="cb84-18"><a href="building-energy-1.html#cb84-18"></a>    <span class="dt">Count =</span> <span class="kw">n</span>(),</span>
+<span id="cb84-19"><a href="building-energy-1.html#cb84-19"></a>    <span class="dt">Average_size =</span> <span class="kw">mean</span>(bldg_tot, <span class="dt">na.rm =</span> T)</span>
+<span id="cb84-20"><a href="building-energy-1.html#cb84-20"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-21"><a href="building-energy-1.html#cb84-21"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb84-22"><a href="building-energy-1.html#cb84-22"></a>    <span class="dt">savings =</span> </span>
+<span id="cb84-23"><a href="building-energy-1.html#cb84-23"></a>      <span class="kw">case_when</span>(</span>
+<span id="cb84-24"><a href="building-energy-1.html#cb84-24"></a>        bldg_type <span class="op">==</span><span class="st"> &quot;Single family&quot;</span> <span class="op">~</span><span class="st"> </span>(<span class="dv">445</span><span class="op">*</span><span class="fl">11.7</span> <span class="op">-</span><span class="st"> </span><span class="dv">3680</span><span class="op">*</span><span class="fl">0.1875</span>)<span class="op">*</span><span class="fl">0.000453592</span>,</span>
+<span id="cb84-25"><a href="building-energy-1.html#cb84-25"></a>        bldg_type <span class="op">==</span><span class="st"> &quot;Low-rise multifamily&quot;</span> <span class="op">~</span><span class="st"> </span>(<span class="dv">1378</span><span class="op">*</span><span class="fl">11.7</span> <span class="op">-</span><span class="st"> </span><span class="dv">8919</span><span class="op">*</span><span class="fl">0.1875</span>)<span class="op">*</span><span class="fl">0.000453592</span>,</span>
+<span id="cb84-26"><a href="building-energy-1.html#cb84-26"></a>        bldg_type <span class="op">==</span><span class="st"> &quot;Small office&quot;</span> <span class="op">~</span><span class="st"> </span>(<span class="dv">747</span><span class="op">*</span><span class="fl">11.7</span> <span class="op">-</span><span class="st"> </span><span class="dv">5714</span><span class="op">*</span><span class="fl">0.1875</span>)<span class="op">*</span><span class="fl">0.000453592</span></span>
+<span id="cb84-27"><a href="building-energy-1.html#cb84-27"></a>      )</span>
+<span id="cb84-28"><a href="building-energy-1.html#cb84-28"></a>  )</span>
+<span id="cb84-29"><a href="building-energy-1.html#cb84-29"></a></span>
+<span id="cb84-30"><a href="building-energy-1.html#cb84-30"></a>bldg_electrification_summary_table &lt;-</span>
+<span id="cb84-31"><a href="building-energy-1.html#cb84-31"></a><span class="st">  </span>bldg_electrification_summary <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-32"><a href="building-energy-1.html#cb84-32"></a><span class="st">  </span><span class="kw">transmute</span>(</span>
+<span id="cb84-33"><a href="building-energy-1.html#cb84-33"></a>    <span class="st">`</span><span class="dt">Building Type</span><span class="st">`</span> =<span class="st"> </span>bldg_type,</span>
+<span id="cb84-34"><a href="building-energy-1.html#cb84-34"></a>    <span class="dt">Count =</span> <span class="kw">prettyNum</span>(<span class="kw">round</span>(Count<span class="op">/</span><span class="dv">10</span><span class="op">^</span>(<span class="kw">nchar</span>(Count)<span class="op">-</span><span class="dv">2</span>))<span class="op">*</span><span class="dv">10</span><span class="op">^</span>(<span class="kw">nchar</span>(Count)<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb84-35"><a href="building-energy-1.html#cb84-35"></a>    <span class="st">`</span><span class="dt">Average Sqft</span><span class="st">`</span> =<span class="st"> </span><span class="kw">prettyNum</span>(<span class="kw">round</span>(Average_size,<span class="op">-</span><span class="dv">2</span>),<span class="dt">big.mark=</span><span class="st">&quot;,&quot;</span>),</span>
+<span id="cb84-36"><a href="building-energy-1.html#cb84-36"></a>    <span class="st">`</span><span class="dt">tCO2e Savings</span><span class="st">`</span> =<span class="st"> </span><span class="kw">round</span>(savings,<span class="dv">1</span>)</span>
+<span id="cb84-37"><a href="building-energy-1.html#cb84-37"></a>  )</span>
+<span id="cb84-38"><a href="building-energy-1.html#cb84-38"></a></span>
+<span id="cb84-39"><a href="building-energy-1.html#cb84-39"></a><span class="kw">kable</span>(</span>
+<span id="cb84-40"><a href="building-energy-1.html#cb84-40"></a>  bldg_electrification_summary_table,</span>
+<span id="cb84-41"><a href="building-energy-1.html#cb84-41"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb84-42"><a href="building-energy-1.html#cb84-42"></a>  <span class="dt">caption =</span> <span class="st">&#39;Summary of electrification impacts for different building types in Stockton.&#39;</span></span>
+<span id="cb84-43"><a href="building-energy-1.html#cb84-43"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-44"><a href="building-energy-1.html#cb84-44"></a><span class="st">  </span><span class="kw">kable_styling</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb84-45"><a href="building-energy-1.html#cb84-45"></a><span class="st">  </span><span class="kw">scroll_box</span>(<span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
