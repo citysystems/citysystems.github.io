@@ -2,12 +2,13 @@ City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.li
 
 ## Projects
 
-1. **[East Palo Alto Accessory Dwelling Units](https://citysystems.shinyapps.io/epa_dashboard/)**: Development of site-specific ADU decision tool, policy recommendations, and streamlined permitting processes, in partnership with the City of East Palo Alto, the County of San Mateo, and local community-based organizations like Rebuilding Together Peninsula and EPACANDO.
+1. **East Palo Alto Accessory Dwelling Units**: Development of [site-specific ADU decision tool](https://citysystems.shinyapps.io/epa_dashboard/), [policy impact analyses](epa-adu/planning-analysis), and streamlined permitting processes, in partnership with the City of East Palo Alto, the County of San Mateo, and local community-based organizations like Rebuilding Together Peninsula and EPACANDO.
 2. **[North Bay ADUs](https://napasonomaadu.org/can-i-build)**: Development of site-specific ADU decision tool embedded in larger North Bay ADU website, in partnership with The Napa Valley Community Foundation, the Community Foundation Sonoma County, Baird + Driskell Community Planning, and Association of Bay Area Governments.
 2. **[Stockton Green Economy](stockton-greeneconomy/introduction)**: Analysis of greenhouse gas reduction and job growth strategies for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.
 3. **Complete Communities Framework**: A data-driven method for measuring and improving the "completeness" of communities, or the ability of residents to access amenities they value within a reasonable travel time, using modes they prefer.
 
 ## Features
 
-- August 2019: City Systems was featured as one of 12 case studies in the Meeting of the Minds Behavior Change Article Series. Read the [article](https://meetingoftheminds.org/behavior-change-case-study-city-systems-affordable-housing-31162) or view the whole report: *[Behavior Change Tactics for Urban Challenges](https://meetingoftheminds.org/behavior-change-report)*
-- November 2018: City Systems' Derek Ouyang moderated a panel discussion with City of Stockton Mayor Michael Tubbs and FUSE Fellow Ann Rogan at the Meeting of the Minds Annual Summit. View the [video recording](https://youtu.be/SdZccmzOBEg).
+- August 2019: City Systems was featured as one of 12 case studies in the Meeting of the Minds Behavior Change Article Series. [Read the article](https://meetingoftheminds.org/behavior-change-case-study-city-systems-affordable-housing-31162) or view the whole report: *[Behavior Change Tactics for Urban Challenges](https://meetingoftheminds.org/behavior-change-report)*
+- November 2018: Derek Ouyang moderated a panel discussion with City of Stockton Mayor Michael Tubbs and FUSE Fellow Ann Rogan at the Meeting of the Minds Annual Summit. [View the video recording](https://youtu.be/SdZccmzOBEg).
+- May 2018: Derek Ouyang was a guest on the U.S. Green Building Council's "Built for Health" podcast discussing "Public Spaces and Urban Design". [Read the article](https://www.usgbc.org/articles/built-health-talks-about-public-spaces-and-urban-design) or [listen to the episode](https://soundcloud.com/usgbc/built-for-health-public-spaces-and-urban-design).
