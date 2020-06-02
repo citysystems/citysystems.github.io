@@ -1343,80 +1343,80 @@ Count
 <p><span class="math inline">\(~\)</span></p>
 <p>These numbers further suggest that there is more than enough space in residential backyards to support all the expected population growth in Stockton over the next 20 years.</p>
 <p>Considering transportation footprint, Stockton could focus its outreach and incentives to the ADU-viable properties that are also extremely accessible to transit, so that the future ADU tenants are less likely to be car-dependent (this could be further ensured by restricting on-street parking and/or providing transit passes). For our demonstration, we defined this subset of the 64,000+ parcels as being within 15 minutes of walking + bus transit (with at least 20-minute frequency during commute hours) from Stockton’s downtown bus station, which provides transfers to many other destinations around town as well a commuter bus to the Bay Area. Even with this heavy constraint, we found over 2,600 eligible parcels, as shown below.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="building-utilization-1.html#cb79-1"></a>rtd_gtfs &lt;-<span class="st"> </span><span class="kw">read_gtfs</span>(<span class="st">&quot;http://sjrtd.com/RTD-GTFS/RTD-GTFS.zip&quot;</span>)</span>
-<span id="cb79-2"><a href="building-utilization-1.html#cb79-2"></a>rtd_stops &lt;-<span class="st"> </span></span>
-<span id="cb79-3"><a href="building-utilization-1.html#cb79-3"></a><span class="st">  </span><span class="kw">st_as_sf</span>(rtd_gtfs<span class="op">$</span>stops,<span class="dt">coords=</span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-4"><a href="building-utilization-1.html#cb79-4"></a><span class="st">  </span><span class="kw">st_set_crs</span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-5"><a href="building-utilization-1.html#cb79-5"></a><span class="st">  </span><span class="kw">st_transform</span>(projection)</span>
-<span id="cb79-6"><a href="building-utilization-1.html#cb79-6"></a></span>
-<span id="cb79-7"><a href="building-utilization-1.html#cb79-7"></a>rtd_stops_downtownstation &lt;-</span>
-<span id="cb79-8"><a href="building-utilization-1.html#cb79-8"></a><span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;7258&quot;</span>,<span class="st">&quot;7017&quot;</span>,<span class="st">&quot;7155&quot;</span>,<span class="st">&quot;7003&quot;</span>,<span class="st">&quot;7006&quot;</span>,<span class="st">&quot;7025&quot;</span>)</span>
-<span id="cb79-9"><a href="building-utilization-1.html#cb79-9"></a></span>
-<span id="cb79-10"><a href="building-utilization-1.html#cb79-10"></a>rtd_stops_amtrak &lt;-</span>
-<span id="cb79-11"><a href="building-utilization-1.html#cb79-11"></a><span class="st">  </span><span class="kw">c</span>(<span class="st">&quot;7029&quot;</span>,<span class="st">&quot;7032&quot;</span>)</span>
-<span id="cb79-12"><a href="building-utilization-1.html#cb79-12"></a></span>
-<span id="cb79-13"><a href="building-utilization-1.html#cb79-13"></a>start_hour &lt;-<span class="st"> </span><span class="dv">16</span></span>
-<span id="cb79-14"><a href="building-utilization-1.html#cb79-14"></a>end_hour &lt;-<span class="st"> </span><span class="dv">20</span></span>
-<span id="cb79-15"><a href="building-utilization-1.html#cb79-15"></a>max_time_minutes &lt;-<span class="st"> </span><span class="dv">15</span></span>
-<span id="cb79-16"><a href="building-utilization-1.html#cb79-16"></a></span>
-<span id="cb79-17"><a href="building-utilization-1.html#cb79-17"></a>stop_times &lt;-<span class="st"> </span><span class="kw">filter_stop_times</span>(rtd_gtfs, <span class="st">&quot;2020-03-30&quot;</span>, start_hour<span class="op">*</span><span class="dv">3600</span>, end_hour<span class="op">*</span><span class="dv">3600</span>)</span>
-<span id="cb79-18"><a href="building-utilization-1.html#cb79-18"></a></span>
-<span id="cb79-19"><a href="building-utilization-1.html#cb79-19"></a>stop_frequency &lt;-</span>
-<span id="cb79-20"><a href="building-utilization-1.html#cb79-20"></a><span class="st">  </span><span class="kw">get_stop_frequency</span>(</span>
-<span id="cb79-21"><a href="building-utilization-1.html#cb79-21"></a>    rtd_gtfs,</span>
-<span id="cb79-22"><a href="building-utilization-1.html#cb79-22"></a>    start_hour,</span>
-<span id="cb79-23"><a href="building-utilization-1.html#cb79-23"></a>    end_hour</span>
-<span id="cb79-24"><a href="building-utilization-1.html#cb79-24"></a>  )</span>
-<span id="cb79-25"><a href="building-utilization-1.html#cb79-25"></a></span>
-<span id="cb79-26"><a href="building-utilization-1.html#cb79-26"></a>rptr &lt;-<span class="st"> </span></span>
-<span id="cb79-27"><a href="building-utilization-1.html#cb79-27"></a><span class="st">  </span><span class="kw">raptor</span>(</span>
-<span id="cb79-28"><a href="building-utilization-1.html#cb79-28"></a>    stop_times, </span>
-<span id="cb79-29"><a href="building-utilization-1.html#cb79-29"></a>    rtd_gtfs<span class="op">$</span>transfers, </span>
-<span id="cb79-30"><a href="building-utilization-1.html#cb79-30"></a>    rtd_stops_downtownstation, </span>
-<span id="cb79-31"><a href="building-utilization-1.html#cb79-31"></a>    <span class="dt">departure_time_range =</span> (end_hour<span class="op">-</span>start_hour)<span class="op">*</span><span class="dv">3600</span>,</span>
-<span id="cb79-32"><a href="building-utilization-1.html#cb79-32"></a>    <span class="dt">keep =</span> <span class="st">&quot;shortest&quot;</span></span>
-<span id="cb79-33"><a href="building-utilization-1.html#cb79-33"></a>  )</span>
-<span id="cb79-34"><a href="building-utilization-1.html#cb79-34"></a></span>
-<span id="cb79-35"><a href="building-utilization-1.html#cb79-35"></a>downtown_accessible_stops &lt;-</span>
-<span id="cb79-36"><a href="building-utilization-1.html#cb79-36"></a><span class="st">  </span>rptr <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-37"><a href="building-utilization-1.html#cb79-37"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb79-38"><a href="building-utilization-1.html#cb79-38"></a>    <span class="dt">travel_time_minutes =</span> (min_arrival_time<span class="op">-</span>journey_departure_time)<span class="op">/</span><span class="dv">60</span>,</span>
-<span id="cb79-39"><a href="building-utilization-1.html#cb79-39"></a>    <span class="dt">walking_time_minutes =</span> max_time_minutes <span class="op">-</span><span class="st"> </span>travel_time_minutes</span>
-<span id="cb79-40"><a href="building-utilization-1.html#cb79-40"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-41"><a href="building-utilization-1.html#cb79-41"></a><span class="st">  </span><span class="kw">filter</span>(travel_time_minutes <span class="op">&lt;=</span><span class="st"> </span>max_time_minutes) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-42"><a href="building-utilization-1.html#cb79-42"></a><span class="st">  </span><span class="kw">left_join</span>(rtd_stops, <span class="dt">by =</span> <span class="st">&quot;stop_id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-43"><a href="building-utilization-1.html#cb79-43"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-44"><a href="building-utilization-1.html#cb79-44"></a><span class="st">  </span><span class="kw">left_join</span>(stop_frequency, <span class="dt">by =</span> <span class="st">&quot;stop_id&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-45"><a href="building-utilization-1.html#cb79-45"></a><span class="st">  </span><span class="kw">filter</span>(departures <span class="op">&gt;=</span><span class="st"> </span>(end_hour<span class="op">-</span>start_hour)<span class="op">*</span><span class="dv">3</span>)</span>
-<span id="cb79-46"><a href="building-utilization-1.html#cb79-46"></a></span>
-<span id="cb79-47"><a href="building-utilization-1.html#cb79-47"></a>downtown_accessible_zone &lt;-</span>
-<span id="cb79-48"><a href="building-utilization-1.html#cb79-48"></a><span class="st">  </span><span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(downtown_accessible_stops) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-49"><a href="building-utilization-1.html#cb79-49"></a><span class="st">  </span><span class="kw">map_dfr</span>(<span class="cf">function</span>(row){</span>
-<span id="cb79-50"><a href="building-utilization-1.html#cb79-50"></a>    downtown_accessible_stops[row,] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-51"><a href="building-utilization-1.html#cb79-51"></a><span class="st">      </span><span class="kw">st_buffer</span>(downtown_accessible_stops<span class="op">$</span>walking_time_minutes[row]<span class="op">/</span><span class="dv">20</span><span class="op">*</span><span class="dv">5280</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># convert minutes to ft assuming 20 minutes per mile walking</span></span>
-<span id="cb79-52"><a href="building-utilization-1.html#cb79-52"></a><span class="st">      </span><span class="kw">as.data.frame</span>()</span>
-<span id="cb79-53"><a href="building-utilization-1.html#cb79-53"></a>  }) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-54"><a href="building-utilization-1.html#cb79-54"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-55"><a href="building-utilization-1.html#cb79-55"></a><span class="st">  </span><span class="kw">st_set_crs</span>(projection)</span>
-<span id="cb79-56"><a href="building-utilization-1.html#cb79-56"></a></span>
-<span id="cb79-57"><a href="building-utilization-1.html#cb79-57"></a>downtown_accessible_adus &lt;-</span>
-<span id="cb79-58"><a href="building-utilization-1.html#cb79-58"></a><span class="st">  </span>clean_buildable_area[<span class="kw">which</span>(clean_buildable_area<span class="op">$</span>APN <span class="op">%in%</span><span class="st"> </span><span class="kw">st_centroid</span>(clean_buildable_area)[downtown_accessible_zone,]<span class="op">$</span>APN),]</span>
-<span id="cb79-59"><a href="building-utilization-1.html#cb79-59"></a></span>
-<span id="cb79-60"><a href="building-utilization-1.html#cb79-60"></a>downtown_accessible_adus_filtered &lt;-</span>
-<span id="cb79-61"><a href="building-utilization-1.html#cb79-61"></a><span class="st">  </span>downtown_accessible_adus <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-62"><a href="building-utilization-1.html#cb79-62"></a><span class="st">  </span><span class="kw">filter</span>(buildable_area <span class="op">&lt;</span><span class="st"> </span><span class="dv">15000</span>)</span>
-<span id="cb79-63"><a href="building-utilization-1.html#cb79-63"></a></span>
-<span id="cb79-64"><a href="building-utilization-1.html#cb79-64"></a>routes &lt;-<span class="st"> </span></span>
-<span id="cb79-65"><a href="building-utilization-1.html#cb79-65"></a><span class="st">  </span><span class="kw">get_route_geometry</span>(</span>
-<span id="cb79-66"><a href="building-utilization-1.html#cb79-66"></a>    rtd_gtfs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gtfs_as_sf</span>(), </span>
-<span id="cb79-67"><a href="building-utilization-1.html#cb79-67"></a>    <span class="dt">route_ids =</span> downtown_accessible_stops<span class="op">$</span>route_id,</span>
-<span id="cb79-68"><a href="building-utilization-1.html#cb79-68"></a>    <span class="dt">service_ids =</span> downtown_accessible_stops<span class="op">$</span>service_id</span>
-<span id="cb79-69"><a href="building-utilization-1.html#cb79-69"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-70"><a href="building-utilization-1.html#cb79-70"></a><span class="st">  </span><span class="kw">st_transform</span>(projection)</span>
-<span id="cb79-71"><a href="building-utilization-1.html#cb79-71"></a></span>
-<span id="cb79-72"><a href="building-utilization-1.html#cb79-72"></a>downtownstation_stops &lt;-<span class="st"> </span></span>
-<span id="cb79-73"><a href="building-utilization-1.html#cb79-73"></a><span class="st">  </span>downtown_accessible_stops <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb79-74"><a href="building-utilization-1.html#cb79-74"></a><span class="st">  </span><span class="kw">filter</span>(stop_id <span class="op">%in%</span><span class="st"> </span>rtd_stops_downtownstation)</span>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="building-utilization-1.html#cb79-1"></a><span class="co"># rtd_gtfs &lt;- read_gtfs(&quot;http://sjrtd.com/RTD-GTFS/RTD-GTFS.zip&quot;)</span></span>
+<span id="cb79-2"><a href="building-utilization-1.html#cb79-2"></a><span class="co"># rtd_stops &lt;- </span></span>
+<span id="cb79-3"><a href="building-utilization-1.html#cb79-3"></a><span class="co">#   st_as_sf(rtd_gtfs$stops,coords=c(6,5)) %&gt;% </span></span>
+<span id="cb79-4"><a href="building-utilization-1.html#cb79-4"></a><span class="co">#   st_set_crs(4326) %&gt;% </span></span>
+<span id="cb79-5"><a href="building-utilization-1.html#cb79-5"></a><span class="co">#   st_transform(projection)</span></span>
+<span id="cb79-6"><a href="building-utilization-1.html#cb79-6"></a><span class="co"># </span></span>
+<span id="cb79-7"><a href="building-utilization-1.html#cb79-7"></a><span class="co"># rtd_stops_downtownstation &lt;-</span></span>
+<span id="cb79-8"><a href="building-utilization-1.html#cb79-8"></a><span class="co">#   c(&quot;7258&quot;,&quot;7017&quot;,&quot;7155&quot;,&quot;7003&quot;,&quot;7006&quot;,&quot;7025&quot;)</span></span>
+<span id="cb79-9"><a href="building-utilization-1.html#cb79-9"></a><span class="co"># </span></span>
+<span id="cb79-10"><a href="building-utilization-1.html#cb79-10"></a><span class="co"># rtd_stops_amtrak &lt;-</span></span>
+<span id="cb79-11"><a href="building-utilization-1.html#cb79-11"></a><span class="co">#   c(&quot;7029&quot;,&quot;7032&quot;)</span></span>
+<span id="cb79-12"><a href="building-utilization-1.html#cb79-12"></a><span class="co"># </span></span>
+<span id="cb79-13"><a href="building-utilization-1.html#cb79-13"></a><span class="co"># start_hour &lt;- 16</span></span>
+<span id="cb79-14"><a href="building-utilization-1.html#cb79-14"></a><span class="co"># end_hour &lt;- 20</span></span>
+<span id="cb79-15"><a href="building-utilization-1.html#cb79-15"></a><span class="co"># max_time_minutes &lt;- 15</span></span>
+<span id="cb79-16"><a href="building-utilization-1.html#cb79-16"></a><span class="co"># </span></span>
+<span id="cb79-17"><a href="building-utilization-1.html#cb79-17"></a><span class="co"># stop_times &lt;- filter_stop_times(rtd_gtfs, &quot;2020-03-30&quot;, start_hour*3600, end_hour*3600)</span></span>
+<span id="cb79-18"><a href="building-utilization-1.html#cb79-18"></a><span class="co"># </span></span>
+<span id="cb79-19"><a href="building-utilization-1.html#cb79-19"></a><span class="co"># stop_frequency &lt;-</span></span>
+<span id="cb79-20"><a href="building-utilization-1.html#cb79-20"></a><span class="co">#   get_stop_frequency(</span></span>
+<span id="cb79-21"><a href="building-utilization-1.html#cb79-21"></a><span class="co">#     rtd_gtfs,</span></span>
+<span id="cb79-22"><a href="building-utilization-1.html#cb79-22"></a><span class="co">#     start_hour,</span></span>
+<span id="cb79-23"><a href="building-utilization-1.html#cb79-23"></a><span class="co">#     end_hour</span></span>
+<span id="cb79-24"><a href="building-utilization-1.html#cb79-24"></a><span class="co">#   )</span></span>
+<span id="cb79-25"><a href="building-utilization-1.html#cb79-25"></a><span class="co"># </span></span>
+<span id="cb79-26"><a href="building-utilization-1.html#cb79-26"></a><span class="co"># rptr &lt;- </span></span>
+<span id="cb79-27"><a href="building-utilization-1.html#cb79-27"></a><span class="co">#   raptor(</span></span>
+<span id="cb79-28"><a href="building-utilization-1.html#cb79-28"></a><span class="co">#     stop_times, </span></span>
+<span id="cb79-29"><a href="building-utilization-1.html#cb79-29"></a><span class="co">#     rtd_gtfs$transfers, </span></span>
+<span id="cb79-30"><a href="building-utilization-1.html#cb79-30"></a><span class="co">#     rtd_stops_downtownstation, </span></span>
+<span id="cb79-31"><a href="building-utilization-1.html#cb79-31"></a><span class="co">#     departure_time_range = (end_hour-start_hour)*3600,</span></span>
+<span id="cb79-32"><a href="building-utilization-1.html#cb79-32"></a><span class="co">#     keep = &quot;shortest&quot;</span></span>
+<span id="cb79-33"><a href="building-utilization-1.html#cb79-33"></a><span class="co">#   )</span></span>
+<span id="cb79-34"><a href="building-utilization-1.html#cb79-34"></a><span class="co"># </span></span>
+<span id="cb79-35"><a href="building-utilization-1.html#cb79-35"></a><span class="co"># downtown_accessible_stops &lt;-</span></span>
+<span id="cb79-36"><a href="building-utilization-1.html#cb79-36"></a><span class="co">#   rptr %&gt;% </span></span>
+<span id="cb79-37"><a href="building-utilization-1.html#cb79-37"></a><span class="co">#   mutate(</span></span>
+<span id="cb79-38"><a href="building-utilization-1.html#cb79-38"></a><span class="co">#     travel_time_minutes = (min_arrival_time-journey_departure_time)/60,</span></span>
+<span id="cb79-39"><a href="building-utilization-1.html#cb79-39"></a><span class="co">#     walking_time_minutes = max_time_minutes - travel_time_minutes</span></span>
+<span id="cb79-40"><a href="building-utilization-1.html#cb79-40"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb79-41"><a href="building-utilization-1.html#cb79-41"></a><span class="co">#   filter(travel_time_minutes &lt;= max_time_minutes) %&gt;% </span></span>
+<span id="cb79-42"><a href="building-utilization-1.html#cb79-42"></a><span class="co">#   left_join(rtd_stops, by = &quot;stop_id&quot;) %&gt;% </span></span>
+<span id="cb79-43"><a href="building-utilization-1.html#cb79-43"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb79-44"><a href="building-utilization-1.html#cb79-44"></a><span class="co">#   left_join(stop_frequency, by = &quot;stop_id&quot;) %&gt;% </span></span>
+<span id="cb79-45"><a href="building-utilization-1.html#cb79-45"></a><span class="co">#   filter(departures &gt;= (end_hour-start_hour)*3)</span></span>
+<span id="cb79-46"><a href="building-utilization-1.html#cb79-46"></a><span class="co"># </span></span>
+<span id="cb79-47"><a href="building-utilization-1.html#cb79-47"></a><span class="co"># downtown_accessible_zone &lt;-</span></span>
+<span id="cb79-48"><a href="building-utilization-1.html#cb79-48"></a><span class="co">#   1:nrow(downtown_accessible_stops) %&gt;% </span></span>
+<span id="cb79-49"><a href="building-utilization-1.html#cb79-49"></a><span class="co">#   map_dfr(function(row){</span></span>
+<span id="cb79-50"><a href="building-utilization-1.html#cb79-50"></a><span class="co">#     downtown_accessible_stops[row,] %&gt;% </span></span>
+<span id="cb79-51"><a href="building-utilization-1.html#cb79-51"></a><span class="co">#       st_buffer(downtown_accessible_stops$walking_time_minutes[row]/20*5280) %&gt;% # convert minutes to ft assuming 20 minutes per mile walking</span></span>
+<span id="cb79-52"><a href="building-utilization-1.html#cb79-52"></a><span class="co">#       as.data.frame()</span></span>
+<span id="cb79-53"><a href="building-utilization-1.html#cb79-53"></a><span class="co">#   }) %&gt;% </span></span>
+<span id="cb79-54"><a href="building-utilization-1.html#cb79-54"></a><span class="co">#   st_as_sf() %&gt;% </span></span>
+<span id="cb79-55"><a href="building-utilization-1.html#cb79-55"></a><span class="co">#   st_set_crs(projection)</span></span>
+<span id="cb79-56"><a href="building-utilization-1.html#cb79-56"></a><span class="co"># </span></span>
+<span id="cb79-57"><a href="building-utilization-1.html#cb79-57"></a><span class="co"># downtown_accessible_adus &lt;-</span></span>
+<span id="cb79-58"><a href="building-utilization-1.html#cb79-58"></a><span class="co">#   clean_buildable_area[which(clean_buildable_area$APN %in% st_centroid(clean_buildable_area)[downtown_accessible_zone,]$APN),]</span></span>
+<span id="cb79-59"><a href="building-utilization-1.html#cb79-59"></a><span class="co"># </span></span>
+<span id="cb79-60"><a href="building-utilization-1.html#cb79-60"></a><span class="co"># downtown_accessible_adus_filtered &lt;-</span></span>
+<span id="cb79-61"><a href="building-utilization-1.html#cb79-61"></a><span class="co">#   downtown_accessible_adus %&gt;% </span></span>
+<span id="cb79-62"><a href="building-utilization-1.html#cb79-62"></a><span class="co">#   filter(buildable_area &lt; 15000)</span></span>
+<span id="cb79-63"><a href="building-utilization-1.html#cb79-63"></a><span class="co"># </span></span>
+<span id="cb79-64"><a href="building-utilization-1.html#cb79-64"></a><span class="co"># routes &lt;- </span></span>
+<span id="cb79-65"><a href="building-utilization-1.html#cb79-65"></a><span class="co">#   get_route_geometry(</span></span>
+<span id="cb79-66"><a href="building-utilization-1.html#cb79-66"></a><span class="co">#     rtd_gtfs %&gt;% gtfs_as_sf(), </span></span>
+<span id="cb79-67"><a href="building-utilization-1.html#cb79-67"></a><span class="co">#     route_ids = downtown_accessible_stops$route_id,</span></span>
+<span id="cb79-68"><a href="building-utilization-1.html#cb79-68"></a><span class="co">#     service_ids = downtown_accessible_stops$service_id</span></span>
+<span id="cb79-69"><a href="building-utilization-1.html#cb79-69"></a><span class="co">#   ) %&gt;% </span></span>
+<span id="cb79-70"><a href="building-utilization-1.html#cb79-70"></a><span class="co">#   st_transform(projection)</span></span>
+<span id="cb79-71"><a href="building-utilization-1.html#cb79-71"></a><span class="co"># </span></span>
+<span id="cb79-72"><a href="building-utilization-1.html#cb79-72"></a><span class="co"># downtownstation_stops &lt;- </span></span>
+<span id="cb79-73"><a href="building-utilization-1.html#cb79-73"></a><span class="co">#   downtown_accessible_stops %&gt;% </span></span>
+<span id="cb79-74"><a href="building-utilization-1.html#cb79-74"></a><span class="co">#   filter(stop_id %in% rtd_stops_downtownstation)</span></span>
 <span id="cb79-75"><a href="building-utilization-1.html#cb79-75"></a></span>
 <span id="cb79-76"><a href="building-utilization-1.html#cb79-76"></a><span class="co"># map &lt;- mapview(downtown_accessible_stops$geometry, layer.name= &quot;Bus Stops&quot;)+</span></span>
 <span id="cb79-77"><a href="building-utilization-1.html#cb79-77"></a><span class="co">#   mapview(downtownstation_stops$geometry, cex = 10, col.regions = &quot;red&quot;, layer.name = &quot;Downtown Bus Station&quot;) +</span></span>
