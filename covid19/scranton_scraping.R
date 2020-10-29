@@ -5,7 +5,8 @@ library(esri2sf)
 
 data <- esri2sf("https://services1.arcgis.com/Nifc7wlHaBPig3Q3/ArcGIS/rest/services/ZIP_Code_PA_COVID/FeatureServer/0")
 
-write_csv(data, paste0("covid19/pa-zip-", Sys.Date(), ".csv"))
+write.csv(data, paste0("covid19/pa-zip-", Sys.Date(), ".csv"))
 
 scrape_time_df <- data.frame(scrape_last_time_ran = Sys.time())
-write_csv(scrape_time_df, "covid19/scranton_scrape_last_time_ran.csv")
+
+write.csv(scrape_time_df, "covid19/scranton_scrape_last_time_ran.csv")
