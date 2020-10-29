@@ -5,7 +5,7 @@ name: Scranton Scraping
 # Controls when the action will run. Triggers the workflow at a specific time, here 4am PST/11am UTC (aiming to run at a time when no other changes are being pushed)
 on:
   schedule:
-    - cron: '40 4 * * *'
+    - cron: '04 5 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,6 +29,7 @@ jobs:
     - name: Install R packages
       run: |
         sudo apt-get install -y libcurl4-openssl-dev
+        sudo apt-get install -y libudunits2-dev
         R -e 'install.packages("remotes")'
         R -e 'remotes::install_github("yonghah/esri2sf")'
 
