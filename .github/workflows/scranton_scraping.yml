@@ -2,7 +2,7 @@
 
 name: Scranton Scraping
 
-# Controls when the action will run. Triggers the workflow at a specific time, here 4am PST/11am UTC (aiming to run at a time when no other changes are being pushed)
+# Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
   schedule:
     - cron: '0 23 * * *'
