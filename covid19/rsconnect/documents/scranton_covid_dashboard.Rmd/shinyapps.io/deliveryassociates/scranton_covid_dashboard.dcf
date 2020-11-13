@@ -1,0 +1,12 @@
+name: scranton_covid_dashboard
+title: scranton_covid_dashboard
+username:
+account: deliveryassociates
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3224455
+bundleId: 3855372
+url: https://deliveryassociates.shinyapps.io/scranton_covid_dashboard/
+when: 1605249214.83942
+asMultiple: FALSE
+asStatic: FALSE

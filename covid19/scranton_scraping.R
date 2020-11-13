@@ -31,8 +31,7 @@ prior_dates <- data.frame(
   ZIP_18508 = c(207, 211, 212, 213, 218),
   ZIP_18509 = c(167, 169, 172, 172, 174),
   ZIP_18510 = c(908, 914, 942, 953, 960)
-) %>% 
-  mutate(date = date %>% as.Date())
+)
 
 zips <- c(18503,18504,18505,18508,18509,18510)
 
@@ -69,7 +68,8 @@ scranton_summary <-
   mutate(
     Positive_New = c(NA,diff(Positive)),
     Negative_New = c(NA,diff(Negative)),
-    Probable_New = c(NA,diff(Probable))
+    Probable_New = c(NA,diff(Probable)),
+    date = date %>% as.character()
   )
 
 write_csv(scranton_summary,"covid19/scranton_summary.csv")

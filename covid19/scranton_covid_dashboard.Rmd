@@ -1,0 +1,172 @@
+---
+title: "Scranton COVID-19 Dashboard"
+runtime: shiny
+output: flexdashboard::flex_dashboard
+---
+
+<style>
+.datatables{
+    overflow: auto;
+}
+</style>
+
+```{r global, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(leaflet)
+library(plotly)
+library(sf)
+library(DT)
+library(colorRamps)
+library(mapboxapi)
+
+# library(tigris)
+# 
+# scranton_zips <-
+#   zctas(cb = F) %>%
+#   filter(GEOID10 %in% c(18503,18504,18505,18508,18509,18510)) %>%
+#   transmute(ZIP_CODE = GEOID10 %>% as.numeric()) %>%
+#   st_transform(4326)
+# 
+# saveRDS(scranton_zips,"scranton_zips.rds")
+# 
+# scranton_boundary <- places("PA", cb = F) %>%
+#   filter(NAME == "Scranton") %>%
+#   select(NAME) %>%
+#   st_transform(4326)
+# 
+# saveRDS(scranton_boundary, "scranton_boundary.rds")
+
+scranton_zips <- readRDS("scranton_zips.rds")
+
+scranton_boundary <- readRDS("scranton_boundary.rds")
+
+data <- 
+  read_csv("https://raw.githubusercontent.com/citysystems/citysystems.github.io/master/covid19/zip_data.csv") %>% 
+  left_join(scranton_zips) %>% 
+  st_as_sf() %>% 
+  mutate(Cases = Positive + Probable)
+
+summary <- data %>% 
+  st_set_geometry(NULL) %>% 
+  select(-Positive,-Negative,-Probable) %>% 
+  pivot_wider(
+    names_from = ZIP_CODE,
+    values_from = Cases
+  ) %>% 
+  arrange(desc(date)) %>% 
+  rename(Date = date)
+
+dates <- unique(data$date) %>% as.character()
+
+pal <- colorNumeric(
+  palette = "Blues",
+  domain = data$Cases
+)
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Daily Cumulative Positive or Probable Cases by Zip Code
+
+```{r}
+dataTableOutput("table")
+```
+
+```{r}
+output$table <- renderDataTable(
+  
+  summary,
+  options = list(
+    pageLength = 20,
+    dom = 'tp'
+  ),
+  rownames = F,
+  selection = list(
+    mode = 'single',
+    selected = 1
+  )
+  
+)
+```
+
+Column
+-----------------------------------------------------------------------
+
+### {.no-padding}
+
+```{r}
+leafletOutput("map")
+```
+
+```{r, context="server"}
+output$map <- renderLeaflet({
+  map <- 
+    leaflet() %>% 
+    addMapboxTiles(
+      style_id = "streets-v11",
+      username = "mapbox",
+      access_token = "pk.eyJ1IjoiZGVyZWtvdXlhbmciLCJhIjoiY2s5Yno5bXByMDM1djNlcDhsMTFqM3VjcyJ9.bcf4iQucxDFqq-0a9bwmsQ",
+      group = "Default Basemap"
+    ) %>% 
+    addMapPane("city", 420) %>% 
+    addPolygons(
+      data = scranton_boundary,
+      fill = F,
+      color = "black",
+      weight = 2,
+      options = 
+        pathOptions(
+          pane = "city"
+        )
+    ) %>% 
+    addLegend(
+      data = data,
+      pal = pal,
+      values = ~Cases,
+      title = "Cumulative<br>Positive or<br>Probable Cases"
+    )
+  
+  for(x in dates){
+    map <- 
+      map %>% 
+      addPolygons(
+        data = data %>% 
+          filter(date == x),
+        fillColor = ~pal(Cases),
+        color = "white",
+        weight = 0.5,
+        opacity = 0.5,
+        fillOpacity = 0.7,
+        highlightOptions = 
+          highlightOptions(
+            weight = 2.25,
+            opacity = 1
+          ),
+        group = x,
+        label = ~paste0(ZIP_CODE,": ", Cases," cases, ",date)
+      )
+  }
+  
+  map
+  
+})
+```
+
+```{r, context="server"}
+observeEvent(input$table_rows_selected,{
+  
+  leafletProxy('map') %>% 
+    hideGroup(dates)
+  
+  row <- input$table_rows_selected
+  
+  if(length(row)){
+    
+    leafletProxy('map') %>% 
+      showGroup(summary$Date[row])
+    
+  }
+}, ignoreNULL = F)
+```
