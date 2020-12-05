@@ -1,8 +1,7 @@
 # for use in Github Actions workflow
 
 library(tidyverse)
-library(esri2sf)
-library(sf)
+library(jsonlite)
 
 data <- fromJSON("https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/arcgis/rest/services/Florida_Cases_Zips_COVID19/FeatureServer/0/query?where=1%3D1&outFields=ZIP,COUNTYNAME,Cases_1&returnGeometry=false&outSR=4326&f=json") %>% 
   .$features %>% 
