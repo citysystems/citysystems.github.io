@@ -21,7 +21,7 @@ write_csv(data, paste0("covid19/pa-zip-", Sys.Date(), ".csv"))
 
 scrape_time_df <- data.frame(scrape_last_time_ran = Sys.time())
 
-write_csv(scrape_time_df, "covid19/scranton_scrape_last_time_ran.csv")
+write_csv(scrape_time_df, "covid19/pa_scrape_last_time_ran.csv")
 
 prior_dates <- data.frame(
   date = c("2020-10-23","2020-10-24","2020-10-25","2020-10-26","2020-10-27"),
