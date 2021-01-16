@@ -14,7 +14,8 @@ data <- esri2sf("https://services1.arcgis.com/Nifc7wlHaBPig3Q3/ArcGIS/rest/servi
     Probable
   ) %>% 
   mutate(
-    date = Sys.Date()
+    # date = Sys.Date()
+    date = "2020-01-14"
   )
 
 write_csv(data, paste0("covid19/pa-zip-", Sys.Date(), ".csv"))
@@ -40,19 +41,23 @@ zip_data <-
   as.Date(origin = "1970-01-01") %>% 
   map_dfr(function(x){
     
-    temp <- 
-      read_csv(paste0("covid19/pa-zip-", x, ".csv")) %>% 
-      filter(ZIP_CODE %in% zips) %>% 
-      mutate(across(
-        c("Positive","Negative","Probable"),
-        function(x){
-          ifelse(
-            x == -1,
-            0,
-            x
-          )
-        }
-      ))
+    tryCatch(
+      temp <- 
+        read_csv(paste0("covid19/pa-zip-", x, ".csv")) %>% 
+        filter(ZIP_CODE %in% zips) %>% 
+        mutate(across(
+          c("Positive","Negative","Probable"),
+          function(x){
+            ifelse(
+              x == -1,
+              0,
+              x
+            )
+          }
+        )),
+      error = function(e) NULL
+    )
+      
     
   })
 
