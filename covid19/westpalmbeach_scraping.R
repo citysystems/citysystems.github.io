@@ -78,8 +78,12 @@ county_data <-
   as.Date(origin = "1970-01-01") %>% 
   map_dfr(function(x){
     
-    temp <- 
-      read_csv(paste0("covid19/pbc-county-", x, ".csv"))
+    tryCatch(
+      temp <- 
+        read_csv(paste0("covid19/pbc-county-", x, ".csv")),
+      error = function(e) NULL
+      
+    )
     
   })
 
