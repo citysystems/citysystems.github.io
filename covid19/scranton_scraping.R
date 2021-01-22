@@ -14,8 +14,8 @@ data <- esri2sf("https://services1.arcgis.com/Nifc7wlHaBPig3Q3/ArcGIS/rest/servi
     Probable
   ) %>% 
   mutate(
-    # date = Sys.Date()
-    date = "2020-01-14"
+    date = Sys.Date()
+    # date = "2020-01-14"
   )
 
 write_csv(data, paste0("covid19/pa-zip-", Sys.Date(), ".csv"))
