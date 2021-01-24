@@ -1,18 +1,12 @@
 # this file includes code for scraping data from https://www.health.pa.gov/topics/disease/coronavirus/Pages/Cases.aspx
 # for use in Github Actions workflow
 
-library(esri2sf)
 library(tidyverse)
-library(sf)
+library(jsonlite)
 
-data <- esri2sf("https://services1.arcgis.com/Nifc7wlHaBPig3Q3/ArcGIS/rest/services/ZIP_Code_PA_COVID/FeatureServer/0") %>% 
-  st_set_geometry(NULL) %>% 
-  select(
-    ZIP_CODE,
-    Positive,
-    Negative,
-    Probable
-  ) %>% 
+data <- fromJSON("https://services1.arcgis.com/Nifc7wlHaBPig3Q3/ArcGIS/rest/services/ZIP_Code_PA_COVID/FeatureServer/0/query?where=1%3D1&outFields=ZIP_CODE,Positive,Negative,Probable&f=json") %>% 
+  .$features %>% 
+  .$attributes %>% 
   mutate(
     date = Sys.Date()
     # date = "2020-01-14"
@@ -34,7 +28,7 @@ write_csv(scrape_time_df, "covid19/pa_scrape_last_time_ran.csv")
 #   ZIP_18510 = c(908, 914, 942, 953, 960)
 # )
 # 
-# zips <- c(18503,18504,18505,18508,18509,18510)
+zips <- c(18503,18504,18505,18508,18509,18510)
 
 zip_data <- 
   ("2020-10-28" %>% as.Date()):Sys.Date() %>% 
