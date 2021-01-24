@@ -29,11 +29,9 @@ jobs:
     # Set up R. Note the first line was needed to make sure the curl package worked
     - name: Install R packages
       run: |
-        sudo apt-get install -y libcurl4-openssl-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev
-        R -e 'install.packages("remotes")'
-        R -e 'remotes::install_github("yonghah/esri2sf")'
+        sudo apt-get install -y libcurl4-openssl-dev libudunits2-dev
         R -e 'install.packages("tidyverse")'
-        R -e 'install.packages("sf")'
+        R -e 'install.packages("jsonlite")'
 
     # Run R script to scrape data
     - name: Scrape data
