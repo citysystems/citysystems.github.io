@@ -4,9 +4,9 @@ name: West Palm Beach Scraping
 
 # Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
-  workflow_dispatch:
-#  schedule:
-#    - cron: '0 23 * * *'
+#  workflow_dispatch:
+  schedule:
+    - cron: '0 23 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
