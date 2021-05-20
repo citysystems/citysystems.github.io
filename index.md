@@ -4,7 +4,7 @@ City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.li
 
 <img src="https://raw.githubusercontent.com/citysystems/citysystems.github.io/master/images/aduo_logo_text.png" alt="Aduo" width="400"/>
 
-Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay Area, made possible by Philanthropic Ventures Foundation and the Facebook Innovation Fund. Learn more at [aduo.org](https://www.aduo.org)
+Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay Area, made possible by the Philanthropic Ventures Foundation and the Facebook Innovation Fund. Learn more at [aduo.org](https://www.aduo.org)
 
 ## Other Projects
 
