@@ -1,6 +1,10 @@
-City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.linkedin.com/in/derekouyang/) and [Rob Best](https://www.linkedin.com/in/robbest13/) in 2017, currently focused on a handful of data-driven projects in partnership with cities, counties, and community-based organizations in Northern California. If you are looking for more information or have a project in mind, contact Derek at derekouyang@gmail.com.
+City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.linkedin.com/in/derekouyang/) and [Rob Best](https://www.linkedin.com/in/robbest13/) in 2017, currently focused on a handful of data-driven projects in partnership with government and community-based organizations in Northern California. If you are looking for more information or have a project in mind, contact Derek at derekouyang@city.systems.
 
-## Projects
+## Featured Project: Aduo
+
+Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay Area, made possible by Philanthropic Ventures Foundation and the Facebook Innovation Fund. Learn more at [aduo.org](https://www.aduo.org)
+
+## Other Projects
 
 1. **East Palo Alto Accessory Dwelling Units**: Development of [site-specific ADU decision tool](https://www.epa-adu.org/adu-tool), Second Unit Task Force [recommendations report](https://docs.google.com/document/d/1OpQPVjHTQpIAJmzFVhZnOsLI02dSCMPYVR3-S1Xgpag/edit#heading=h.l7xthtqawfil), [policy impact analyses](epa-adu/planning-analysis), and streamlined permitting processes, in partnership with the City of East Palo Alto, the County of San Mateo, and local community-based organizations like Rebuilding Together Peninsula and EPACANDO.
 2. **[North Bay ADUs](https://napasonomaadu.org/can-i-build)**: Development of site-specific ADU decision tool embedded in larger North Bay ADU website, in partnership with The Napa Valley Community Foundation, the Community Foundation Sonoma County, Baird + Driskell Community Planning, and Association of Bay Area Governments.
