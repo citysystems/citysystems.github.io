@@ -9,7 +9,7 @@ Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay
 ## Other Projects
 
 1. **Accessory Dwelling Units**: In East Palo Alto, we've partnered with the City and other community-based organizations in the development of a [site-specific ADU decision tool](https://www.epa-adu.org/adu-tool), a Second Unit Task Force [recommendations report](https://docs.google.com/document/d/1OpQPVjHTQpIAJmzFVhZnOsLI02dSCMPYVR3-S1Xgpag/edit#heading=h.l7xthtqawfil), [policy impact analyses](epa-adu/planning-analysis), and streamlined permitting processes. In Napa and Sonoma Counties, we've developed a similar [address lookup tool](https://napasonomaadu.org/can-i-build) embedded in a larger North Bay ADU website, in partnership with The Napa Valley Community Foundation, the Community Foundation of Sonoma County, Baird + Driskell Community Planning, and the Association of Bay Area Governments.
-2. **Stockton Green Economy**: We've analyzed [greenhouse gas reduction and job growth strategies](stockton-greeneconomy/introduction) for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.
+2. **Green Economy**: We've analyzed [greenhouse gas reduction and job growth strategies](stockton-greeneconomy/introduction) for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.
 3. **Complete Communities Framework**: We're working on an open-source, data-driven method for measuring and improving the "completeness" of communities, or the ability of residents to access amenities they value within a reasonable travel time (e.g., 15 minutes), using modes they prefer.
 
 ## News
