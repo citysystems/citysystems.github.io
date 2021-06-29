@@ -172,7 +172,7 @@ save(
   data_papers,
   data_people,
   data_undergraduate,
-  file = "kingcenter_cleaned_data.rda"
+  file = "kingcenter/kingcenter_cleaned_data.rda"
 )
 
 #saveRDS(all_cleaned,"kingcenter_cleaned_data.rds")
