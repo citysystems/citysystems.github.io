@@ -162,18 +162,20 @@ all_cleaned <-
 
 # data <- all_cleaned
 
-save(
-  all_cleaned,
-  data_news,
-  data_events,
-  data_faculty,
-  data_graduate,
-  data_initiatives,
-  data_papers,
-  data_people,
-  data_undergraduate,
-  file = "kingcenter/kingcenter_cleaned_data.rda"
-)
+# save(
+#   all_cleaned,
+#   data_news,
+#   data_events,
+#   data_faculty,
+#   data_graduate,
+#   data_initiatives,
+#   data_papers,
+#   data_people,
+#   data_undergraduate,
+#   file = "kingcenter/kingcenter_cleaned_data.rda"
+# )
+
+write_csv(all_cleaned,"kingcenter/kingcenter_cleaned_data.csv")
 
 #saveRDS(all_cleaned,"kingcenter_cleaned_data.rds")
 
