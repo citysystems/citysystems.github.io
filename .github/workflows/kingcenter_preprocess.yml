@@ -35,7 +35,7 @@ jobs:
 
     # Run R script to scrape data
     - name: Scrape data
-      run: R -e 'source("covid19/scranton_scraping.R", echo = TRUE)'
+      run: R -e 'source("kingcenter/kingcenter_preprocess.R", echo = TRUE)'
 
     # Add new files in correct folder
     - name: Commit files
