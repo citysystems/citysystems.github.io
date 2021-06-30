@@ -43,7 +43,9 @@ jobs:
         git config --local user.name github-actions
         git config --local user.email "actions@github.com"
         git add kingcenter/*
+        git commit --allow-empty
         git commit -am "Updating data"
+        
 
     # Push changes
     - name: Push changes
