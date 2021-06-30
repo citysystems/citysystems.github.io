@@ -40,11 +40,10 @@ jobs:
     # Add new files in correct folder
     - name: Commit files
       run: |
-        git commit --allow-empty
         git config --local user.name github-actions
         git config --local user.email "actions@github.com"
         git add kingcenter/*
-        git commit -am "Updating data"
+        git commit --allow-empty -am "Updating data"
         
 
     # Push changes
