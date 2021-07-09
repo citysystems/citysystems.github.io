@@ -8,7 +8,7 @@ Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay
 
 ## Other Projects
 
-<a href='https://citysystems.shinyapps.io/portfolio/'><button>Web Tool Portfolio</button></a>
+<a href='https://citysystems.shinyapps.io/portfolio/' target="_blank"><button>Web Tool Portfolio</button></a>
 
 - **Project Mapper** (*2021*): We are developing a universal toolkit for community organizations to create interactive map dashboards that feature location-based projects or assets. The toolkit allows for the dashboard content to be managed via a Google Sheet. We will publish the toolkit manual later in 2021.
 - **San Mateo County ADU Outreach Tool** (*2021*): We developed a [prioritization tool](https://citysystems.shinyapps.io/smc_adu_outreach/) for San Mateo County’s Office of Sustainability to target their ADU outreach via social media ads. Read explanatory [article](https://medium.com/aduo-blog/under-the-hood-using-data-to-target-adu-outreach-in-san-mateo-county-4945fa2dc28e).
