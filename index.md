@@ -1,3 +1,22 @@
+<style type="text/css">
+#portfolio {
+ background-color: #5e8bcf;
+ padding: .5em;
+ -moz-border-radius: 5px;
+ -webkit-border-radius: 5px;
+ border-radius: 6px;
+ color: #fff;
+ font-size: 16px;
+ text-decoration: none;
+ border: none;
+}
+#portfolio:hover {
+ border: none;
+ background: #e9c555;
+ box-shadow: 0px 0px 1px #777;
+}
+</style>
+
 City Systems is a nonprofit consultancy founded by [Derek Ouyang](https://www.linkedin.com/in/derekouyang/) and [Rob Best](https://www.linkedin.com/in/robbest13/) in 2017, currently focused on a handful of data-driven projects in partnership with government and community-based organizations in Northern California. If you are looking for more information or have a project in mind, contact Derek at derekouyang@city.systems.
 
 ## Featured Project
@@ -8,9 +27,19 @@ Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay
 
 ## Other Projects
 
-1. **Accessory Dwelling Units**: In East Palo Alto, we've partnered with the City and other community-based organizations in the development of a [site-specific ADU decision tool](https://www.epa-adu.org/adu-tool), a Second Unit Task Force [recommendations report](https://docs.google.com/document/d/1OpQPVjHTQpIAJmzFVhZnOsLI02dSCMPYVR3-S1Xgpag/edit#heading=h.l7xthtqawfil), [policy impact analyses](epa-adu/planning-analysis), and streamlined permitting processes. In Napa and Sonoma Counties, we've developed a similar [address lookup tool](https://napasonomaadu.org/can-i-build) embedded in a larger North Bay ADU website, in partnership with The Napa Valley Community Foundation, the Community Foundation of Sonoma County, Baird + Driskell Community Planning, and the Association of Bay Area Governments.
-2. **Green Economy**: We've analyzed [greenhouse gas reduction and job growth strategies](stockton-greeneconomy/introduction) for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.
-3. **Complete Communities Framework**: We're working on an open-source, data-driven method for measuring and improving the "completeness" of communities, or the ability of residents to access amenities they value within a reasonable travel time (e.g., 15 minutes), using modes they prefer.
+<a href='https://citysystems.shinyapps.io/portfolio/'><button id ="portfolio">Web Tool Portfolio</button></a>
+
+- **Project Mapper** (*2021*): We are developing a universal toolkit for community organizations to create interactive map dashboards that feature location-based projects or assets. The toolkit allows for the dashboard content to be managed via a Google Sheet. We will publish the toolkit manual later in 2021.
+- **San Mateo County ADU Outreach Tool** (*2021*): We developed a [prioritization tool](https://citysystems.shinyapps.io/smc_adu_outreach/) for San Mateo County’s Office of Sustainability to target their ADU outreach via social media ads. Read explanatory [article](https://medium.com/aduo-blog/under-the-hood-using-data-to-target-adu-outreach-in-san-mateo-county-4945fa2dc28e).
+- **COVID-19 Response** (*2021*): In partnership with Delivery Associates and the Bloomberg Harvard City Leadership Initiative, we supported some U.S. cities, including [Stamford, CT](https://www.placekey.io/seminars/how-safegraph-data-is-empowering-cities-in-covid-19-response-and-beyond), in the development of pandemic decision-making tools informed by mobility data from SafeGraph. 
+- **EPA-ADU Initiative** (*2021*): In partnership with other community organizations, we formed a successor initiative to the City’s Second Unit Task Force to advance community-driven ADU solutions, and developed a website which includes an [address look-up tool](https://www.epa-adu.org/adu-tool/#eligibility) and a [permit fee calculator](https://www.epa-adu.org/adu-tool/#fee) (see [guide](https://medium.com/aduo-blog/test-drive-a-web-tool-for-estimating-adu-permit-fees-in-east-palo-alto-1eb044a39a85)).
+- **Napa Sonoma ADU Look-up Tool** (*2020*): We developed an [address look-up tool](https://napasonomaadu.org/can-i-build) for the Napa Sonoma ADU Center’s new website that allows property owners to determine their ADU eligibility in accordance with new state laws. As local zoning ordinances continue to be updated, the Center can easily update the tool using a Google Sheet.
+- **East Palo Alto ADU Policy Impact Analysis** (*2020*): We assisted the City of East Palo Alto with analyzing the impacts of their ADU local ordinance update scenarios on ADU eligibility at the parcel-level. This [technical report](https://city.systems/epa-adu/planning-analysis), coupled with a public workshop and survey, ultimately informed the local ordinance adopted at the end of 2020. 
+- **Stockton Green Economy Analysis** (2019): We analyzed [greenhouse gas reduction and job growth strategies](stockton-greeneconomy/introduction) for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.
+- **East Palo Alto Second Unit Task Force Report** (*2019*): We assisted a community task force in East Palo Alto in the development of a [final report](https://docs.google.com/document/d/1OpQPVjHTQpIAJmzFVhZnOsLI02dSCMPYVR3-S1Xgpag/edit#heading=h.l7xthtqawfil) summarizing three years of their investigations and recommendations for preservation and production of affordable housing. In particular, we spearheaded the design of the systems diagram and strategy framework featured in the report.
+- **East Palo Alto Garage Conversions** (*2019*): We supported Rebuilding Together Peninsula in the legalization of two garages with unpermitted living spaces in East Palo Alto. View the projects [here](https://www.epa-adu.org/garage-to-bedroom) and [here](https://www.epa-adu.org/garage-to-raised-bedroom).
+- **Complete Communities Framework**: We're working on an open-source, data-driven method for measuring and improving the "completeness" of communities, or the ability of residents to access amenities they value within a reasonable travel time (e.g., 15 minutes), using modes they prefer.
+
 
 ## News
 
