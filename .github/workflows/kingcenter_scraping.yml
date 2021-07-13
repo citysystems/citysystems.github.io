@@ -4,9 +4,9 @@ name: King Center Scraping
 
 # Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
-  workflow_dispatch:
-  #schedule:
-  #  - cron: '0 */6 * * *'
+  #workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -66,6 +66,6 @@ jobs:
       # email body as text
         body: King Center Project Mapper update failed. Please check the Google Sheet for errors.
       # comma-separated string, send email to
-        to: juliawagenfehr@gmail.com,juliawagenfehr@city.systems
+        to: juliawagenfehr@gmail.com,derekouyang@gmail.com,cbowyer@stanford.edu
       # from email name
         from: City Systems
