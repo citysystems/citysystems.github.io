@@ -53,6 +53,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Send mail
+      if: failure()
       uses: dawidd6/action-send-mail@v2
       with:
        # mail server settings
