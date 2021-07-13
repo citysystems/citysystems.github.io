@@ -4,9 +4,9 @@ name: King Center Scraping
 
 # Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
-  #workflow_dispatch:
-  schedule:
-    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  #schedule:
+  #  - cron: '0 */6 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -60,8 +60,8 @@ jobs:
         server_address: smtp.gmail.com
         server_port: 465
       # user credentials
-        username: ${{ secrets.EMAIL_USERNAME }}
-        password: ${{ secrets.EMAIL_PASSWORD }}
+        username: info@city.systems
+        password: 2sY^Pr9Tz$Xc
       # email subject
         subject: ${{ github.job }} job of ${{ github.repository }} has ${{ job.status }}
       # email body as text
