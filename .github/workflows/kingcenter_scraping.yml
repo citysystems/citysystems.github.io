@@ -59,8 +59,8 @@ jobs:
        # mail server settings
         server_address: smtp.gmail.com
         server_port: 465
-        username: info@city.systems
-        password: 2sY^Pr9Tz$Xc 
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
       # email subject
         subject: King Center Project Mapper Error
       # email body as text
