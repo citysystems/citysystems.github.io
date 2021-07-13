@@ -58,11 +58,13 @@ jobs:
        # mail server settings
         server_address: smtp.gmail.com
         server_port: 465
+        username: info@city.systems
+        password: 2sY^Pr9Tz$Xc 
       # email subject
         subject: King Center Project Mapper Error
       # email body as text
         body: King Center Project Mapper update failed. Please check the Google Sheet for errors.
       # comma-separated string, send email to
-        to: juliawagenfehr@gmail.com,juliawagenfehr@city.systems,derekouyang@gmail.com
+        to: juliawagenfehr@gmail.com,juliawagenfehr@city.systems
       # from email name
         from: City Systems
