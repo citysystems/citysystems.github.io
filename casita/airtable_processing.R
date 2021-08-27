@@ -1,7 +1,6 @@
 library(airtabler)
 library(tidyverse)
 library(qdapRegex)
-library(RColorBrewer)
 
 basekey_issues = Sys.getenv("AIRTABLE_BASEKEY_ISSUES")
 basekey_projects = Sys.getenv("AIRTABLE_BASEKEY_PROJECTS")
@@ -126,58 +125,6 @@ for(i in 1:nrow(interpretation_table)){
 }
 
 
-####color processing
-
-
-n <- 33
-qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-col_vector = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals))) %>% as.data.frame()
-
-
-keyword_list1 <- unique(c(unique(interp_mod$`Topic 1`),unique(interp_mod$`Topic 2`),unique(interp_mod$`Topic 3`),unique(interp_mod$`Topic 4`),unique(interp_mod$`Topic 5`))) %>% 
-  na.omit() %>% 
-  as.data.frame() %>% 
-  rename(keywords = ".") %>% 
-  filter(keywords != "") 
-
-keyword_list <-
-  keyword_list1 %>% 
-  cbind(head(col_vector,nrow(keyword_list1))) %>% 
-  rename("hex" = ".")
-
-
-interp_mod2 <-
-  interp_mod %>% 
-  left_join(
-    keyword_list %>% 
-      rename(color1 = "hex"),
-    by = c("Topic 1" = "keywords")
-  ) %>% 
-  left_join(
-    keyword_list %>% 
-      rename(color2 = "hex"),
-    by = c("Topic 2" = "keywords")
-  ) %>% 
-  left_join(
-    keyword_list %>% 
-      rename(color3 = "hex"),
-    by = c("Topic 3" = "keywords")
-  ) %>% 
-  left_join(
-    keyword_list %>% 
-      rename(color4 = "hex"),
-    by = c("Topic 4" = "keywords")
-  ) %>% 
-  left_join(
-    keyword_list %>% 
-      rename(color5 = "hex"),
-    by = c("Topic 5" = "keywords")
-  ) 
-
-interp_mod <- 
-  interp_mod2 
-
-###########
 
 for(i in 1:nrow(interp_mod)){
   if(is.null(unlist(interp_mod$`State Law Relatedness`[i]))){
@@ -449,6 +396,6 @@ save(
   interpretation_display_data,
   issue_display_data,
   code_display_data,
-  file = "casita/airtable_data.rda")
+  file = "airtable_data.rda")
 
 
