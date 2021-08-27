@@ -1,5 +1,4 @@
 library(tidyverse)
-library(qdapRegex)
 
 ###
 air_url <- "https://api.airtable.com/v0"
