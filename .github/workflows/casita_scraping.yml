@@ -14,6 +14,8 @@ jobs:
   scrape:
     # The type of runner that the job will run on. Needs to be ubuntu to use the start selenoid server action
     runs-on: ubuntu-latest
+    env:
+      AIRTABLE_API_KEY: keyK0cTBq3xvhmWSr
 
     steps:
     # Checks-out the repository
@@ -33,7 +35,6 @@ jobs:
         R -e 'install.packages("tidyverse")'
         R -e 'install.packages("airtabler")'
         R -e 'install.packages("qdapRegex")'
-        R -e 'install.packages("RColorBrewer")'
 
     # Run R script to scrape data
     - name: Scrape data
