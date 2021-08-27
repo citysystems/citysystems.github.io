@@ -2,16 +2,15 @@ library(airtabler)
 library(tidyverse)
 library(qdapRegex)
 
-basekey_issues = Sys.getenv("AIRTABLE_BASEKEY_ISSUES")
-basekey_projects = Sys.getenv("AIRTABLE_BASEKEY_PROJECTS")
-tablekey_issues = Sys.getenv("AIRTABLE_TABLEKEY_ISSUES")
-tablekey_interpretations = Sys.getenv("AIRTABLE_TABLEKEY_INTERPRETATIONS")
+basekey_issues = "appw9tHhofqYj2ywD"
+tablekey_issues = "tbl106h1MXjyBVrN9"
+tablekey_interpretations = "tblv0mPHXsqYBK2Ws"
 
 
 
 issue_airtable <- airtable(
   base = basekey_issues,
-  tables = Sys.getenv("AIRTABLE_TABLEKEY_ISSUES")
+  tables = "tbl106h1MXjyBVrN9"
 )
 
 issue_table <- issue_airtable$tbl106h1MXjyBVrN9$select() %>%
@@ -53,7 +52,7 @@ issue_table <-
 
 interpretation_airtable <- airtable(
   base = basekey_issues,
-  tables = Sys.getenv("AIRTABLE_TABLEKEY_INTERPRETATIONS")
+  tables = "tblv0mPHXsqYBK2Ws"
 )
 
 interpretation_table <- interpretation_airtable$tblv0mPHXsqYBK2Ws$select() %>%
