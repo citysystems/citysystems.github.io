@@ -30,7 +30,6 @@ jobs:
       run: |
         sudo apt-get install -y libcurl4-openssl-dev libudunits2-dev
         R -e 'install.packages("tidyverse")'
-        R -e 'install.packages("qdapRegex")'
 
     # Run R script to scrape data
     - name: Scrape data
