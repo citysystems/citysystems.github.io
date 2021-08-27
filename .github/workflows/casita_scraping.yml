@@ -37,7 +37,7 @@ jobs:
 
     # Run R script to scrape data
     - name: Scrape data
-      run: R -e 'source("casita/airtable_preprocessing.R", echo = TRUE)'
+      run: R -e 'source("casita/airtable_processing.R", echo = TRUE)'
 
     # Add new files in correct folder
     - name: Commit files
