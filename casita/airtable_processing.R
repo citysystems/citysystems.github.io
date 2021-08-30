@@ -606,10 +606,11 @@ while(!is.null(offset)) {
 
 interpretation_table <-
   data %>% 
-  dplyr::select(`Interpretation`,`State Law Relatedness` = `State Grab Text`,Source,Topic,`Last Modified`) %>%
+  dplyr::select(`Interpretation`,`State Law Relatedness` = `State Grab Text`,Source,Topic,`Last Modified (Official)`,`Page Number (If Applicable)`) %>%
   mutate(
-    `Last Modified` = as.Date(`Last Modified`)
+    `Last Modified` = as.Date(`Last Modified (Official)`)
   ) %>% 
+  dplyr::select(-`Last Modified (Official)`) %>% 
   arrange(desc(Interpretation))
 
 interp_mod <-
@@ -686,9 +687,8 @@ code_display_data <- interp_mod %>%
 # dplyr::select(Code)
 
 interpretation_display_data <- interp_mod %>%
-  dplyr::select(Interpretation,`Last Modified`,`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`) %>% 
+  dplyr::select(Interpretation,`Last Modified`,`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,`Page Number (If Applicable)`) %>% 
   filter(!substr(Interpretation,1,4) %in% c("312.","310.","6585","311.")) %>% 
-  na.omit() %>% 
   mutate(
     Interpretation = case_when(
       grepl("https://www.hcd.ca.gov/policyresearch/AccessoryDwellingUnits.shtml",Interpretation) ~ "hcdqa30: <br/><strong>Question:</strong> Are solar panels required for new construction ADUs?  <br/><br/><strong>Response:</strong> Yes, newly constructed ADUs are subject to the Energy Code requirement to provide solar panels if the unit(s) is a newly constructed, non-manufactured, detached ADU. Per the California Energy Commission (CEC), the panels can be installed on the ADU or on the primary dwelling unit. ADUs that are constructed within existing space, or as an addition to existing homes, including detached additions where an existing detached building is converted from non-residential to residential space, are not subject to the Energy Code requirement to provide solar panels. 18 Please refer to the CEC on this matter. For more information, see the CEC’s website www.energy.ca.gov. You may email your questions to: title24@energy.ca.gov, or contact the Energy Standards Hotline at 800- 772-3300. CEC memos can also be found on HCD’s website at <a href = https://www.hcd.ca.gov/policyresearch/AccessoryDwellingUnits.shtml.>this link</a>",
@@ -702,11 +702,12 @@ interpretation_display_data <- interp_mod %>%
   ) %>% 
   mutate(
     Interpretation = case_when(
-      grepl("hcdqa",Interpretation) ~ paste0("HCD Q&A #",as.character(substr(Interpretation,6,7)),substr(Interpretation,8,nchar(Interpretation))),
+      grepl("hcdqa",Interpretation) ~ paste0("HCD Q&A Page ",`Page Number (If Applicable)`,substr(Interpretation,8,nchar(Interpretation))),
       grepl("emailqa", Interpretation) ~ paste0("Email Q&A #",as.character(substr(Interpretation,8,9)),substr(Interpretation,10,nchar(Interpretation))),
       TRUE ~ Interpretation
     )
-  )
+  ) %>% 
+  dplyr::select(-`Page Number (If Applicable)`)
 
 issue_display_data <- issue_table %>%
   dplyr::select(Issue) 
@@ -741,6 +742,11 @@ for(i in 1:nrow(issue_table)){
 
 all_hold_issue <-
   all_hold_issue %>% 
+  left_join(
+    interpretation_table %>% 
+      dplyr::select(Interpretation,`Page Number (If Applicable)`),
+    by = "Interpretation"
+  ) %>% 
   mutate(
     Interpretation = case_when(
       grepl("https://www.hcd.ca.gov/policyresearch/AccessoryDwellingUnits.shtml",Interpretation) ~ "hcdqa30: <br/><strong>Question:</strong> Are solar panels required for new construction ADUs?  <br/><br/><strong>Response:</strong> Yes, newly constructed ADUs are subject to the Energy Code requirement to provide solar panels if the unit(s) is a newly constructed, non-manufactured, detached ADU. Per the California Energy Commission (CEC), the panels can be installed on the ADU or on the primary dwelling unit. ADUs that are constructed within existing space, or as an addition to existing homes, including detached additions where an existing detached building is converted from non-residential to residential space, are not subject to the Energy Code requirement to provide solar panels. 18 Please refer to the CEC on this matter. For more information, see the CEC’s website www.energy.ca.gov. You may email your questions to: title24@energy.ca.gov, or contact the Energy Standards Hotline at 800- 772-3300. CEC memos can also be found on HCD’s website at <a href = https://www.hcd.ca.gov/policyresearch/AccessoryDwellingUnits.shtml.>this link</a>",
@@ -754,7 +760,7 @@ all_hold_issue <-
   ) %>% 
   mutate(
     Interpretation = case_when(
-      grepl("hcdqa",Interpretation) ~ paste0("HCD Q&A #",as.character(substr(Interpretation,6,7)),substr(Interpretation,8,nchar(Interpretation))),
+      grepl("hcdqa",Interpretation) ~ paste0("HCD Q&A Page ",`Page Number (If Applicable)`,substr(Interpretation,8,nchar(Interpretation))),
       grepl("emailqa", Interpretation) ~ paste0("Email Q&A #",as.character(substr(Interpretation,8,9)),substr(Interpretation,10,nchar(Interpretation))),
       TRUE ~ Interpretation
     )
@@ -813,6 +819,11 @@ for(i in 1:nrow(interpretation_table)){
 
 all_hold_interp <-
   all_hold_interp %>% 
+  left_join(
+    interpretation_table %>% 
+      dplyr::select(Interpretation,`Page Number (If Applicable)`),
+    by = "Interpretation"
+  ) %>% 
   mutate(
     Interpretation = case_when(
       grepl("https://www.hcd.ca.gov/policyresearch/AccessoryDwellingUnits.shtml",Interpretation) ~ "hcdqa30: <br/><strong>Question:</strong> Are solar panels required for new construction ADUs?  <br/><br/><strong>Response:</strong> Yes, newly constructed ADUs are subject to the Energy Code requirement to provide solar panels if the unit(s) is a newly constructed, non-manufactured, detached ADU. Per the California Energy Commission (CEC), the panels can be installed on the ADU or on the primary dwelling unit. ADUs that are constructed within existing space, or as an addition to existing homes, including detached additions where an existing detached building is converted from non-residential to residential space, are not subject to the Energy Code requirement to provide solar panels. 18 Please refer to the CEC on this matter. For more information, see the CEC’s website www.energy.ca.gov. You may email your questions to: title24@energy.ca.gov, or contact the Energy Standards Hotline at 800- 772-3300. CEC memos can also be found on HCD’s website at <a href = https://www.hcd.ca.gov/policyresearch/AccessoryDwellingUnits.shtml.>this link</a>",
@@ -826,7 +837,7 @@ all_hold_interp <-
   ) %>% 
   mutate(
     Interpretation = case_when(
-      grepl("hcdqa",Interpretation) ~ paste0("HCD Q&A #",as.character(substr(Interpretation,6,7)),substr(Interpretation,8,nchar(Interpretation))),
+      grepl("hcdqa",Interpretation) ~ paste0("HCD Q&A Page ",`Page Number (If Applicable)`,substr(Interpretation,8,nchar(Interpretation))),
       grepl("emailqa", Interpretation) ~ paste0("Email Q&A #",as.character(substr(Interpretation,8,9)),substr(Interpretation,10,nchar(Interpretation))),
       TRUE ~ Interpretation
     )
