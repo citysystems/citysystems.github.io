@@ -582,21 +582,7 @@ for(i in 1:nrow(hub_table)){
   school_list <- NULL
   
   for(j in 1:length(schools)){
-    transform <- case_when(
-      schools[j] %in% "EEES" ~ "School of Earth, Energy & Environmental Sciences",
-      schools[j] %in% "GSB" ~ "Graduate School of Business",
-      schools[j] %in% "GSE" ~ "Graduate School of Education",
-      schools[j] %in% "H&S" ~ "School of Humanities & Sciences",
-      schools[j] %in% "SOM" ~ "School of Medicine",
-      schools[j] %in% "SLS" ~ "School of Law",
-      schools[j] %in% "SOE" ~ "School of Engineering",
-      schools[j] %in% "VPUE" ~ "Vice Provost for Undergraduate Education",
-      schools[j] %in% "VPGE" ~ "Vice Provost for Graduate Education",
-      schools[j] %in% "VPA" ~ "Vice Provost for the Arts",
-      schools[j] %in% "DAPER" ~ "Stanford Athletics",
-      schools[j] %in% "DOR" ~ "Dean of Research",
-      TRUE ~ "Central"
-    )
+    transform <- schools[j]
     school_list <- paste0(school_list,", ",transform)
     
   }
@@ -649,7 +635,7 @@ for(i in 1:nrow(hub_table)){
 }
 
 for(i in 1:nrow(hub_table)){
-  emails <- unlist(hub_table$`Email (from Director Complete Name (head of dep/org))`[i])
+  emails <- unlist(hub_table$`Email (from Faculty Director Name)`[i])
   
   emails_list <- NULL
   for(j in 1:length(emails)){
@@ -657,7 +643,7 @@ for(i in 1:nrow(hub_table)){
   }  
   emails_list <- substr(emails_list,3,nchar(emails_list))
   
-  hub_table$`Email (from Director Complete Name (head of dep/org))`[i] <- emails_list
+  hub_table$`Email (from Faculty Director Name)`[i] <- emails_list
 }
 
 
