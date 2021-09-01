@@ -651,4 +651,4 @@ hub_table <-
   hub_table %>% 
   arrange(`Campus Hubs`)
 
-saveRDS(hub_table,"oce/hubs_from_airtable.rds")
+save(hub_table,file = "oce/hubs_from_airtable.rda")
