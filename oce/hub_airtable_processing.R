@@ -649,6 +649,20 @@ for(i in 1:nrow(hub_table)){
 
 hub_table <-
   hub_table %>% 
-  arrange(`Campus Hubs`)
+  arrange(`Campus Hubs`) %>% 
+  mutate(
+    Logo = case_when(
+      grepl(".jpg",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
+      grepl(".png",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*png")[,2],"png"),
+      grepl(".pdf",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*pdf")[,2],"pdf"),
+      TRUE ~ Logo
+    ),
+    `Featured Photo` = case_when(
+      grepl(".jpg",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
+      grepl(".png",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*png")[,2],"png"),
+      grepl(".pdf",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*pdf")[,2],"pdf"),
+      TRUE ~ `Featured Photo`
+    )
+  )
 
 save(hub_table,file = "oce/hubs_from_airtable.rda")
