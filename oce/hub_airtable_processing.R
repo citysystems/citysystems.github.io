@@ -653,12 +653,12 @@ hub_table <-
   mutate(
     Logo = case_when(
       grepl(".jpg",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
-      grepl(".png",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*png")[,2],"png")
+      grepl(".png",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*png")[,2],"png"),
       TRUE ~ Logo
     ),
     `Featured Photo` = case_when(
       grepl(".jpg",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
-      grepl(".png",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*png")[,2],"png")
+      grepl(".png",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*png")[,2],"png"),
       TRUE ~ `Featured Photo`
     )
   )
