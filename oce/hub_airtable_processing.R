@@ -572,7 +572,11 @@ hub_table <-
   ) %>% 
   st_as_sf(coords = c("lng","lat"), crs = 4326) %>% 
   mutate(
-    school_official = ""
+    school_official = "",
+    `Director Name (new)` = "",
+    `Other Point of Contact Name (new)` = ""
+    
+    
   )
 
 
@@ -605,6 +609,7 @@ for(i in 1:nrow(hub_table)){
   hub_table$Impact[i] <- impact_list
 }
 
+
 for(i in 1:nrow(hub_table)){
   others <- unlist(hub_table$`Other Point of Contact Name (for dashboard)`[i])
   
@@ -614,17 +619,16 @@ for(i in 1:nrow(hub_table)){
   }  
   others_list <- substr(others_list,3,nchar(others_list))
   
-  for(i in 1:length(others)){
+  for(j in 1:length(others)){
     others_list <- str_replace(others_list," ,",",")
   }
   
   if(nchar(others_list) > 2){
-    hub_table$`Other Point of Contact Name (for dashboard)`[i] <- others_list
+    hub_table$`Other Point of Contact Name (new)`[i] <- others_list
   }else{
-    hub_table$`Other Point of Contact Name (for dashboard)`[i] <- ""
+    hub_table$`Other Point of Contact Name (new)`[i] <- ""
   }
 }
-
 
 for(i in 1:nrow(hub_table)){
   mains <- unlist(hub_table$`Director Name (for dashboard)`[i])
@@ -635,11 +639,11 @@ for(i in 1:nrow(hub_table)){
   }  
   mains_list <- substr(mains_list,3,nchar(mains_list))
   
-  for(i in 1:length(mains)){
+  for(j in 1:length(mains)){
     mains_list <- str_replace(mains_list," ,",",")
   }
   
-  hub_table$`Director Name (for dashboard)`[i] <- mains_list
+  hub_table$`Director Name (new)`[i] <- mains_list
 }
 
 for(i in 1:nrow(hub_table)){
@@ -651,7 +655,7 @@ for(i in 1:nrow(hub_table)){
   }  
   emails_list <- substr(emails_list,3,nchar(emails_list))
   
-  hub_table$`Email (from Faculty Director Name)`[i] <- emails_list
+  hub_table$`Email (new)`[i] <- emails_list
 }
 
 
