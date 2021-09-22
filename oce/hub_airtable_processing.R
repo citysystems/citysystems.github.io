@@ -614,6 +614,10 @@ for(i in 1:nrow(hub_table)){
   }  
   others_list <- substr(others_list,3,nchar(others_list))
   
+  for(i in 1:length(others)){
+    others_list <- str_replace(others_list," ,",",")
+  }
+  
   if(nchar(others_list) > 2){
     hub_table$`Other Point of Contact Name (for dashboard)`[i] <- others_list
   }else{
@@ -630,6 +634,10 @@ for(i in 1:nrow(hub_table)){
     mains_list <- paste0(mains_list,", ",mains[j])
   }  
   mains_list <- substr(mains_list,3,nchar(mains_list))
+  
+  for(i in 1:length(mains)){
+    mains_list <- str_replace(mains_list," ,",",")
+  }
   
   hub_table$`Director Name (for dashboard)`[i] <- mains_list
 }
