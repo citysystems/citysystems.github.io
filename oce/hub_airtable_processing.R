@@ -565,6 +565,12 @@ hub_table <-
   filter(`Filtered View` == TRUE) %>% 
   rename("Campus Hubs" = `Campus Hub`) %>% 
   filter(`Campus Hubs` != "Exclude from hub mapping") %>% 
+  mutate(
+    firstcoord = round(as.numeric(sub(",.*", "", latlong)),3),
+    secondcoord = round(as.numeric(sub(".*, ", "", latlong)),3),
+    latlong = paste0(firstcoord,", ",secondcoord)
+  ) %>% 
+  dplyr::select(-firstcoord,-secondcoord) %>% 
   separate(
     latlong,
     into = c("lat","lng"),
@@ -574,9 +580,8 @@ hub_table <-
   mutate(
     school_official = "",
     `Director Name (new)` = "",
-    `Other Point of Contact Name (new)` = ""
-    
-    
+    `Other Point of Contact Name (new)` = "",
+    `Other Email (new)` = ""
   )
 
 
@@ -626,7 +631,7 @@ for(i in 1:nrow(hub_table)){
   if(nchar(others_list) > 2){
     hub_table$`Other Point of Contact Name (new)`[i] <- others_list
   }else{
-    hub_table$`Other Point of Contact Name (new)`[i] <- ""
+    hub_table$`Other Point of Contact Name (new)`[i] <- NA
   }
 }
 
@@ -643,7 +648,7 @@ for(i in 1:nrow(hub_table)){
     mains_list <- str_replace(mains_list," ,",",")
   }
   
-  hub_table$`Director Name (new)`[i] <- mains_list
+  hub_table$`Director Name (new)`[i] <- ifelse(mains_list == ", ", NA, mains_list)
 }
 
 for(i in 1:nrow(hub_table)){
@@ -655,7 +660,19 @@ for(i in 1:nrow(hub_table)){
   }  
   emails_list <- substr(emails_list,3,nchar(emails_list))
   
-  hub_table$`Email (new)`[i] <- emails_list
+  hub_table$`Email (new)`[i] <- ifelse(emails_list == ", ",NA,emails_list)
+}
+
+for(i in 1:nrow(hub_table)){
+  other_emails <- unlist(hub_table$`Email (from Other point of contact)`[i])
+  
+  other_emails_list <- NULL
+  for(j in 1:length(other_emails)){
+    other_emails_list <- paste0(other_emails_list,", ",other_emails[j])
+  }  
+  other_emails_list <- substr(other_emails_list,3,nchar(other_emails_list))
+  
+  hub_table$`Other Email (new)`[i] <- ifelse(other_emails_list == ", ",NA,other_emails_list)
 }
 
 
