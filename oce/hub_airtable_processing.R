@@ -618,18 +618,23 @@ for(i in 1:nrow(hub_table)){
 for(i in 1:nrow(hub_table)){
   others <- unlist(hub_table$`Other Point of Contact Name (for dashboard)`[i])
   
-  others_list <- NULL
-  for(j in 1:length(others)){
-    others_list <- paste0(others_list,", ",others[j])
-  }  
-  others_list <- substr(others_list,3,nchar(others_list))
+  other_emails <- unlist(hub_table$`Email (from Other point of contact)`[i])
   
-  for(j in 1:length(others)){
-    others_list <- str_replace(others_list," ,",",")
+  poc_list <- NULL
+  if(!is.null(other_emails)){
+    for(j in 1:length(others)){
+      poc_list <- paste0(poc_list,", ",others[j]," (",other_emails[j],")")
+    }
+    
+    poc_list <- substr(poc_list,3,nchar(poc_list))
+    
+    for(j in 1:length(others)){
+      poc_list <- str_replace(poc_list," ,",",")
+    }
   }
   
-  if(nchar(others_list) > 2){
-    hub_table$`Other Point of Contact Name (new)`[i] <- others_list
+  if(!is.null(poc_list)){
+    hub_table$`Other Point of Contact Name (new)`[i] <- poc_list
   }else{
     hub_table$`Other Point of Contact Name (new)`[i] <- NA
   }
@@ -651,30 +656,17 @@ for(i in 1:nrow(hub_table)){
   hub_table$`Director Name (new)`[i] <- ifelse(mains_list == ", ", NA, mains_list)
 }
 
-for(i in 1:nrow(hub_table)){
-  emails <- unlist(hub_table$`Email (from Faculty Director Name)`[i])
-  
-  emails_list <- NULL
-  for(j in 1:length(emails)){
-    emails_list <- paste0(emails_list,", ",emails[j])
-  }  
-  emails_list <- substr(emails_list,3,nchar(emails_list))
-  
-  hub_table$`Email (new)`[i] <- ifelse(emails_list == ", ",NA,emails_list)
-}
-
-for(i in 1:nrow(hub_table)){
-  other_emails <- unlist(hub_table$`Email (from Other point of contact)`[i])
-  
-  other_emails_list <- NULL
-  for(j in 1:length(other_emails)){
-    other_emails_list <- paste0(other_emails_list,", ",other_emails[j])
-  }  
-  other_emails_list <- substr(other_emails_list,3,nchar(other_emails_list))
-  
-  hub_table$`Other Email (new)`[i] <- ifelse(other_emails_list == ", ",NA,other_emails_list)
-}
-
+# for(i in 1:nrow(hub_table)){
+#   emails <- unlist(hub_table$`Email (from Faculty Director Name)`[i])
+#   
+#   emails_list <- NULL
+#   for(j in 1:length(emails)){
+#     emails_list <- paste0(emails_list,", ",emails[j])
+#   }  
+#   emails_list <- substr(emails_list,3,nchar(emails_list))
+#   
+#   hub_table$`Email (new)`[i] <- ifelse(emails_list == ", ",NA,emails_list)
+# }
 
 hub_table <-
   hub_table %>% 
