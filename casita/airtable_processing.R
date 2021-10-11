@@ -854,37 +854,74 @@ all_hold_issue <-
 
 ###
 
-sub_e_list <- c(
-  "65852.2(e)(1): Notwithstanding subdivisions (a) to (d), inclusive, a local agency shall ministerially approve an application for a building permit within a residential or mixed-use zone to create any of the following:",
-  "65852.2(e)(1)(A): One accessory dwelling unit and one junior accessory dwelling unit per lot with a proposed or existing single-family dwelling if all of the following apply:",
-  "65852.2(e)(1)(A)(i): The accessory dwelling unit or junior accessory dwelling unit is within the proposed space of a single-family dwelling or existing space of a single-family dwelling or accessory structure and may include an expansion of not more than 150 square feet beyond the same physical dimensions as the existing accessory structure. An expansion beyond the physical dimensions of the existing accessory structure shall be limited to accommodating ingress and egress.",
-  "65852.2(e)(1)(A)(ii): The space has exterior access from the proposed or existing single-family dwelling.",
-  "65852.2(e)(1)(A)(iii): The side and rear setbacks are sufficient for fire and safety.",
-  "65852.2(e)(1)(A)(iv): The junior accessory dwelling unit complies with the requirements of Section 65852.22.",
-  "65852.2(e)(1)(B): One detached, new construction, accessory dwelling unit that does not exceed four-foot side and rear yard setbacks for a lot with a proposed or existing single-family dwelling. The accessory dwelling unit may be combined with a junior accessory dwelling unit described in subparagraph (A). A local agency may impose the following conditions on the accessory dwelling unit:",
-  "65852.2(e)(1)(B)(i): A total floor area limitation of not more than 800 square feet.",
-  "65852.2(e)(1)(B)(ii): A height limitation of 16 feet.",
-  "65852.2(e)(1)(C)(i): Multiple accessory dwelling units within the portions of existing multifamily dwelling structures that are not used as livable space, including, but not limited to, storage rooms, boiler rooms, passageways, attics, basements, or garages, if each unit complies with state building standards for dwellings.",
-  "65852.2(e)(1)(C)(ii): A local agency shall allow at least one accessory dwelling unit within an existing multifamily dwelling and shall allow up to 25 percent of the existing multifamily dwelling units.",
-  "65852.2(e)(1)(D): Not more than two accessory dwelling units that are located on a lot that has an existing multifamily dwelling, but are detached from that multifamily dwelling and are subject to a height limit of 16 feet and four-foot rear yard and side setbacks.",
-  "65852.2(e)(2): A local agency shall not require, as a condition for ministerial approval of a permit application for the creation of an accessory dwelling unit or a junior accessory dwelling unit, the correction of nonconforming zoning conditions.",
-  "65852.2(e)(3): The installation of fire sprinklers shall not be required in an accessory dwelling unit if sprinklers are not required for the primary residence.",
-  "65852.2(e)(4): A local agency may require owner occupancy for either the primary dwelling or the accessory dwelling unit on a single-family lot, subject to the requirements of paragraph (6) of subdivision (a).",
-  "65852.2(e)(5): A local agency shall require that a rental of the accessory dwelling unit created pursuant to this subdivision be for a term longer than 30 days.",
-  "65852.2(e)(6): A local agency may require, as part of the application for a permit to create an accessory dwelling unit connected to an onsite wastewater treatment system, a percolation test completed within the last five years, or, if the percolation test has been recertified, within the last 10 years.",
-  "65852.2(e)(7): Notwithstanding subdivision (c) and paragraph (1) a local agency that has adopted an ordinance by July 1, 2018, providing for the approval of accessory dwelling units in multifamily dwelling structures shall ministerially consider a permit application to construct an accessory dwelling unit that is described in paragraph (1), and may impose standards including, but not limited to, design, development, and historic standards on said accessory dwelling units. These standards shall not include requirements on minimum lot size."
-  )
+# sub_e_list <- c(
+#   "65852.2(e)(1): Notwithstanding subdivisions (a) to (d), inclusive, a local agency shall ministerially approve an application for a building permit within a residential or mixed-use zone to create any of the following:",
+#   "65852.2(e)(1)(A): One accessory dwelling unit and one junior accessory dwelling unit per lot with a proposed or existing single-family dwelling if all of the following apply:",
+#   "65852.2(e)(1)(A)(i): The accessory dwelling unit or junior accessory dwelling unit is within the proposed space of a single-family dwelling or existing space of a single-family dwelling or accessory structure and may include an expansion of not more than 150 square feet beyond the same physical dimensions as the existing accessory structure. An expansion beyond the physical dimensions of the existing accessory structure shall be limited to accommodating ingress and egress.",
+#   "65852.2(e)(1)(A)(ii): The space has exterior access from the proposed or existing single-family dwelling.",
+#   "65852.2(e)(1)(A)(iii): The side and rear setbacks are sufficient for fire and safety.",
+#   "65852.2(e)(1)(A)(iv): The junior accessory dwelling unit complies with the requirements of Section 65852.22.",
+#   "65852.2(e)(1)(B): One detached, new construction, accessory dwelling unit that does not exceed four-foot side and rear yard setbacks for a lot with a proposed or existing single-family dwelling. The accessory dwelling unit may be combined with a junior accessory dwelling unit described in subparagraph (A). A local agency may impose the following conditions on the accessory dwelling unit:",
+#   "65852.2(e)(1)(B)(i): A total floor area limitation of not more than 800 square feet.",
+#   "65852.2(e)(1)(B)(ii): A height limitation of 16 feet.",
+#   "65852.2(e)(1)(C)(i): Multiple accessory dwelling units within the portions of existing multifamily dwelling structures that are not used as livable space, including, but not limited to, storage rooms, boiler rooms, passageways, attics, basements, or garages, if each unit complies with state building standards for dwellings.",
+#   "65852.2(e)(1)(C)(ii): A local agency shall allow at least one accessory dwelling unit within an existing multifamily dwelling and shall allow up to 25 percent of the existing multifamily dwelling units.",
+#   "65852.2(e)(1)(D): Not more than two accessory dwelling units that are located on a lot that has an existing multifamily dwelling, but are detached from that multifamily dwelling and are subject to a height limit of 16 feet and four-foot rear yard and side setbacks.",
+#   "65852.2(e)(2): A local agency shall not require, as a condition for ministerial approval of a permit application for the creation of an accessory dwelling unit or a junior accessory dwelling unit, the correction of nonconforming zoning conditions.",
+#   "65852.2(e)(3): The installation of fire sprinklers shall not be required in an accessory dwelling unit if sprinklers are not required for the primary residence.",
+#   "65852.2(e)(4): A local agency may require owner occupancy for either the primary dwelling or the accessory dwelling unit on a single-family lot, subject to the requirements of paragraph (6) of subdivision (a).",
+#   "65852.2(e)(5): A local agency shall require that a rental of the accessory dwelling unit created pursuant to this subdivision be for a term longer than 30 days.",
+#   "65852.2(e)(6): A local agency may require, as part of the application for a permit to create an accessory dwelling unit connected to an onsite wastewater treatment system, a percolation test completed within the last five years, or, if the percolation test has been recertified, within the last 10 years.",
+#   "65852.2(e)(7): Notwithstanding subdivision (c) and paragraph (1) a local agency that has adopted an ordinance by July 1, 2018, providing for the approval of accessory dwelling units in multifamily dwelling structures shall ministerially consider a permit application to construct an accessory dwelling unit that is described in paragraph (1), and may impose standards including, but not limited to, design, development, and historic standards on said accessory dwelling units. These standards shall not include requirements on minimum lot size."
+#   )
+# 
+# 
+# interpretation_table <-
+#   interpretation_table %>% 
+#   mutate(
+#     `State Law Relatedness` = case_when(
+#       grepl("65852\\.2\\(e\\) |65852\\.2\\(e\\)\\.|65852\\.2\\(e\\)\\,|65852\\.2\\.e |65852\\.2\\.e\\.|65852\\.2\\.e\\,|subdivision \\(e\\)",Interpretation) ~ list(sub_e_list),
+#       TRUE ~ `State Law Relatedness`
+#     )
+#   )
 
 
-interpretation_table <-
+adu_code_only<-
   interpretation_table %>% 
-  mutate(
-    `State Law Relatedness` = case_when(
-      grepl("65852\\.2\\(e\\) |65852\\.2\\(e\\)\\.|65852\\.2\\(e\\)\\,|65852\\.2\\.e |65852\\.2\\.e\\.|65852\\.2\\.e\\,|subdivision \\(e\\)",Interpretation) ~ list(sub_e_list),
-      TRUE ~ `State Law Relatedness`
-    )
-  )
+  filter(Source %in% c("65852.2","65852.22"))
 
+for(i in 1:nrow(interpretation_table)){
+  code_list <- interpretation_table$`State Law Relatedness`[i][[1]]
+  full_code_list <- NULL
+  if(!is.null(interpretation_table$`State Law Relatedness`[i][[1]])){
+    for(j in 1:length(code_list)){
+      snippet <- sub(":.*", "", code_list[j])
+      patterns <- gsub("([()])","\\\\\\1", snippet)
+      
+      adu_specific_code <-
+        adu_code_only %>% 
+        filter(grepl(patterns,Interpretation)) %>% 
+        dplyr::select(Interpretation) %>% 
+        arrange(Interpretation) %>% 
+        as.list() %>% 
+        .[[1]]
+      
+      full_code_list <- c(full_code_list,adu_specific_code)
+    }
+    
+    full_code_df <-
+      full_code_list %>% 
+      as.data.frame() %>% 
+      filter(!duplicated(.)) %>% 
+      as.list() %>% 
+      .[[1]]
+    
+    interpretation_table$`State Law Relatedness`[i] <- list(full_code_df)
+  }
+}
+
+
+####
 
 all_hold_interp <- NULL
 
