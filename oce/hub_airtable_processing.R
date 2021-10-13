@@ -640,20 +640,32 @@ for(i in 1:nrow(hub_table)){
   }
 }
 
+
 for(i in 1:nrow(hub_table)){
   mains <- unlist(hub_table$`Director Name (for dashboard)`[i])
+  mains_profile <- unlist(hub_table$`faculty profile`[i])
   
   mains_list <- NULL
-  for(j in 1:length(mains)){
-    mains_list <- paste0(mains_list,", ",mains[j])
-  }  
-  mains_list <- substr(mains_list,3,nchar(mains_list))
-  
-  for(j in 1:length(mains)){
-    mains_list <- str_replace(mains_list," ,",",")
+  if(length(mains > 0)){
+    for(j in 1:length(mains)){
+      if(!is.na(mains_profile[[1]])){
+        if(!is.na(mains_profile[j])){
+          mains_list <- paste0(mains_list,", <a href = ",mains_profile[j],">",mains[j],"</a>")
+        }else{
+          mains_list <- paste0(mains_list,", ",mains[j])
+        }
+      }else{
+        mains_list <- paste0(mains_list,", ",mains[j])
+      }
+    }
+    mains_list <- substr(mains_list,3,nchar(mains_list))
+    
+    for(j in 1:length(mains)){
+      mains_list <- str_replace(mains_list," ,",",")
+    }
+    
+    hub_table$`Director Name (new)`[i] <- ifelse(mains_list == ", ", NA, mains_list)
   }
-  
-  hub_table$`Director Name (new)`[i] <- ifelse(mains_list == ", ", NA, mains_list)
 }
 
 # for(i in 1:nrow(hub_table)){
