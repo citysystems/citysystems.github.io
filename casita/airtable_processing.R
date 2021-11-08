@@ -538,7 +538,8 @@ issue_airtable <- airtable(
 )
 
 issue_table <- issue_airtable$tbl106h1MXjyBVrN9$select() %>%
-  mutate(across(where(is.list), ~ sapply(., unlist)))
+  mutate(across(where(is.list), ~ sapply(., unlist)))# %>% 
+  #dplyr::select(-`Other Agencies`)
 
 data1 <- issue_table
 offset <- get_offset(issue_table)
@@ -553,7 +554,7 @@ while(!is.null(offset)) {
   data1 <- 
     tryCatch({
       data1 %>% 
-        dplyr::bind_rows(issue_table)
+        rbind(issue_table)
     }, error = function(e) {
       print(e)
       return(data1)
