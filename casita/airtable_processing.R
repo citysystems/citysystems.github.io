@@ -994,7 +994,7 @@ all_hold_interp <-
     `Topic 3` = ifelse(nchar(`Topic 3`) > 0,paste0("; ",`Topic 3`),""),
     `Topic 4` = ifelse(nchar(`Topic 4`) > 0,paste0("; ",`Topic 4`),""),
     `Topic 5` = ifelse(nchar(`Topic 5`) > 0,paste0("; ",`Topic 5`),""),
-    Interpretation = paste0(Interpretation ,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i>")
+    Interpretation = paste0(Interpretation ,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i><br><br>")
   ) %>%
   dplyr::select(Interpretation,Code) %>% 
   left_join(
@@ -1007,7 +1007,7 @@ all_hold_interp <-
     `Topic 3` = ifelse(nchar(`Topic 3`) > 0,paste0("; ",`Topic 3`),""),
     `Topic 4` = ifelse(nchar(`Topic 4`) > 0,paste0("; ",`Topic 4`),""),
     `Topic 5` = ifelse(nchar(`Topic 5`) > 0,paste0("; ",`Topic 5`),""),
-    Code = paste0(Code,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i>")
+    Code = paste0(Code,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i><br><br>")
   ) %>%
   dplyr::select(Interpretation,Code)
 
@@ -1019,7 +1019,7 @@ interpretation_display_data <-
     `Topic 3` = ifelse(nchar(`Topic 3`) > 0,paste0("; ",`Topic 3`),""),
     `Topic 4` = ifelse(nchar(`Topic 4`) > 0,paste0("; ",`Topic 4`),""),
     `Topic 5` = ifelse(nchar(`Topic 5`) > 0,paste0("; ",`Topic 5`),""),
-    Interpretation = paste0(Interpretation ,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i>")
+    Interpretation = paste0(Interpretation ,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i><br><br>")
   ) %>%
   dplyr::select(Interpretation) %>% 
   arrange(Interpretation)
@@ -1032,7 +1032,7 @@ code_display_data <-
     `Topic 3` = ifelse(nchar(`Topic 3`) > 0,paste0("; ",`Topic 3`),""),
     `Topic 4` = ifelse(nchar(`Topic 4`) > 0,paste0("; ",`Topic 4`),""),
     `Topic 5` = ifelse(nchar(`Topic 5`) > 0,paste0("; ",`Topic 5`),""),
-    Code = paste0(Code,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i>")
+    Code = paste0(Code,"<br><br><i><small> Last Modified: ",`Last Modified`,"<br>",`Topic 1`,`Topic 2`,`Topic 3`,`Topic 4`,`Topic 5`,"</small></i><br><br>")
   ) %>%
   dplyr::select(Code) %>% 
   arrange(Code)
