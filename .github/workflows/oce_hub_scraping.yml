@@ -6,7 +6,7 @@ name: OCE Hub Scraping
 on:
  # workflow_dispatch:
   schedule:
-    - cron: '30 4,10,16 * * *'
+    - cron: '30 4,10,16,22 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
