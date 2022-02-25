@@ -15,8 +15,14 @@ data_projects <- data %>%
     `Partner Agencies (separate with semicolons)`
   )
 
+data_areas <-
+  range_speedread("1YeYdVzfS5vpZppMUTR3xRw3XK-PDMRtvTHF21f06O1s",range="Areas", col_names = FALSE)
+
 data_faculty <-
   range_speedread("1YeYdVzfS5vpZppMUTR3xRw3XK-PDMRtvTHF21f06O1s",range="Faculty")
+
+data_countries <-
+  range_speedread("1YeYdVzfS5vpZppMUTR3xRw3XK-PDMRtvTHF21f06O1s",range="Countries", col_names = FALSE)
 
 data_tidy <- data %>% 
   select(
@@ -48,7 +54,9 @@ data_tidy <- data %>%
 
 save(
   data_projects,
+  data_areas,
   data_faculty,
+  data_countries,
   data_tidy,
   file = "cigh/cigh_data.rda"
 )
