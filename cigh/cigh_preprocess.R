@@ -12,7 +12,7 @@ data_projects <- data %>%
     `Project Name`,
     `Link for additional information`,
     `Hospital/Facility name`,
-    `Partner Agencies (separate with semicolons)`
+    `Partner Agencies (separate with commas)`
   )
 
 data_areas <-
