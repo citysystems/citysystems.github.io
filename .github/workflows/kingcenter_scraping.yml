@@ -66,6 +66,6 @@ jobs:
       # email body as text
         body: King Center Project Mapper update failed. Please check the Google Sheet for errors.
       # comma-separated string, send email to
-        to: juliawagenfehr@gmail.com,derekouyang@gmail.com,cbowyer@stanford.edu
+        to: derekouyang@gmail.com,cbowyer@stanford.edu
       # from email name
         from: City Systems
