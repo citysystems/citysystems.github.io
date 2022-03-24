@@ -703,7 +703,8 @@ data <-
       is.na(`Featured Photo`),
       `Featured Photo`,
       `Featured Photo` %>% gsub(".*\\(","",.) %>% gsub(")","",.)
-    )
+    ),
+    geometry = st_as_text(geometry)
   )
 
 write_csv(data,"oce/hubs_from_airtable.csv")
