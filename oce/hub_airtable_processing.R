@@ -706,4 +706,4 @@ data <-
     )
   )
 
-saveRDS(data,"oce/hubs_from_airtable.rds")
+write_csv(data,"oce/hubs_from_airtable.csv")
