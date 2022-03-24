@@ -693,6 +693,16 @@ hub_table <-
       grepl(".jpg",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
       grepl(".png",`Featured Photo`) ~ paste0("https",str_match(`Featured Photo`, "https\\s*(.*?)\\s*png")[,2],"png"),
       TRUE ~ `Featured Photo`
+    ),
+    Logo = ifelse(
+      is.na(Logo),
+      Logo,
+      Logo %>% gsub(".*\\(","",.) %>% gsub(")","",.)
+    ),
+    `Featured Photo` = ifelse(
+      is.na(`Featured Photo`),
+      `Featured Photo`,
+      `Featured Photo` %>% gsub(".*\\(","",.) %>% gsub(")","",.)
     )
   )
 
