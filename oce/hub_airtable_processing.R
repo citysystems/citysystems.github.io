@@ -680,7 +680,7 @@ for(i in 1:nrow(hub_table)){
 #   hub_table$`Email (new)`[i] <- ifelse(emails_list == ", ",NA,emails_list)
 # }
 
-hub_table <-
+data <-
   hub_table %>% 
   arrange(`Campus Hubs`) %>% 
   mutate(
@@ -706,4 +706,4 @@ hub_table <-
     )
   )
 
-save(hub_table,file = "oce/hubs_from_airtable.rda")
+save(data,file = "oce/hubs_from_airtable.rda")
