@@ -614,6 +614,8 @@ for(i in 1:nrow(hub_table)){
   hub_table$Impact[i] <- impact_list
 }
 
+hub_table$Impact <- hub_table$Impact %>% unlist()
+
 
 for(i in 1:nrow(hub_table)){
   others <- unlist(hub_table$`Other Point of Contact Name (for dashboard)`[i])
