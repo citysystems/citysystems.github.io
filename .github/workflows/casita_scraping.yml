@@ -4,9 +4,9 @@ name: Casita Scraping
 
 # Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
-#  workflow_dispatch:
-  schedule:
-    - cron: '30 5,11,17,23 * * *'
+  workflow_dispatch:
+#  schedule:
+#    - cron: '30 5,11,17,23 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,7 +33,11 @@ jobs:
 
     # Run R script to scrape data
     - name: Scrape data
-      run: R -e 'source("casita/airtable_processing.R", echo = TRUE)'
+      env:
+        AIR_API_KEY: ${{ secrets.AIR_API_KEY }}
+      run: |
+        echo AIR_API_KEY ="$AIR_API_KEY" >> ~/.Renviron
+        R -e 'source("casita/airtable_processing.R", echo = TRUE)'
 
     # Add new files in correct folder
     - name: Commit files
