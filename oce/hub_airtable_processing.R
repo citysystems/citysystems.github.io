@@ -5,7 +5,7 @@ library(sf)
 air_url <- "https://api.airtable.com/v0"
 
 air_api_key <- function() {
-  key <- "keyK0cTBq3xvhmWSr"
+  key <- Sys.getenv("AIR_API_KEY")
   if(key == "") {
     stop("AIRTABLE_API_KEY environment variable is empty. See ?airtabler for help.")
   }

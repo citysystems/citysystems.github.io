@@ -34,7 +34,11 @@ jobs:
 
     # Run R script to scrape data
     - name: Scrape data
-      run: R -e 'source("oce/hub_airtable_processing.R", echo = TRUE)'
+      env:
+          AIR_API_KEY: ${{ secrets.AIR_API_KEY }}
+      run: |
+        echo AIR_API_KEY ="$AIR_API_KEY" >> ~/.Renviron
+        R -e 'source("oce/hub_airtable_processing.R", echo = TRUE)'
 
     # Add new files in correct folder
     - name: Commit files
