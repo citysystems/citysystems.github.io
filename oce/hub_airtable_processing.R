@@ -566,8 +566,8 @@ hub_table <-
   rename("Campus Hubs" = `Campus Hub`) %>% 
   filter(`Campus Hubs` != "Exclude from hub mapping") %>% 
   mutate(
-    firstcoord = round(as.numeric(sub(",.*", "", latlong)),3),
-    secondcoord = round(as.numeric(sub(".*, ", "", latlong)),3),
+    firstcoord = round(as.numeric(sub(",.*", "", latlong)),5),
+    secondcoord = round(as.numeric(sub(".*, ", "", latlong)),5),
     latlong = paste0(firstcoord,", ",secondcoord)
   ) %>% 
   dplyr::select(-firstcoord,-secondcoord) %>% 
