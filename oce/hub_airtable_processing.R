@@ -586,7 +586,7 @@ hub_table <-
 
 
 for(i in 1:nrow(hub_table)){
-  schools <- unlist(hub_table$`School or Vice Provostial area (VP)`[i])
+  schools <- unlist(hub_table$`Stanford Unit`[i])
   
   school_list <- NULL
   
