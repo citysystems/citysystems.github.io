@@ -652,7 +652,7 @@ for(i in 1:nrow(hub_table)){
     for(j in 1:length(mains)){
       if(!is.na(mains_profile[[1]])){
         if(!is.na(mains_profile[j])){
-          mains_list <- paste0(mains_list,", <a href = ",mains_profile[j],">",mains[j],"</a>")
+          mains_list <- paste0(mains_list,", <a href = '",mains_profile[j],"' target='_blank'>",mains[j],"</a>")
         }else{
           mains_list <- paste0(mains_list,", ",mains[j])
         }
