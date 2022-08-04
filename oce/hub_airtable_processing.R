@@ -684,7 +684,7 @@ for(i in 1:nrow(hub_table)){
 
 data <-
   hub_table %>% 
-  arrange(`Campus Hubs`) %>% 
+  arrange(desc(createdTime)) %>% 
   mutate(
     Logo = case_when(
       grepl(".jpg",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
