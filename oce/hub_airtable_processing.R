@@ -615,7 +615,19 @@ for(i in 1:nrow(hub_table)){
 }
 
 hub_table$Impact <- hub_table$Impact %>% unlist()
+# hub_table$funding <- hub_table$`Funding Recipient` %>% unlist()
 
+for(i in 1:nrow(hub_table)){
+  funding <- unlist(hub_table$`Funding Recipient`[i]) %>% 
+    sort() %>% 
+    paste(collapse = ", ")
+  
+  if(!is.null(funding)){
+    hub_table$funding[i] <- funding
+  }else{
+    hub_table$funding[i] <- NA
+  }
+}
 
 for(i in 1:nrow(hub_table)){
   others <- unlist(hub_table$`Other Point of Contact Name (for dashboard)`[i])
@@ -685,7 +697,7 @@ for(i in 1:nrow(hub_table)){
 data <-
   hub_table %>% 
   arrange(desc(createdTime)) %>% 
-  mutate(
+  dplyr::mutate(
     Logo = case_when(
       grepl(".jpg",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*jpg")[,2],"jpg"),
       grepl(".png",Logo) ~ paste0("https",str_match(Logo, "https\\s*(.*?)\\s*png")[,2],"png"),
@@ -707,6 +719,23 @@ data <-
       `Featured Photo` %>% gsub(".*\\(","",.) %>% gsub(")","",.)
     ),
     geometry = st_as_text(geometry)
+  ) %>% 
+  as.data.frame() %>% 
+  dplyr::select(
+    `Campus Hubs`,
+    URL,
+    Address,
+    Description,
+    Logo,
+    `Featured Text`,
+    `Featured Link`,
+    Impact,
+    `Director Name (new)`,
+    `Other Point of Contact Name (new)`,
+    `Featured Photo`,
+    geometry,
+    school_official,
+    funding
   )
 
 write_csv(data,"oce/hubs_from_airtable.csv")
