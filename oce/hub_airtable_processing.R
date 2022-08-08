@@ -723,6 +723,7 @@ data <-
   as.data.frame() %>% 
   dplyr::select(
     `Campus Hubs`,
+    bookmark,
     URL,
     Address,
     Description,
