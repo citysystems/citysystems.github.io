@@ -740,3 +740,42 @@ data <-
   )
 
 write_csv(data,"oce/hubs_from_airtable.csv")
+
+# engagements ----
+
+basekey_hub = "appbK3ew6puy9NzFM"
+tablekey_engage = "tbl3anzSaDAN6Zv7P"
+
+
+engage_airtable <- airtable(
+  base = basekey_hub,
+  tables = tablekey_engage
+)
+
+engage_table <- engage_airtable$tbl3anzSaDAN6Zv7P$select() %>%
+  mutate(across(where(is.list), ~ sapply(., unlist)))
+
+data2 <- engage_table
+offset <- get_offset(engage_table)
+
+while(!is.null(offset)) {
+  
+  engage_table <- engage_airtable$tbl3anzSaDAN6Zv7P$select(offset = offset) %>%
+    mutate(across(where(is.list), ~ sapply(., unlist)))
+  
+  data2 <- 
+    tryCatch({
+      data2 %>% 
+        dplyr::bind_rows(engage_table)
+    }, error = function(e) {
+      print(e)
+      return(data2)
+    }
+    )
+  offset <- get_offset(engage_table)
+}
+
+data2 <- data2 %>% 
+  left_join(hub_table %>% select(Hub = id, `Campus Hubs`) %>% st_drop_geometry())
+
+write_csv(data2,"oce/engagements_from_airtable.csv")
