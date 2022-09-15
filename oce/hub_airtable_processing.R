@@ -775,7 +775,21 @@ while(!is.null(offset)) {
   offset <- get_offset(engage_table)
 }
 
+for(i in 1:nrow(data2)){
+  location <- unlist(data2$`Location Name (from Lo)`[i]) %>% 
+    sort() %>% 
+    paste(collapse = ", ")
+  
+  if(!is.null(location)){
+    data2$location[i] <- location
+  }else{
+    data2$location[i] <- NA
+  }
+}
+
 data2 <- data2 %>% 
+  select(-`Location Link`, -`Location Name (from Lo)`) %>% 
+  mutate(Text = Text %>% gsub("=<|= <","=",.) %>% gsub("> target"," target",.)) %>% 
   left_join(hub_table %>% select(Hub = id, `Campus Hubs`) %>% st_drop_geometry())
 
 write_csv(data2,"oce/engagements_from_airtable.csv")
