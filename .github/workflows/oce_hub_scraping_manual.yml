@@ -1,0 +1,56 @@
+# This workflow scrapes COVID data from the PA dashboard
+
+name: OCE Hub Scraping Manual
+
+# Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
+on:
+  workflow_dispatch:
+#  schedule:
+#    - cron: '30 4,10,16,22 * * *'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "scrape"
+  scrape:
+    # The type of runner that the job will run on. Needs to be ubuntu to use the start selenoid server action
+    runs-on: ubuntu-latest
+    steps:
+    # Checks-out the repository
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+
+    # Install R
+    - uses: r-lib/actions/setup-r@master
+      with:
+        r-version: '4.0.2'
+
+    # Set up R. Note the first line was needed to make sure the curl package worked
+    - name: Install R packages
+      run: |
+        sudo apt-get install -y libcurl4-openssl-dev libudunits2-dev libgdal-dev
+        R -e 'install.packages("tidyverse")'
+        R -e 'install.packages("sf")'
+
+    # Run R script to scrape data
+    - name: Scrape data
+      env:
+          AIR_API_KEY: ${{ secrets.AIR_API_KEY }}
+      run: |
+        echo AIR_API_KEY ="$AIR_API_KEY" >> ~/.Renviron
+        R -e 'source("oce/hub_airtable_processing.R", echo = TRUE)'
+
+    # Add new files in correct folder
+    - name: Commit files
+      run: |
+        git config --local user.name github-actions
+        git config --local user.email "actions@github.com"
+        git add oce/*
+        git commit --allow-empty -am "Updating data"
+        
+
+    # Push changes
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
