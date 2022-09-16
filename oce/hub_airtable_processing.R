@@ -803,7 +803,7 @@ write_csv(data2,"oce/engagements_from_airtable.csv")
 
 # location geometries
 
-location_geo <- read_csv("location_geo.csv")
+location_geo <- read_csv("oce/location_geo.csv")
 
 new_locations <- data2 %>% 
   filter(!is.na(index)) %>% 
@@ -811,12 +811,12 @@ new_locations <- data2 %>%
 
 if(nrow(new_locations) > 0){
   
-  temp_locations <- readRDS("all_locations.rds") %>% 
+  temp_locations <- readRDS("oce/all_locations.rds") %>% 
     filter(index %in% new_locations$index) %>% 
     mutate(wkt = st_as_text(geometry, digits = 9)) %>% 
     st_drop_geometry() %>% 
     rbind(location_geo)
   
-  write_csv(temp_locations, "location_geo.csv")
+  write_csv(temp_locations, "oce/location_geo.csv")
   
 }
