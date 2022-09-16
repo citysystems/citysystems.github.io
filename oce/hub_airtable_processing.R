@@ -780,16 +780,40 @@ for(i in 1:nrow(data2)){
     sort() %>% 
     paste(collapse = ", ")
   
+  index <- unlist(data2$`index (from Location Link)`[i]) %>% 
+    sort() %>% 
+    paste(collapse = ", ")
+  
   if(!is.null(location)){
     data2$location[i] <- location
+    data2$index[i] <- index
   }else{
     data2$location[i] <- NA
+    data2$index[i] <- NA
   }
 }
 
 data2 <- data2 %>% 
-  select(-`Location Link`, -`Location Name (from Lo)`) %>% 
+  select(-`Location Link`, -`Location Name (from Lo)`, -`index (from Location Link)`) %>% 
   mutate(Text = Text %>% gsub("=<|= <","=",.) %>% gsub("> target"," target",.)) %>% 
   left_join(hub_table %>% select(Hub = id, `Campus Hubs`) %>% st_drop_geometry())
 
 write_csv(data2,"oce/engagements_from_airtable.csv")
+
+# location geometries
+
+location_geo <- readRDS("location_geo.rds")
+
+new_locations <- data2 %>% 
+  filter(!is.na(index)) %>% 
+  filter(!index %in% location_geo$index)
+
+if(nrow(new_locations) > 0){
+  
+  temp_locations <- readRDS("all_locations.rds") %>% 
+    filter(index %in% new_locations$index) %>% 
+    rbind(location_geo)
+  
+  saveRDS(temp_locations, "location_geo.rds")
+  
+}
