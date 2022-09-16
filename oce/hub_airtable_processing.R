@@ -795,7 +795,8 @@ for(i in 1:nrow(data2)){
 
 data2 <- data2 %>% 
   select(-`Location Link`, -`Location Name (from Lo)`, -`index (from Location Link)`) %>% 
-  mutate(Text = Text %>% gsub("=<|= <","=",.) %>% gsub("> target"," target",.)) %>% 
+  mutate(Text = Text %>% gsub("=<|= <","=",.) %>% gsub("> target"," target",.)) %>%
+  mutate(index = unlist(index)) %>% 
   left_join(hub_table %>% select(Hub = id, `Campus Hubs`) %>% st_drop_geometry())
 
 write_csv(data2,"oce/engagements_from_airtable.csv")
