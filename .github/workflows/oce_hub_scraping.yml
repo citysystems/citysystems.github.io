@@ -4,9 +4,9 @@ name: OCE Hub Scraping
 
 # Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
- # workflow_dispatch:
-  schedule:
-    - cron: '30 4,10,16,22 * * *'
+  workflow_dispatch:
+  # schedule:
+    # - cron: '30 4,10,16,22 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
