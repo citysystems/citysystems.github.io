@@ -1,7 +1,6 @@
 library(tidyverse)
 library(googlesheets4)
 
-gs4_auth_configure(api_key = "AIzaSyDkJJ2brMHagmb2mmOGNXQgkT71QUwRLgU")
 gs4_deauth()
 
 
