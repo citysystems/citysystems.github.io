@@ -24,7 +24,7 @@
 {"description":"Building lasting solutions to systemic challenges within cities.","url":"https://citysystems.github.io/","@type":"WebSite","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://citysystems.github.io/images/logo.png"}},"headline":"City Systems","name":"City Systems","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <link rel="stylesheet" href="./index_files/style.css">
+    <link rel="stylesheet" th:href="@{./index_files/style.css}">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -33,7 +33,7 @@
     <div class="wrapper">
       <header>
         
-          <img src="./index_files/logo.png" alt="Logo" width="100">
+          <img th:src="@{./index_files/logo.png}" alt="Logo" width="100">
         
         <br>
         <br>
@@ -47,20 +47,20 @@
 
 <h2 id="featured-project">Featured Project</h2>
 
-<p><img src="./index_files/aduo_logo_text.png" alt="Aduo" width="400"></p>
+<p><img th:src="@{./index_files/aduo_logo_text.png}" alt="Aduo" width="400"></p>
 
 <p>Aduo is an open-source, less-than-$100K, plug-in garage ADU solution for the Bay&nbsp;Area, made possible by the Philanthropic Ventures Foundation and the Facebook Housing Innovation Fund. Learn more at <a href="https://www.aduo.org/">aduo.org</a></p>
 
 <h2 id="other-projects">Other Projects</h2>
 
 <ul>
-  <li><strong>ShowPlace</strong> (<em>2021</em>): We developed a DIY web tool for community organizations to create interactive map dashboards that feature places of interest. The data and view configuration are designed to be managed via an Airtable.  <a href = "https://city.systems/showplace">Click here to get started with ShowPlace</a>.</li>
+  <li><strong>ShowPlace</strong> (<em>2021</em>): We developed a DIY web tool for community organizations to create interactive map dashboards that feature places of interest. The data and view configuration are designed to be managed via an Airtable.  <a href = "https://citysystems.github.io/showplace/">Click here to get started with ShowPlace</a>.</li>
   <li><strong>San Mateo County ADU Outreach Tool</strong> (<em>2021</em>): We developed a <a href="https://city.systems/smc_adu_outreach/">prioritization tool</a> for San Mateo County’s Office of Sustainability to target their ADU outreach via social media ads. Read explanatory <a href="https://medium.com/aduo-blog/under-the-hood-using-data-to-target-adu-outreach-in-san-mateo-county-4945fa2dc28e">article</a>.</li>
   <li><strong>COVID-19 Response</strong> (<em>2021</em>): In partnership with Delivery Associates and the Bloomberg Harvard City Leadership Initiative, we supported some U.S. cities, including <a href="https://www.placekey.io/seminars/how-safegraph-data-is-empowering-cities-in-covid-19-response-and-beyond">Stamford, CT</a>, in the development of pandemic decision-making tools informed by mobility data from SafeGraph.</li>
   <li><strong>EPA-ADU Initiative</strong> (<em>2021</em>): In partnership with other community organizations, we formed a successor initiative to the City’s Second Unit Task Force to advance community-driven ADU solutions, and developed a website which includes an <a href="https://www.epa-adu.org/adu-tool/#eligibility">address look-up tool</a> and a <a href="https://www.epa-adu.org/adu-tool/#fee">permit fee calculator</a> (see <a href="https://medium.com/aduo-blog/test-drive-a-web-tool-for-estimating-adu-permit-fees-in-east-palo-alto-1eb044a39a85">guide</a>).</li>
   <li><strong>Napa Sonoma ADU Look-up Tool</strong> (<em>2020</em>): We developed an <a href="https://napasonomaadu.org/can-i-build">address look-up tool</a> for the Napa Sonoma ADU Center’s new website that allows property owners to determine their ADU eligibility in accordance with new state laws. As local zoning ordinances continue to be updated, the Center can easily update the tool using a Google Sheet.</li>
-  <li><strong>East Palo Alto ADU Policy Impact Analysis</strong> (<em>2020</em>): We assisted the City of East Palo Alto with analyzing the impacts of their ADU local ordinance update scenarios on ADU eligibility at the parcel-level. This <a href="https://city.systems/epa-adu/planning_analysis.html">technical report</a>, coupled with a public workshop and survey, ultimately informed the local ordinance adopted at the end of 2020.</li>
-  <li><strong>Stockton Green Economy Analysis</strong> (2019): We analyzed <a href="https://city.systems/stockton-greeneconomy/introduction.html">greenhouse gas reduction and job growth strategies</a> for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.</li>
+  <li><strong>East Palo Alto ADU Policy Impact Analysis</strong> (<em>2020</em>): We assisted the City of East Palo Alto with analyzing the impacts of their ADU local ordinance update scenarios on ADU eligibility at the parcel-level. This <a href="https://citysystems.github.io/epa-adu/planning_analysis.html">technical report</a>, coupled with a public workshop and survey, ultimately informed the local ordinance adopted at the end of 2020.</li>
+  <li><strong>Stockton Green Economy Analysis</strong> (2019): We analyzed <a href="https://citysystems.github.io/stockton-greeneconomy/introduction.html">greenhouse gas reduction and job growth strategies</a> for the City of Stockton, in partnership with the Office of the Mayor and local community-based organizations like Reinvent South Stockton Coalition.</li>
   <li><strong>East Palo Alto Second Unit Task Force Report</strong> (<em>2019</em>): We assisted a community task force in East Palo Alto in the development of a <a href="https://docs.google.com/document/d/1OpQPVjHTQpIAJmzFVhZnOsLI02dSCMPYVR3-S1Xgpag/edit#heading=h.l7xthtqawfil">final report</a> summarizing three years of their investigations and recommendations for preservation and production of affordable housing. In particular, we spearheaded the design of the systems diagram and strategy framework featured in the report.</li>
   <li><strong>East Palo Alto Garage Conversions</strong> (<em>2019</em>): We supported Rebuilding Together Peninsula in the legalization of two garages with unpermitted living spaces in East Palo Alto. View the projects <a href="https://www.epa-adu.org/garage-to-bedroom">here</a> and <a href="https://www.epa-adu.org/garage-to-raised-bedroom">here</a>.</li>
   <li><strong>Complete Communities Framework</strong>: We’re working on an open-source, data-driven method for measuring and improving the “completeness” of communities, or the ability of residents to access amenities they value within a reasonable travel time (e.g., 15 minutes), using modes they prefer.</li>
@@ -86,7 +86,7 @@
 
       </footer>
     </div>
-    <script src="./index_files/scale.fix.js"></script>
+    <script th:src="@{./index_files/scale.fix.js}"></script>
     
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
