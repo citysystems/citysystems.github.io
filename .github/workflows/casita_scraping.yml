@@ -38,7 +38,7 @@ jobs:
       env:
         AIR_API_KEY: ${{ secrets.AIR_API_KEY }}
       run: |
-        echo AIR_API_KEY ="$AIR_API_KEY" >> ~/.Renviron
+        echo AIR_API_KEY ="$AIR_API_KEY_CASITA" >> ~/.Renviron
         R -e 'source("casita/airtable_processing.R", echo = TRUE)'
 
     # Add new files in correct folder
