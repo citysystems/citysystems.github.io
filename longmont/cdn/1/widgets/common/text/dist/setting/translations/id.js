@@ -1,0 +1,1 @@
+System.register([],(function(e){return{execute:function(){e({wrap:"Bentuk",verticalAlignment:"Penyejajaran vertikal"})}}}));

@@ -1,0 +1,1 @@
+System.register([],(function(t){return{execute:function(){t({wrap:"Rivitä",verticalAlignment:"Pystytasaus"})}}}));

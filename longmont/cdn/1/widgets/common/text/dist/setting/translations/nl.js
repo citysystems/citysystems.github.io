@@ -1,0 +1,1 @@
+System.register([],(function(e){return{execute:function(){e({wrap:"Inpakken",verticalAlignment:"Verticale uitlijning"})}}}));

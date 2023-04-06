@@ -1,0 +1,1 @@
+System.register([],(function(e){return{execute:function(){e({wrap:"Gå runt",verticalAlignment:"Vertikal justering"})}}}));

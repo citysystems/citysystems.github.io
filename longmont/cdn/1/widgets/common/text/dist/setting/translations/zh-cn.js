@@ -1,0 +1,1 @@
+System.register([],(function(e){return{execute:function(){e({wrap:"环绕",verticalAlignment:"垂直对齐"})}}}));

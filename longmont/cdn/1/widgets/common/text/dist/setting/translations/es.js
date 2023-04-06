@@ -1,0 +1,1 @@
+System.register([],(function(e){return{execute:function(){e({wrap:"Ajustar",verticalAlignment:"Alineación vertical"})}}}));
