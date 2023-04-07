@@ -627,10 +627,10 @@
         "0": {
           "type": "WIDGET",
           "bbox": {
-            "left": "0.0%",
+            "left": "-0.0%",
             "right": "71.6%",
-            "top": "8.3%",
-            "bottom": "81.1%",
+            "top": "8.2%",
+            "bottom": "81.2%",
             "width": "28.4%",
             "height": "10.6%"
           },
@@ -1343,7 +1343,7 @@
       "home": []
     }
   ],
-  "timestamp": 1680837949422,
+  "timestamp": 1680882919625,
   "header": {
     "layout": {
       "LARGE": "layout_31"
@@ -1354,13 +1354,7 @@
   },
   "originExbVersion": "1.11.0",
   "attributes": {
-    "portalUrl": "https://longmontco.maps.arcgis.com",
-    "isWebTier": false,
-    "clientId": "",
-    "title": "Longmont ECE Map",
-    "description": "",
-    "type": "Web Experience",
-    "thumbnail": "thumbnail/thumbnail1680808445336.png"
+    "portalUrl": "https://longmontco.maps.arcgis.com"
   },
   "sharedThemeVariables": {
     "header": {},
