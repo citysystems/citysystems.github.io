@@ -25,12 +25,12 @@
         "1": {
           "type": "WIDGET",
           "bbox": {
-            "left": "0%",
-            "right": "0%",
-            "top": "0%",
-            "bottom": "0%",
-            "width": "100%",
-            "height": "100%"
+            "left": "0.0%",
+            "right": "0.0%",
+            "top": "0.0%",
+            "bottom": "0.0%",
+            "width": "100.0%",
+            "height": "100.0%"
           },
           "widgetId": "widget_22",
           "setting": {
@@ -44,7 +44,8 @@
             },
             "vCenter": false,
             "hCenter": false
-          }
+          },
+          "isPending": false
         }
       }
     },
@@ -618,18 +619,20 @@
       "type": "FIXED",
       "label": "Map FixedLayout",
       "order": [
-        "0"
+        "0",
+        "1",
+        "2"
       ],
       "content": {
         "0": {
           "type": "WIDGET",
           "bbox": {
-            "left": "3.9%",
-            "right": "73.2%",
-            "top": "0.0%",
-            "bottom": "88.8%",
-            "width": "22.9%",
-            "height": "11.2%"
+            "left": "0.0%",
+            "right": "71.6%",
+            "top": "8.3%",
+            "bottom": "81.1%",
+            "width": "28.4%",
+            "height": "10.6%"
           },
           "widgetId": "widget_23",
           "setting": {
@@ -637,7 +640,59 @@
               "left": false,
               "right": true,
               "top": false,
-              "bottom": true
+              "bottom": true,
+              "width": "AUTO",
+              "height": "AUTO"
+            },
+            "vCenter": false,
+            "hCenter": false
+          },
+          "isPending": false
+        },
+        "1": {
+          "type": "WIDGET",
+          "bbox": {
+            "left": "85.5%",
+            "right": "0.0%",
+            "top": "39.3%",
+            "bottom": "0.0%",
+            "width": "14.5%",
+            "height": "60.7%"
+          },
+          "widgetId": "widget_24",
+          "setting": {
+            "autoProps": {
+              "right": false,
+              "left": true,
+              "top": true,
+              "bottom": false,
+              "width": "AUTO",
+              "height": "AUTO"
+            },
+            "vCenter": false,
+            "hCenter": false
+          },
+          "isPending": false
+        },
+        "2": {
+          "type": "WIDGET",
+          "bbox": {
+            "left": "-0.0%",
+            "right": "74.7%",
+            "top": "-0.0%",
+            "bottom": "89.4%",
+            "width": "25.3%",
+            "height": "10.6%"
+          },
+          "widgetId": "widget_25",
+          "setting": {
+            "autoProps": {
+              "left": false,
+              "right": true,
+              "top": false,
+              "bottom": true,
+              "width": "AUTO",
+              "height": "AUTO"
             },
             "vCenter": false,
             "hCenter": false
@@ -1096,8 +1151,8 @@
       "label": "Map",
       "config": {
         "toolConfig": {
-          "canZoom": true,
-          "canHome": true,
+          "canZoom": false,
+          "canHome": false,
           "canSearch": false,
           "canNavigation": false,
           "canBaseMap": true
@@ -1129,7 +1184,8 @@
           "rotation": 0,
           "viewType": "2d"
         },
-        "initialMapDataSourceID": "dataSource_2"
+        "initialMapDataSourceID": "dataSource_2",
+        "layoutIndex": 0
       },
       "id": "widget_22",
       "layouts": {
@@ -1150,10 +1206,62 @@
       "label": "View Layers Toggle",
       "config": {
         "layerUrls": [
-          "Not Enrolled aged 3 to 4"
+          "Not Enrolled aged 3 to 4",
+          "Population aged 3 to 4"
         ]
       },
       "id": "widget_23",
+      "useMapWidgetIds": [
+        "widget_22"
+      ],
+      "style": {
+        "background": {
+          "color": null,
+          "fillType": "fill"
+        },
+        "boxShadow": {
+          "presetStyle": "shadow-none"
+        },
+        "borderRadius": null,
+        "border": {
+          "color": null,
+          "type": "solid",
+          "width": "2px"
+        }
+      }
+    },
+    "widget_24": {
+      "uri": "widgets/arcgis/legend/",
+      "version": "1.11.0",
+      "label": "Legend 2",
+      "config": {
+        "style": {
+          "useCustom": true,
+          "background": {
+            "color": "#ffffff",
+            "fillType": "fill"
+          },
+          "fontColor": "var(--light)"
+        },
+        "showBaseMap": false,
+        "cardStyle": false
+      },
+      "id": "widget_24",
+      "useMapWidgetIds": [
+        "widget_22"
+      ]
+    },
+    "widget_25": {
+      "uri": "widgets/view-layers-toggle-2/",
+      "version": "1.11.0",
+      "label": "View Layers Toggle 3",
+      "config": {
+        "layerUrls": [
+          "10 minute walk to all facilities",
+          "10 minute walk to high quality facilities"
+        ]
+      },
+      "id": "widget_25",
       "useMapWidgetIds": [
         "widget_22"
       ]
@@ -1197,9 +1305,36 @@
           "geometryType": "esriGeometryPolygon",
           "label": "median household income",
           "isHidden": true
+        },
+        "facilities_51": {
+          "id": "dataSource_2-facilities_51",
+          "sourceLabel": "facilities",
+          "type": "FEATURE_LAYER",
+          "url": "https://services1.arcgis.com/Sb0rgSd67ecLKIvl/arcgis/rest/services/facilities/FeatureServer/0",
+          "portalUrl": "https://www.arcgis.com",
+          "itemId": "e60c62df239a4bf4add8eecc530d06e4",
+          "geometryType": "esriGeometryPoint",
+          "label": "Childcare Facilities"
+        },
+        "longmont_fill_1337": {
+          "id": "dataSource_2-longmont_fill_1337",
+          "sourceLabel": "longmont_fill",
+          "type": "FEATURE_LAYER",
+          "url": "https://services1.arcgis.com/Sb0rgSd67ecLKIvl/arcgis/rest/services/longmont_fill/FeatureServer/0",
+          "portalUrl": "https://www.arcgis.com",
+          "itemId": "95d28bf90bdf456db4e7c9217c644c3f",
+          "geometryType": "esriGeometryPolygon",
+          "label": "Longmont Boundary",
+          "query": {
+            "id": "dataSource_2-longmont_fill_1337",
+            "label": "Longmont Boundary",
+            "refreshInterval": 600
+          },
+          "dataViews": {}
         }
       },
-      "label": "Median Home Value"
+      "label": "Map",
+      "isHidden": false
     }
   },
   "messageConfigs": {},
@@ -1208,7 +1343,7 @@
       "home": []
     }
   ],
-  "timestamp": 1680816470429,
+  "timestamp": 1680837949422,
   "header": {
     "layout": {
       "LARGE": "layout_31"
@@ -1219,13 +1354,7 @@
   },
   "originExbVersion": "1.11.0",
   "attributes": {
-    "portalUrl": "https://longmontco.maps.arcgis.com",
-    "isWebTier": false,
-    "clientId": "",
-    "title": "Longmont ECE Map",
-    "description": "",
-    "type": "Web Experience",
-    "thumbnail": "thumbnail/thumbnail1680808445336.png"
+    "portalUrl": "https://longmontco.maps.arcgis.com"
   },
   "sharedThemeVariables": {
     "header": {},
