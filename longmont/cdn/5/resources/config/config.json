@@ -1207,7 +1207,12 @@
       "config": {
         "layerUrls": [
           "Not Enrolled aged 3 to 4",
-          "Population aged 3 to 4"
+          "Enrolled aged 3 to 4",
+          "Population aged 3 to 4",
+          "Population aged 0 to 2",
+          "Spanish speaking household",
+          "API language speaking household",
+          "Median household income"
         ]
       },
       "id": "widget_23",
@@ -1258,7 +1263,10 @@
       "config": {
         "layerUrls": [
           "10 minute walk to all facilities",
-          "10 minute walk to high quality facilities"
+          "10 minute walk to high quality facilities",
+          "10 minute bike to all facilities",
+          "10 minute bike to high quality facilities",
+          "10 minute drive to high quality facilities"
         ]
       },
       "id": "widget_25",
@@ -1343,7 +1351,7 @@
       "home": []
     }
   ],
-  "timestamp": 1680882919625,
+  "timestamp": 1680913126621,
   "header": {
     "layout": {
       "LARGE": "layout_31"
@@ -1354,13 +1362,7 @@
   },
   "originExbVersion": "1.11.0",
   "attributes": {
-    "portalUrl": "https://longmontco.maps.arcgis.com",
-    "isWebTier": false,
-    "clientId": "",
-    "title": "Longmont ECE Map",
-    "description": "",
-    "type": "Web Experience",
-    "thumbnail": "thumbnail/thumbnail1680808445336.png"
+    "portalUrl": "https://longmontco.maps.arcgis.com"
   },
   "sharedThemeVariables": {
     "header": {},
