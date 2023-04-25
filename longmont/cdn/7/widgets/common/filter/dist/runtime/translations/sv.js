@@ -1,1 +1,0 @@
-System.register([],(function(t){return{execute:function(){t({_widgetLabel:"Filter",allExprsMustBeTrue:"Alla dessa uttryck måste vara sanna:",anyExprsMustBeTrue:"Ett av dessa uttryck är sant:"})}}}));

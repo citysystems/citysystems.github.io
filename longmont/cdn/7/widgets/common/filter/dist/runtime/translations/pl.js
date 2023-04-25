@@ -1,1 +1,0 @@
-System.register([],(function(e){return{execute:function(){e({_widgetLabel:"Filtr",allExprsMustBeTrue:"Wszystkie te wyrażenia muszą być prawdziwe:",anyExprsMustBeTrue:"Dowolne z tych wyrażeń jest prawdziwe:"})}}}));
