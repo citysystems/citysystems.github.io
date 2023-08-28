@@ -1,0 +1,124 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+library(tidyverse)
+library(sf)
+library(tigris)
+library(censusapi)
+library(mapview)
+library(leaflet)
+options(tigris_use_cache = TRUE)
+Sys.setenv(CENSUS_KEY="c8aa67e4086b4b5ce3a8717f59faa9a28f611dab")
+```
+
+```{r}
+sf_cbgs <- block_groups("CA","San Francisco", year = 2021, cb = T) %>% 
+  filter(!GEOID %in% c("060759804011")) %>% 
+  select(cbg = GEOID)
+
+mapview(sf_cbgs)
+```
+
+eligibility
+- born in SF
+- attended X years of public school in SF
+- renter in SF for Y years
+
+```{r}
+sf_renter_length <- getCensus(
+  name = "acs/acs5",
+  vintage = 2021,
+  region = "block group:*",
+  regionin = "state:06+county:075",
+  vars = c(
+    "B25038_001E",
+    "B25038_013E",
+    "B25038_014E",
+    "B25038_015E"
+  )
+) %>% 
+  transmute(
+    cbg = paste0(state,county,tract,block_group),
+    total = B25038_001E,
+    over10 = B25038_013E+B25038_014E+B25038_015E,
+    over20 = B25038_014E+B25038_015E,
+    over30 = B25038_015E
+  ) %>% 
+  left_join(
+    sf_cbgs 
+  ) %>% 
+  st_as_sf()
+
+mapview(sf_renter_length,zcol="over10")
+```
+
+```{r}
+pal_total <- colorNumeric(
+  "Blues",
+  sf_renter_length$total
+)
+pal_renter <- colorNumeric(
+  "Reds",
+  sf_renter_length$over10
+)
+
+map <- leaflet() %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addPolygons(
+    data = sf_renter_length,
+    fillColor = ~pal_total(total),
+    fillOpacity = 0.75,
+    color = "white",
+    weight = 0.5,
+    opacity = 0.5,
+    group = "Total residents"
+  ) %>% 
+  addPolygons(
+    data = sf_renter_length,
+    fillColor = ~pal_renter(over10),
+    fillOpacity = 0.75,
+    color = "white",
+    weight = 0.5,
+    opacity = 0.5,
+    group = "Renters over 10 years"
+  ) %>% 
+  addPolygons(
+    data = sf_renter_length,
+    fillColor = ~pal_renter(over20),
+    fillOpacity = 0.75,
+    color = "white",
+    weight = 0.5,
+    opacity = 0.5,
+    group = "Renters over 20 years"
+  ) %>% 
+  addPolygons(
+    data = sf_renter_length,
+    fillColor = ~pal_renter(over30),
+    fillOpacity = 0.75,
+    color = "white",
+    weight = 0.5,
+    opacity = 0.5,
+    group = "Renters over 30 years"
+  ) %>% 
+  addLayersControl(
+    baseGroups = c("Total residents","Renters over 10 years", "Renters over 20 years", "Renters over 30 years")
+  ) %>% 
+  addLegend(
+    data = sf_renter_length,
+    values = ~total,
+    pal = pal_total,
+    title = "Total residents"
+  ) %>% 
+  addLegend(
+    data = sf_renter_length,
+    values = ~over10,
+    pal = pal_renter,
+    title = "Renters"
+  )
+
+map
+```
+
