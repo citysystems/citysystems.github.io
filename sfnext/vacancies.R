@@ -132,3 +132,113 @@ ggplot(DF, aes(x = Var1, y = Var2, color = group)) +
   theme(
     legend.position="none"
   )
+
+# simpler version
+
+data <- read_csv("G:/Shared drives/City Systems/SFNext/vacancies.csv") %>% 
+  mutate(
+    funded_ftes = round(funded_ftes),
+    `Filled FTEs` = pmin(funded_ftes,round(filled_ftes)),
+    `Vacant FTEs` = funded_ftes - `Filled FTEs`
+  ) %>% 
+  arrange(desc(`Vacant FTEs`)) %>% 
+  head(15) %>%
+  mutate(
+    Name = factor(Name, levels = rev(unique(Name))),
+    # Label = paste0(`Vacant FTEs`,"/",funded_ftes,"\n(",round(`Vacant FTEs`/funded_ftes*100),"%)")
+    Label = paste0(round(`Vacant FTEs`/funded_ftes*100),"%")
+  ) %>% 
+  select(-funded_ftes,-filled_ftes,-vacant_ftes,-Department) %>% 
+  pivot_longer(
+    -c(Name,Label),
+    names_to = "names",
+    values_to = "values"
+  ) %>% 
+  mutate(
+    Label = ifelse(
+      names == "Vacant FTEs",
+      Label,
+      ""
+    )
+  )
+
+data %>% 
+  ggplot() +
+  geom_bar(
+    aes(
+      x = Name,
+      y = values,
+      fill = names
+    ),
+    stat = "identity",
+    position = "stack"
+  ) +
+  geom_text(aes(x = Name, y = values, label = Label), hjust = -0.1, size = 2.5, color = "white") +
+  coord_flip() +
+  labs(
+    x = "Department",
+    y = "# of full-time equivalent positions (FTEs)",
+    fill = "Type"
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = c(0.8, 0.8)
+  )
+  
+
+  
+pdf("G:/Shared drives/City Systems/SFNext/vacancies_tall.pdf", width = 5, height = 5)
+data %>% 
+  ggplot() +
+  geom_bar(
+    aes(
+      x = Name,
+      y = values,
+      fill = names
+    ),
+    stat = "identity",
+    position = "stack"
+  ) +
+  geom_text(aes(x = Name, y = -250, label = Label), size = 2.5, color = "red") +
+  coord_flip() +
+  labs(
+    x = "",
+    y = "Number of full-time equivalent positions (FTEs)",
+    fill = ""
+  ) +
+  scale_fill_manual(values = c("gray","red")) +
+  ylim(-250,NA) +
+  guides(color = "none") +
+  theme_classic() +
+  theme(
+    legend.position = c(0.8, 0.2)
+  )
+dev.off()
+
+pdf("G:/Shared drives/City Systems/SFNext/vacancies_wide.pdf", width = 8, height = 5)
+data %>% 
+  ggplot() +
+  geom_bar(
+    aes(
+      x = Name,
+      y = values,
+      fill = names
+    ),
+    stat = "identity",
+    position = "stack"
+  ) +
+  geom_text(aes(x = Name, y = -250, label = Label), size = 2.5, color = "red") +
+  coord_flip() +
+  labs(
+    x = "",
+    y = "Number of full-time equivalent positions (FTEs)",
+    fill = ""
+  ) +
+  scale_fill_manual(values = c("gray","red")) +
+  ylim(-250,NA) +
+  guides(color = "none") +
+  theme_classic() +
+  theme(
+    legend.position = c(0.8, 0.2)
+  )
+dev.off()
