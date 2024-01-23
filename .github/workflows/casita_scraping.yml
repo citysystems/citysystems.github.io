@@ -6,7 +6,7 @@ name: Casita Scraping
 on:
   # workflow_dispatch:
  schedule:
-   - cron: '30 11,23 * * *'
+   - cron: '30 11 * * *'
    
  workflow_dispatch:
 
