@@ -50,7 +50,7 @@ data_graduate <-
   dplyr::select(-`Old Project Title`)
 
 data_undergraduate <-
-  range_speedread("1eMowQcLh12vq0jAOjMbnE0FlLoh7ocHg5me9j-2Lrlo",range="Undergraduate Summer Programs!A:O") %>%
+  range_speedread("1eMowQcLh12vq0jAOjMbnE0FlLoh7ocHg5me9j-2Lrlo",range="Undergraduate Student Programs!A:O") %>%
   mutate(
     Date = case_when(
       grepl("Fall",Quarter) ~ paste0("20",substr(Quarter,nchar(Quarter) - 1,nchar(Quarter)),"-09-01") %>% as.Date(),
@@ -58,7 +58,7 @@ data_undergraduate <-
       grepl("Spring",Quarter) ~ paste0("20",substr(Quarter,nchar(Quarter) - 1,nchar(Quarter)),"-03-01")%>% as.Date(),
       grepl("Summer",Quarter) ~ paste0("20",substr(Quarter,nchar(Quarter) - 1,nchar(Quarter)),"-06-01")%>% as.Date()
     ),
-    Category = "Undergraduate Summer Programs") %>%
+    Category = "Undergraduate Student Programs") %>%
   rename(Subcategory = `Sub-category (Title)`) %>%
   mutate(Subcategory = paste0(Subcategory,"; ",`Sub-category (Name)`)) %>%
   dplyr::select(-`Sub-category (Name)`) %>%
