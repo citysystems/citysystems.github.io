@@ -1,4 +1,4 @@
-library(tidyverse)
+library(dplyr)
 library(googlesheets4)
 
 gs4_deauth()
