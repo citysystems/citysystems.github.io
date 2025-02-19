@@ -1,5 +1,6 @@
 library(dplyr)
 library(tidyr)
+library(purrr)
 library(googlesheets4)
 
 gs4_deauth()
