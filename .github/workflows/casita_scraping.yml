@@ -4,9 +4,9 @@ name: Casita Scraping
 
 # Controls when the action will run. Triggers the workflow at a specific time, here 4pm PST/11pm UTC
 on:
-  # workflow_dispatch:
- schedule:
-   #- cron: '30 11 * * *'
+  workflow_dispatch:
+# schedule:
+#   - cron: '30 11 * * *'
    
  workflow_dispatch:
 
