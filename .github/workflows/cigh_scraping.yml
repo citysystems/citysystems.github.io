@@ -9,7 +9,6 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     env:
-      # Use the Posit binary manager for lightning-fast installs
       RSPM: "https://packagemanager.posit.co/cran/__linux__/jammy/latest"
     
     steps:
@@ -23,8 +22,6 @@ jobs:
           r-version: '4.1.0'
           use-public-rspm: true
 
-      # This step automatically identifies and installs 
-      # both system dependencies (libuv, libcurl, etc.) and R packages
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -39,7 +36,7 @@ jobs:
         run: |
           git config --local user.name github-actions
           git config --local user.email "actions@github.com"
-          git add kingcenter/*
+          git add cigh/*
           git commit --allow-empty -am "Updating data"
 
       - name: Push changes
