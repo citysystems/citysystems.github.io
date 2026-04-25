@@ -11,13 +11,18 @@ data_projects <- data %>%
   select(
     index,
     `Project Name`,
+    Description,
     `Link for additional information`,
     `Hospital/Facility name`,
     `Partner Agencies (separate with commas)`
-  )
+  ) %>% 
+  filter(!is.na(`Project Name`))
 
 data_areas <-
   range_speedread("1B3UzqR0yOsUZVVjjhgvMuxfIHiDPd8atgchxwcZP2-Y",range="Areas", col_names = FALSE)
+
+data_activities <-
+  range_speedread("1B3UzqR0yOsUZVVjjhgvMuxfIHiDPd8atgchxwcZP2-Y",range="Activity", col_names = FALSE)
 
 data_faculty <-
   range_speedread("1B3UzqR0yOsUZVVjjhgvMuxfIHiDPd8atgchxwcZP2-Y",range="Faculty")
@@ -31,6 +36,7 @@ data_tidy <- data %>%
     starts_with(c(
       "Faculty",
       "Clinical/academic focus area",
+      "Activity",
       "Country"
     ))
   ) %>% 
@@ -46,6 +52,12 @@ data_tidy <- data %>%
   ) %>% 
   select(-name) %>% 
   filter(!is.na(Area)) %>% 
+  pivot_longer(
+    starts_with("Activity"),
+    values_to = "Activity"
+  ) %>% 
+  select(-name) %>% 
+  filter(!is.na(Activity)) %>% 
   pivot_longer(
     starts_with("Country"),
     values_to = "Country"
